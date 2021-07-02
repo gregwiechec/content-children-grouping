@@ -36,7 +36,7 @@ namespace AlloySample.Business
             }
 
             var articles = _contentLoader.GetChildren<IContent>(containerPage.ContentLink);
-            var article = articles.FirstOrDefault(x => x. == letter);
+            var article = articles.OfType<PageData>().FirstOrDefault(x => x.URLSegment == letter);
             if (article == null)
             {
                 return null;
