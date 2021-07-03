@@ -261,12 +261,15 @@
     <Compile Include="Business\Channels\DisplayResolutions.cs" />
     <Compile Include="Business\Channels\MobileChannel.cs" />
     <Compile Include="Business\Channels\WebChannel.cs" />
+    <Compile Include="Business\ClusterRegistration.cs" />
+    <Compile Include="Business\ContentClusteringBuilder.cs" />
     <Compile Include="Business\ContentExtensions.cs" />
     <Compile Include="Business\ContentLocator.cs" />
     <Compile Include="Business\CustomPartialRouter.cs" />
     <Compile Include="Business\EditorDescriptors\ContactPageSelectionFactory.cs" />
     <Compile Include="Business\EditorDescriptors\ContactPageSelector.cs" />
     <Compile Include="Business\EditorDescriptors\StringListEditorDescriptor.cs" />
+    <Compile Include="Business\IClusterNameGenerator.cs" />
     <Compile Include="Business\IModifyLayout.cs" />
     <Compile Include="Business\Initialization\BundleConfig.cs" />
     <Compile Include="Business\Initialization\CustomizedRenderingInitialization.cs" />
