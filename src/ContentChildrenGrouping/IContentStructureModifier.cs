@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
@@ -43,12 +44,18 @@ namespace ContentChildrenGrouping
         void UpdateContentParent(IContent content);
     }
 
+    /// <summary>
+    /// Update content parent page to match the structure tree
+    /// </summary>
+    [ServiceConfiguration(typeof(IContentStructureModifier))]
     public class ContentStructureModifier: IContentStructureModifier
     {
+        private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
 
-        public ContentStructureModifier(IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders)
+        public ContentStructureModifier(IContentRepository contentRepository, IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders)
         {
+            _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
         }
 
@@ -59,28 +66,51 @@ namespace ContentChildrenGrouping
                 return;
             }
 
-            if (!_contentType.IsAssignableFrom(e.Content.GetType()))
+
+            var containerConfigurations = _contentChildrenGroupsLoaders.SelectMany(x => x.GetConfigurations()).ToList();
+
+            ContainerConfiguration containerConfiguration = null;
+            containerConfiguration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
+
+            if (containerConfiguration == null)
+            {
+                var ancestors = _contentRepository.GetAncestors(content.ParentLink);
+                foreach (var ancestor in ancestors)
+                {
+                    var parentContentLink = ancestor.ContentLink.ToReferenceWithoutVersion();
+                    containerConfiguration = containerConfigurations.FirstOrDefault(x =>
+                        x.ContainerContentLink.ToReferenceWithoutVersion() == parentContentLink);
+                    if (containerConfiguration != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (containerConfiguration == null)
             {
                 return;
             }
 
-            if (e.Content.ParentLink.ToReferenceWithoutVersion() != _rootLink.ToReferenceWithoutVersion())
+            if (containerConfiguration.ContainerType.IsInstanceOfType(content))
             {
                 return;
             }
 
-            var parentLink = _rootLink;
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            foreach (var clusterNameGenerator in this._generators)
+            var parentLink = containerConfiguration.ContainerContentLink;
+            foreach (var nameGenerator in containerConfiguration.GroupLevelConfigurations)
             {
-                var clusterName = clusterNameGenerator.GetName(e.Content);
-                var parent = contentRepository.GetChildren<IContent>(parentLink).FirstOrDefault(x =>
-                    string.Compare(x.Name, clusterName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                var groupName = nameGenerator.GetName(content);
+                var parent = _contentRepository.GetChildren<IContent>(parentLink).FirstOrDefault(x =>
+                    string.Compare(x.Name, groupName, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (parent == null)
                 {
-                    var contentFolder = contentRepository.GetDefault<ContentFolder>(parentLink);
-                    contentFolder.Name = clusterName;
-                    parentLink = contentRepository.Save(contentFolder, SaveAction.Publish);
+                    MethodInfo getDefault = typeof(IContentRepository).GetMethod(nameof(IContentRepository.GetDefault),
+                        new[] {typeof(ContentReference)});
+                    MethodInfo generic = getDefault.MakeGenericMethod(containerConfiguration.ContainerType);
+                    var container = generic.Invoke(_contentRepository, new [] {parentLink}) as IContent;
+                    container.Name = groupName;
+                    parentLink = _contentRepository.Save(container, SaveAction.Publish);
                 }
                 else
                 {
@@ -88,9 +118,9 @@ namespace ContentChildrenGrouping
                 }
             }
 
-            if (e.Content.ParentLink.ToReferenceWithoutVersion() != parentLink.ToReferenceWithoutVersion())
+            if (content.ParentLink.ToReferenceWithoutVersion() != parentLink.ToReferenceWithoutVersion())
             {
-                e.Content.ParentLink = parentLink.ToReferenceWithoutVersion();
+                content.ParentLink = parentLink.ToReferenceWithoutVersion();
             }
         }
     }

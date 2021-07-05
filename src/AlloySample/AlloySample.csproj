@@ -261,15 +261,13 @@
     <Compile Include="Business\Channels\DisplayResolutions.cs" />
     <Compile Include="Business\Channels\MobileChannel.cs" />
     <Compile Include="Business\Channels\WebChannel.cs" />
-    <Compile Include="Business\StructureModifyRegistration.cs" />
-    <Compile Include="Business\ContentClusteringBuilder.cs" />
+    <Compile Include="Business\ContentGrouping\ContentGroupingInitialization.cs" />
     <Compile Include="Business\ContentExtensions.cs" />
     <Compile Include="Business\ContentLocator.cs" />
-    <Compile Include="Business\CustomPartialRouter.cs" />
+    <Compile Include="Business\ContentGrouping\CustomPartialRouter.cs" />
     <Compile Include="Business\EditorDescriptors\ContactPageSelectionFactory.cs" />
     <Compile Include="Business\EditorDescriptors\ContactPageSelector.cs" />
     <Compile Include="Business\EditorDescriptors\StringListEditorDescriptor.cs" />
-    <Compile Include="Business\IClusterNameGenerator.cs" />
     <Compile Include="Business\IModifyLayout.cs" />
     <Compile Include="Business\Initialization\BundleConfig.cs" />
     <Compile Include="Business\Initialization\CustomizedRenderingInitialization.cs" />
@@ -318,7 +316,6 @@
     <Compile Include="Models\Media\VideoFile.cs" />
     <Compile Include="Models\Pages\ArticlePage.cs" />
     <Compile Include="Models\Pages\ContactPage.cs" />
-    <Compile Include="Models\Pages\GroupingContainerPage.cs" />
     <Compile Include="Models\Pages\ContainerPage.cs" />
     <Compile Include="Models\Pages\IHasRelatedContent.cs" />
     <Compile Include="Models\Pages\ISearchPage.cs" />
@@ -467,6 +464,7 @@
       <Name>ContentChildrenGrouping</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

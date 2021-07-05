@@ -1,17 +1,18 @@
-using AlloySample.Business.Rendering;
 using EPiServer.Core;
+using EPiServer.DataAnnotations;
 
-namespace AlloySample.Models.Pages
+namespace ContentChildrenGrouping
 {
     //TODO: group move to another assembly
     /// <summary>
     /// Used to logically group pages in the page tree
     /// </summary>
-    [SiteContentType(
+    [ContentType(
         GUID = "C5495780-3BC7-4DC3-A5AC-8444617F530C",
-        GroupName = Global.GroupNames.Specialized)]
+        GroupName = "Administration",
+        AvailableInEditMode = false)]
     //[SiteImageUrl]
-    public class GroupingContainerPage : PageData, IContainerPage
+    public class GroupingContainerPage : PageData //TODO: grouping render IContainerPage
     {
 
     }
