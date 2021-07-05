@@ -5,10 +5,7 @@ using EPiServer.Core;
 
 namespace EPiServer.Labs.ContentManager.ContentClustering
 {
-    public interface IClusterNameGenerator
-    {
-        string GetName(IContent content);
-    }
+
 
     internal class CreatedDateClusterGenerator : IClusterNameGenerator
     {
