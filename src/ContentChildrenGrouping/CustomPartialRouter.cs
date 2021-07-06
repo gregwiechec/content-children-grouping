@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
-using ContentChildrenGrouping;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
@@ -11,7 +10,7 @@ using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
 
-namespace AlloySample.Business
+namespace ContentChildrenGrouping
 {
     public class CustomPartialRouter: IPartialRouter<PageData, PageData>
     {
