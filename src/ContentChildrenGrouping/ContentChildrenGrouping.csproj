@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerConfiguration.cs" />
+    <Compile Include="ContentChildrenGroupingOptions.cs" />
     <Compile Include="CustomPartialRouter.cs" />
     <Compile Include="GroupingContainerPage.cs" />
     <Compile Include="IContentChildrenGroupsLoader.cs" />

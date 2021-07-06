@@ -44,7 +44,7 @@ namespace AlloySample.Business
                 .GellAllConfigurations()
                 .FirstOrDefault(x =>
                     x.ContainerContentLink == segmentContext.RoutedContentLink.ToReferenceWithoutVersion());
-            if (configuration == null)
+            if (configuration == null || !configuration.RoutingEnabled)
             {
                 return null;
             }
@@ -105,6 +105,10 @@ namespace AlloySample.Business
                         containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion())
                     {
                         configuration = containerConfiguration;
+                        if (!configuration.RoutingEnabled)
+                        {
+                            return null;
+                        }
                         break;
                     }
                 }
@@ -133,8 +137,14 @@ namespace AlloySample.Business
     {
         public void Initialize(EPiServer.Framework.Initialization.InitializationEngine context)
         {
-            var partialRouter = new CustomPartialRouter(context.Locate.ContentLoader(), context.Locate.Advanced.GetAllInstances<IContentChildrenGroupsLoader>());
-            RouteTable.Routes.RegisterPartialRouter<PageData, PageData>(partialRouter);
+            var options = context.Locate.Advanced.GetInstance<ContentChildrenGroupingOptions>();
+
+            if (options.RouterEnabled)
+            {
+                var partialRouter = new CustomPartialRouter(context.Locate.ContentLoader(),
+                    context.Locate.Advanced.GetAllInstances<IContentChildrenGroupsLoader>());
+                RouteTable.Routes.RegisterPartialRouter(partialRouter);
+            }
         }
 
         public void Preload(string[] parameters)

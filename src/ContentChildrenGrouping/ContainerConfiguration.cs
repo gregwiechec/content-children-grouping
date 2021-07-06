@@ -14,6 +14,11 @@ namespace ContentChildrenGrouping
         /// </summary>
         public ContentReference ContainerContentLink { get; set; }
 
+        /// <summary>
+        /// When true then routing for configuration is enabled
+        /// </summary>
+        public bool RoutingEnabled { get; set; } = true;
+
         // for assets it should be ContentFolder
         public Type ContainerType { get; set; }
 
