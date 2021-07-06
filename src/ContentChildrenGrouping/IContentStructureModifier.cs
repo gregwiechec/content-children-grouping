@@ -67,7 +67,7 @@ namespace ContentChildrenGrouping
             }
 
 
-            var containerConfigurations = _contentChildrenGroupsLoaders.SelectMany(x => x.GetConfigurations()).ToList();
+            var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations();
 
             ContainerConfiguration containerConfiguration = null;
             containerConfiguration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
