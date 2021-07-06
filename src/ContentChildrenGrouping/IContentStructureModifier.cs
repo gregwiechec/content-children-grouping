@@ -105,6 +105,8 @@ namespace ContentChildrenGrouping
                     string.Compare(x.Name, groupName, StringComparison.InvariantCultureIgnoreCase) == 0);
                 if (parent == null)
                 {
+                    //TODO: groups for blocks always create ContentFolder
+
                     MethodInfo getDefault = typeof(IContentRepository).GetMethod(nameof(IContentRepository.GetDefault),
                         new[] {typeof(ContentReference)});
                     MethodInfo generic = getDefault.MakeGenericMethod(containerConfiguration.ContainerType);
