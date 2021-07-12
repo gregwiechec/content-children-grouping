@@ -1,18 +1,15 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { ConfigurationsList } from "./configurations-list";
+import App from "./App";
 import "./App.scss";
-import { action } from "@storybook/addon-actions";
 
 export default {
-  title: "List",
-  component: ConfigurationsList
-} as ComponentMeta<typeof ConfigurationsList>;
+  title: "App",
+  component: App
+} as ComponentMeta<typeof App>;
 
-const Template: ComponentStory<typeof ConfigurationsList> = (args) => (
-  <ConfigurationsList {...args} onListChange={action("onListChange")} />
-);
+const Template: ComponentStory<typeof App> = (args) => <App {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {

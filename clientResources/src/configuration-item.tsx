@@ -44,13 +44,13 @@ export const ConfigurationItem = ({
         <GridCell className="config-grid-cell" large={12} medium={8} small={4}>
           <Label>Name generators</Label>
           {configuration.groupLevelConfigurations.map((x, index) => (
-            <>
+            <React.Fragment key={x + "_" + index}>
               <Select
                 className="configuration-generator-select"
                 isOptional={false}
                 name="zoo"
                 id="zoo"
-                onChange={(value) => onGeneratorValueChange(index, value)}
+                onChange={(value) => onGeneratorValueChange(index, value.target.value)}
               >
                 {availableNameGenerators.map((generator) => (
                   <option key={generator} value={generator}>
@@ -69,7 +69,7 @@ export const ConfigurationItem = ({
                   title="Close Dialog"
                 />
               )}
-            </>
+            </React.Fragment>
           ))}
           <Button className="add-button" style="highlight" size="narrow" leftIcon="add" onClick={onAddGenerator}>
             Add generator

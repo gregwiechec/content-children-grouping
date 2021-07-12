@@ -7,24 +7,31 @@ import "optimizely-oui/dist/styles.css";
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
   availableNameGenerators: string[];
+  onListChange: (items: GroupConfiguration[]) => void;
 }
 
-export const ConfigurationsList = ({ items, availableNameGenerators }: ConfigurationsListProps) => {
+export const ConfigurationsList = ({ items, availableNameGenerators, onListChange }: ConfigurationsListProps) => {
   const [currentItems, setCurrentItems] = useState(items || []);
 
   const onAddGenerator = (item: GroupConfiguration) => {
     item.groupLevelConfigurations.push(availableNameGenerators[0]);
-    setCurrentItems([...items]);
+    const itemsCopy = [...items];
+    onListChange(itemsCopy);
+    setCurrentItems(itemsCopy);
   };
 
   const onRemoveGenerator = (item: GroupConfiguration, index: number) => {
     item.groupLevelConfigurations.splice(index, 1);
-    setCurrentItems([...items]);
+    let itemsCopy = [...items];
+    onListChange(itemsCopy);
+    setCurrentItems(itemsCopy);
   };
 
   const onGeneratorValueChange = (item: GroupConfiguration, index: number, value: string) => {
-    item.groupLevelConfigurations[index] = value.target.value;
-    setCurrentItems([...items]);
+    item.groupLevelConfigurations[index] = value;
+    let itemsCopy = [...items];
+    onListChange(itemsCopy);
+    setCurrentItems(itemsCopy);
   };
 
   return (
