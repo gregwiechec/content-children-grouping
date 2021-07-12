@@ -1,0 +1,14 @@
+.vscode/
+.idea/
+dist/
+node_modules/
+.storybook/
+public/
+package.json
+package-lock.json
+*.conf
+*.xml
+*.sh
+.editorconfig
+.babelrc
+.gitignore
