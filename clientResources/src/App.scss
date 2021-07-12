@@ -1,0 +1,18 @@
+.configuration-item {
+  .config-grid-cell {
+    >div[data-oui-component=true],
+    >label[data-oui-component=true] {
+      display: inline-block;
+      margin-right: 16px;
+    }
+  }
+
+  .content-link
+  {
+    width: 100px;
+  }
+
+  .configuration-generator-select {
+    max-width: 150px;
+  }
+}

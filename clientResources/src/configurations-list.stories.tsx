@@ -2,6 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { ConfigurationsList } from './configurations-list';
+import './App.scss';
 
 export default {
     title: 'Configuraion/List',
@@ -12,5 +13,15 @@ const Template: ComponentStory<typeof ConfigurationsList> = (args) => <Configura
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
-    items: ["aaa", "bbb"]
+    items: [{
+        contentLink: "123",
+        routingEnabled: false,
+        containerTypeName: "",
+        groupLevelConfigurations: ["Name", "CreatedDate"]
+    }, {
+        contentLink: "124",
+        routingEnabled: true,
+        containerTypeName: "",
+        groupLevelConfigurations: ["Name"]
+    }]
 };

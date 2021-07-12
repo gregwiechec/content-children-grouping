@@ -1,26 +1,27 @@
 import React from 'react';
-import { BlockList } from 'optimizely-oui';
-
+import {BlockList} from 'optimizely-oui';
+import {GroupConfiguration} from "./models/Groupconfiguration";
+import {ConfigurationItem} from "./configuration-item";
 import "optimizely-oui/dist/styles.css";
 
 interface ConfigurationsListProps {
-    items: any[];
+    items: GroupConfiguration[];
 }
 
-export const ConfigurationsList = ({ items }: ConfigurationsListProps) => {
+export const ConfigurationsList = ({items}: ConfigurationsListProps) => {
+    if (!items) {
+        items = [];
+    }
+
     return (
-        <BlockList hasBorder={ true } >
-            <BlockList.Category header="Header">
-                <BlockList.Item>
-                    Home
-                </BlockList.Item>
-                <BlockList.Item>
-                    Shopping Cart
-                </BlockList.Item>
-                <BlockList.Item>
-                    Order Confirmation
-                </BlockList.Item>
-            </BlockList.Category>
+        <BlockList hasBorder={false}>
+            {items.map(x => (
+                <BlockList.Category>
+                    <BlockList.Item>
+                        <ConfigurationItem key={x.contentLink} configuration={x}/>
+                    </BlockList.Item>
+                </BlockList.Category>
+            ))}
         </BlockList>
     );
 }
