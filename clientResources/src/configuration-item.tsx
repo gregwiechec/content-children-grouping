@@ -48,12 +48,10 @@ export const ConfigurationItem = ({
               <Select
                 className="configuration-generator-select"
                 isOptional={false}
-                name="zoo"
-                id="zoo"
                 onChange={(value) => onGeneratorValueChange(index, value.target.value)}
               >
                 {availableNameGenerators.map((generator) => (
-                  <option key={generator} value={generator}>
+                  <option key={generator} value={generator} selected={generator === x}>
                     {generator}
                   </option>
                 ))}

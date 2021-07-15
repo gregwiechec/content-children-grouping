@@ -14,8 +14,8 @@ const Template: ComponentStory<typeof ConfigurationsList> = (args) => (
   <ConfigurationsList {...args} onListChange={action("onListChange")} />
 );
 
-export const LoggedIn = Template.bind({});
-LoggedIn.args = {
+export const DefaultList = Template.bind({});
+DefaultList.args = {
   items: [
     {
       contentLink: "123",
