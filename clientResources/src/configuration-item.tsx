@@ -69,10 +69,11 @@ export const ConfigurationItem = ({
               )}
             </React.Fragment>
           ))}
-          <Button className="add-button" style="highlight" size="narrow" leftIcon="add" onClick={onAddGenerator}>
+          <Button className="add-button" style="outline" size="narrow" leftIcon="add" onClick={onAddGenerator}>
             Add generator
           </Button>
         </GridCell>
+
       </Grid>
     </GridContainer>
   );

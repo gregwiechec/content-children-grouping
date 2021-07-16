@@ -11,8 +11,8 @@ export default {
 
 const Template: ComponentStory<typeof App> = (args) => <App {...args} />;
 
-export const LoggedIn = Template.bind({});
-LoggedIn.args = {
+export const AppStory = Template.bind({});
+AppStory.args = {
   items: [
     {
       contentLink: "123",
