@@ -18,7 +18,7 @@ AppStory.args = {
       contentLink: "123",
       routingEnabled: false,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name", "CreatedDate"]
+      groupLevelConfigurations: ["Name", "Created Date"]
     },
     {
       contentLink: "124",
@@ -27,5 +27,5 @@ AppStory.args = {
       groupLevelConfigurations: ["Name"]
     }
   ],
-  availableNameGenerators: ["name", "created date", "very long name generator"]
+  availableNameGenerators: ["Name", "Created Date", "Very long name generator"]
 };

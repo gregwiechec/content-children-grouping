@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Attention, Button } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
@@ -10,12 +10,22 @@ interface AppProps {
   availableNameGenerators: string[];
 }
 
+let successTimeoutHandle: number;
+
 const App = ({ items, availableNameGenerators }: AppProps) => {
   const [currentItems, setCurrentItems] = useState(items || []);
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [showSaveMessage, setShowSaveMessage] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutHandle) {
+        clearTimeout(successTimeoutHandle);
+      }
+    };
+  }, []);
 
   const onAddConfiguration = () => {
     setDialogValidationError("");
@@ -36,15 +46,15 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
     let updatedList: GroupConfiguration[];
     if (isNewConfiguration) {
       // add new item to array
-      let config = currentItems.filter(x=> x.contentLink === configuration.contentLink)[0];
+      let config = currentItems.filter((x) => x.contentLink === configuration.contentLink)[0];
       if (config != null) {
         setDialogValidationError("Duplicated configuration container");
-        return ;
+        return;
       }
       updatedList = [...currentItems, configuration];
     } else {
-      let existingConfig = currentItems.filter(x=> x.contentLink === configuration.contentLink)[0];
-      if (existingConfig){
+      let existingConfig = currentItems.filter((x) => x.contentLink === configuration.contentLink)[0];
+      if (existingConfig) {
         if (existingConfig !== currentConfiguration) {
           setDialogValidationError("Duplicated configuration container");
           return;
@@ -52,7 +62,7 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
       }
       const index = currentItems.indexOf(currentConfiguration);
       updatedList = [...currentItems];
-      const c = Object.assign({},updatedList[index]);
+      const c = Object.assign({}, updatedList[index]);
       c.contentLink = configuration.contentLink;
       c.containerTypeName = configuration.containerTypeName;
       c.routingEnabled = configuration.routingEnabled;
@@ -82,17 +92,19 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
   };
 
   const onSaveClick = () => {
-    alert(1);
+    setShowSaveMessage(true);
+    // @ts-ignore
+    successTimeoutHandle = setTimeout(() => {
+      setShowSaveMessage(false);
+    }, 3000);
   };
 
   return (
     <div className="App">
-      <Attention alignment="center" isDismissible>
-        Configuration saved
-      </Attention>
+      {showSaveMessage && <Attention alignment="center">Configuration saved</Attention>}
 
       <ConfigurationsList items={currentItems} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
-
+      <br />
       <Button
         className="add-configuration-button"
         style="outline"
