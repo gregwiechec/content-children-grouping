@@ -1,9 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-
 import { ConfigurationsList } from "./configurations-list";
 import "./App.scss";
-import { action } from "@storybook/addon-actions";
 
 export default {
   title: "List",
@@ -11,7 +9,7 @@ export default {
 } as ComponentMeta<typeof ConfigurationsList>;
 
 const Template: ComponentStory<typeof ConfigurationsList> = (args) => (
-  <ConfigurationsList {...args} onListChange={action("onListChange")} />
+  <ConfigurationsList {...args} />
 );
 
 export const DefaultList = Template.bind({});
@@ -29,6 +27,5 @@ DefaultList.args = {
       containerTypeName: "",
       groupLevelConfigurations: ["Name"]
     }
-  ],
-  availableNameGenerators: ["name", "created date", "very long name generator"]
+  ]
 };

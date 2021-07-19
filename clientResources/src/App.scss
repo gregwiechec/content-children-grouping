@@ -1,24 +1,16 @@
 .configuration-item {
-  .config-grid-cell {
-    >div[data-oui-component=true],
-    >label[data-oui-component=true] {
-      display: inline-block;
-      margin-right: 16px;
-    }
-  }
-
-  .content-link
-  {
-    width: 100px;
+  .content-link {
+    text-align: left;
+    background-color: blue;
+    background-color: blue;
   }
 
   .configuration-generator-select {
-    max-width: 150px;
-    margin-right: 4px;
+    max-width: 250px;
   }
 
   .remove-button {
-    margin-right: 4px;
+    margin-left: 4px;
   }
 
   .add-button {
