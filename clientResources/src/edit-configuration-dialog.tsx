@@ -1,26 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GroupConfiguration } from "./models/Groupconfiguration";
-import { BlockList, Button, ButtonIcon, Checkbox, DialogNew, GridCell, Input, Label, Select } from "optimizely-oui";
+import { Attention, BlockList, Button, ButtonIcon, Checkbox, DialogNew, Input, Label, Select } from "optimizely-oui";
 
 interface EditConfigurationDialogProps {
   onSave: (configuration: GroupConfiguration) => void;
   onCancel: () => void;
   configuration?: GroupConfiguration;
   availableNameGenerators: string[];
+  validationMessage: string;
 }
 
 export const EditConfigurationDialog = ({
   onSave,
   onCancel,
   configuration,
-  availableNameGenerators
+  availableNameGenerators,
+  validationMessage
 }: EditConfigurationDialogProps) => {
   const [contentLink, setContentLink] = useState(configuration?.contentLink || "");
   const [containerTypeName, setContainerTypeName] = useState(configuration?.containerTypeName || "");
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(configuration?.routingEnabled || false);
   const [generators, setGenerators] = useState(configuration?.groupLevelConfigurations || []);
 
-  const onAddGenerator = (item: GroupConfiguration) => {
+  useEffect(() => {
+    setContentLink(configuration?.contentLink || "");
+    setContainerTypeName(configuration?.containerTypeName || "");
+    setIsRoutingEnabled(configuration?.routingEnabled || false);
+    setGenerators(configuration?.groupLevelConfigurations || []);
+  }, [configuration]);
+
+  const onAddGenerator = () => {
     const updatedList = [...generators, availableNameGenerators[0]];
     setGenerators(updatedList);
   };
@@ -49,6 +58,7 @@ export const EditConfigurationDialog = ({
   return (
     <DialogNew
       title="Configuration"
+      className="configuration-item"
       hasCloseButton={true}
       hasOverlay={true}
       onClose={onCancel}
@@ -61,8 +71,13 @@ export const EditConfigurationDialog = ({
         </Button>
       ]}
     >
+      {validationMessage && (
+        <Attention alignment="center" type="bad-news">
+          {validationMessage}
+        </Attention>
+      )}
+
       <Input
-        defaultValue={configuration?.contentLink}
         displayError={false}
         type="number"
         isOptional={false}
@@ -70,11 +85,20 @@ export const EditConfigurationDialog = ({
         maxLength={5}
         className="content-link"
         min={1}
-        onChange={e => setContentLink(e.target.value)}
+        onChange={(e) => setContentLink(e.target.value)}
         value={contentLink}
       />
-      <Input defaultValue={configuration?.containerTypeName} type="text" label="Container type name" />
-      <Checkbox defaultChecked={configuration?.routingEnabled} label="Router enabled" />
+      <Input
+        type="text"
+        label="Container type name"
+        value={containerTypeName}
+        onChange={(e) => setContainerTypeName(e.target.value)}
+      />
+      <Checkbox
+        label="Router enabled"
+        checked={isRoutingEnabled}
+        onChange={(e) => setIsRoutingEnabled(e.target.value)}
+      />
       <Label>Name generators</Label>
       <BlockList hasBorder={false} className="configuration-item">
         {generators.map((x, index) => (
