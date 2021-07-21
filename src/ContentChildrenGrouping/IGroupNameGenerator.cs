@@ -8,11 +8,18 @@ namespace ContentChildrenGrouping
     /// </summary>
     public interface IGroupNameGenerator
     {
+        /// <summary>
+        /// unique generator name
+        /// </summary>
+        string Key { get; };
+
         string GetName(IContent content);
     }
 
     public class ByNameGroupNameGenerator : IGroupNameGenerator
     {
+        public string Key => "Name";
+
         private readonly int _startIndex;
         private readonly int _countLetters;
         private readonly string _defaultName;
@@ -41,6 +48,8 @@ namespace ContentChildrenGrouping
 
     public class ByCreateDateGroupNameGenerator : IGroupNameGenerator
     {
+        public string Key => "Create date";
+
         private readonly string _dateFormat;
         private readonly string _defaultValue;
 
@@ -63,6 +72,8 @@ namespace ContentChildrenGrouping
 
     internal class ByExpressionGroupNameGenerator : IGroupNameGenerator
     {
+        public string Key => "Expression"; //TODO: filter this generator from database selection
+        
         private readonly Func<IContent, string> _expression;
 
         public ByExpressionGroupNameGenerator(Func<IContent, string> expression)

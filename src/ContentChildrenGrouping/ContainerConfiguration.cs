@@ -5,7 +5,7 @@ using EPiServer.Core;
 namespace ContentChildrenGrouping
 {
     /// <summary>
-    /// Configuration for container content that has groups
+    /// Configuration for container content
     /// </summary>
     public class ContainerConfiguration
     {

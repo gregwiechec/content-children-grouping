@@ -178,6 +178,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterFromCode\ContentChildrenGroupsRegistration.cs" />
     <Compile Include="RegisterFromCode\FromCodeContentChildrenGroupsLoader.cs" />
+    <Compile Include="RegisterFromDb\ConfigSettingsController.cs" />
+    <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
+    <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
+    <Compile Include="RegisterFromDb\DbContentChildrenGroupsLoader.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

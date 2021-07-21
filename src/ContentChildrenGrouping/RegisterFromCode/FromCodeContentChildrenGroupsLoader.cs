@@ -14,7 +14,7 @@ namespace ContentChildrenGrouping.RegisterFromCode
             _contentChildrenGroupsRegistration = contentChildrenGroupsRegistration;
         }
 
-        public int Rank { get; } = 100;
+        public int Rank { get; } = 200;
 
         public IEnumerable<ContainerConfiguration> GetConfigurations()
         {
