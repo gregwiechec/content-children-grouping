@@ -15,6 +15,10 @@ interface ConfigurationsListProps {
 export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsListProps) => {
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
 
+  if (!items) {
+      items = [];
+  }
+
   const onConfigurationDelete = () => {
       if (!itemToDelete) {
           return;
@@ -25,22 +29,25 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
 
   return (
     <>
-      <Table density="loose">
+      <Table density="loose" className="configuration-table">
         <Table.THead>
           <Table.TR>
             <Table.TH>Content Link</Table.TH>
             <Table.TH>Container type</Table.TH>
-            <Table.TH>Router enabled</Table.TH>
+            <Table.TH  width="110px">Router enabled</Table.TH>
             <Table.TH>Generator</Table.TH>
             <Table.TH>Delete</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
-          {(items || []).map((x) => (
+          {items.map((x) => (
             <Table.TR key={x.contentLink}>
               <Table.TD>{x.contentLink}</Table.TD>
-              <Table.TD width="20%">{x.containerTypeName}</Table.TD>
-              <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>
+              <Table.TD>
+                  {x.containerTypeName}
+                  {!x.containerTypeName && <span style={{ fontStyle: "italic" }}>[default]</span>}
+              </Table.TD>
+              <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(", ")}</Table.TD>
               <Table.TD>
                 <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
@@ -52,6 +59,10 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
               </Table.TD>
             </Table.TR>
           ))}
+
+            {items.length === 0 && <Table.TR>
+                <Table.TD className="empty-config-table" colSpan={5}>No configuration</Table.TD>
+            </Table.TR>}
         </Table.TBody>
       </Table>
       <ConfirmDialog

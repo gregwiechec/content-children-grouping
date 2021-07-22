@@ -19,3 +19,15 @@
 .oui-button.add-configuration-button {
   margin-right: 8px;
 }
+
+.configuration-table {
+  & > tbody > tr > td.empty-config-table {
+    text-align: center;
+    height: 100px;
+    padding-top: 50px;
+  }
+
+  .centered {
+    text-align: center;
+  }
+}
