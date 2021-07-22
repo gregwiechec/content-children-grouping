@@ -37,7 +37,7 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
         </Table.THead>
         <Table.TBody>
           {(items || []).map((x) => (
-            <Table.TR>
+            <Table.TR key={x.contentLink}>
               <Table.TD>{x.contentLink}</Table.TD>
               <Table.TD width="20%">{x.containerTypeName}</Table.TD>
               <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>

@@ -4,28 +4,39 @@ import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
 import { EditConfigurationDialog } from "./edit-configuration-dialog";
+import { dataService as defaultDataService } from "./data-service";
 
 interface AppProps {
-  items: GroupConfiguration[];
-  availableNameGenerators: string[];
+  dataService?: any;
 }
 
 let successTimeoutHandle: number;
 
-const App = ({ items, availableNameGenerators }: AppProps) => {
-  const [currentItems, setCurrentItems] = useState(items || []);
+const App = ({ dataService }: AppProps) => {
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [showSaveMessage, setShowSaveMessage] = useState(false);
 
+  const [items, setItems] = useState<GroupConfiguration[]>([]);
+  const [availableNameGenerators, setAvailableGenerators] = useState<string[]>([]);
+
+  if (!dataService) {
+    dataService = defaultDataService;
+  }
+
   useEffect(() => {
+    dataService.load().then((result: any) => {
+      setItems(result.items);
+      setAvailableGenerators(result.availableNameGenerators);
+    });
+
     return () => {
       if (successTimeoutHandle) {
         clearTimeout(successTimeoutHandle);
       }
     };
-  }, []);
+  }, [dataService]);
 
   const onAddConfiguration = () => {
     setDialogValidationError("");
@@ -46,22 +57,22 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
     let updatedList: GroupConfiguration[];
     if (isNewConfiguration) {
       // add new item to array
-      let config = currentItems.filter((x) => x.contentLink === configuration.contentLink)[0];
+      let config = items.filter((x) => x.contentLink === configuration.contentLink)[0];
       if (config != null) {
         setDialogValidationError("Duplicated configuration container");
         return;
       }
-      updatedList = [...currentItems, configuration];
+      updatedList = [...items, configuration];
     } else {
-      let existingConfig = currentItems.filter((x) => x.contentLink === configuration.contentLink)[0];
+      let existingConfig = items.filter((x) => x.contentLink === configuration.contentLink)[0];
       if (existingConfig) {
         if (existingConfig !== currentConfiguration) {
           setDialogValidationError("Duplicated configuration container");
           return;
         }
       }
-      const index = currentItems.indexOf(currentConfiguration);
-      updatedList = [...currentItems];
+      const index = items.indexOf(currentConfiguration);
+      updatedList = [...items];
       const c = Object.assign({}, updatedList[index]);
       c.contentLink = configuration.contentLink;
       c.containerTypeName = configuration.containerTypeName;
@@ -70,7 +81,7 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
       updatedList[index] = c;
     }
 
-    setCurrentItems(updatedList);
+    setItems(updatedList);
     setCurrentConfiguration(null);
     setDialogValidationError("");
   };
@@ -82,13 +93,13 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
   };
 
   const onDeleteConfiguration = (configuration: GroupConfiguration) => {
-    const index = currentItems.indexOf(configuration);
+    const index = items.indexOf(configuration);
     if (index < 0) {
       return;
     }
-    const itemsCopy = [...currentItems];
+    const itemsCopy = [...items];
     itemsCopy.splice(index, 1);
-    setCurrentItems(itemsCopy);
+    setItems(itemsCopy);
   };
 
   const onSaveClick = () => {
@@ -103,7 +114,7 @@ const App = ({ items, availableNameGenerators }: AppProps) => {
     <div className="App">
       {showSaveMessage && <Attention alignment="center">Configuration saved</Attention>}
 
-      <ConfigurationsList items={currentItems} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
+      <ConfigurationsList items={items} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
       <br />
       <Button
         className="add-configuration-button"
