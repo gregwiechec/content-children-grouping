@@ -4,10 +4,10 @@ import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
 import { EditConfigurationDialog } from "./edit-configuration-dialog";
-import { dataService as defaultDataService } from "./data-service";
+import { DataService, dataService as defaultDataService } from "./data-service";
 
 interface AppProps {
-  dataService?: any;
+  dataService?: DataService;
 }
 
 let successTimeoutHandle: number;
@@ -26,9 +26,9 @@ const App = ({ dataService }: AppProps) => {
   }
 
   useEffect(() => {
-    dataService.load().then((result: any) => {
-      setItems(result.items);
-      setAvailableGenerators(result.availableNameGenerators);
+    dataService?.load().then((result: any) => {
+      setItems(result.items || []);
+      setAvailableGenerators(result.availableNameGenerators || []);
     });
 
     return () => {

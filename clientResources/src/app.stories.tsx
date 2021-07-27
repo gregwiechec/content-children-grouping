@@ -33,6 +33,9 @@ const service = {
         resolve(result);
       }, 500);
     });
+  },
+  save: () => {
+    return new Promise(resolve => resolve(false));
   }
 };
 
