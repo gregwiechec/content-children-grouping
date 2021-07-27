@@ -11,7 +11,7 @@ namespace ContentChildrenGrouping
         /// <summary>
         /// unique generator name
         /// </summary>
-        string Key { get; };
+        string Key { get; }
 
         string GetName(IContent content);
     }
