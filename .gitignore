@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+
+src/AlloySample/modules/_protected/content-children-grouping/1.0.0/static/
