@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using EPiServer.Core;
 using EPiServer.Shell.Services.Rest;
 
 namespace ContentChildrenGrouping.RegisterFromDb
@@ -10,19 +11,31 @@ namespace ContentChildrenGrouping.RegisterFromDb
     {
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
+        private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
-            DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader)
+            DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
+            IEnumerable<IGroupNameGenerator> groupNameGenerators)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
+            _groupNameGenerators = groupNameGenerators;
         }
 
         public ActionResult LoadConfigurations()
         {
             return new RestResult
             {
-                Data = _configSettingsDbRepository.LoadAll().ToList()
+                Data = new {
+                    items = _configSettingsDbRepository.LoadAll().ToList().Select(x=> new ConfigurationViewModel
+                    {
+                        ContainerContentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
+                        ContainerType = x.ContainerType.FullName,
+                        RoutingEnabled = x.RoutingEnabled,
+                        GroupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g=>g.Key))
+                    }),
+                    availableNameGenerators = _groupNameGenerators.Where(x=>x is IDbAvailableGroupNameGenerator).Select(x=>x.Key)
+                }
             };
         }
 
