@@ -16,7 +16,8 @@ const App = ({ dataService }: AppProps) => {
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
-  const [showSaveMessage, setShowSaveMessage] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveMessageType, setSaveMessageType] = useState("good-news");
 
   const [items, setItems] = useState<GroupConfiguration[]>([]);
   const [availableNameGenerators, setAvailableGenerators] = useState<string[]>([]);
@@ -103,16 +104,20 @@ const App = ({ dataService }: AppProps) => {
   };
 
   const onSaveClick = () => {
-    setShowSaveMessage(true);
-    // @ts-ignore
-    successTimeoutHandle = setTimeout(() => {
-      setShowSaveMessage(false);
-    }, 3000);
+    setSaveMessage("Saving");
+    setSaveMessageType("brand");
+    dataService?.save(items).then(response => {
+      setSaveMessageType("good-news");
+      setSaveMessage("Configuration saved");
+    }).catch(error => {
+      setSaveMessageType("bad-news");
+      setSaveMessage("Saving configuration failed");
+    });
   };
 
   return (
     <div className="App">
-      {showSaveMessage && <Attention alignment="center">Configuration saved</Attention>}
+      {saveMessage && <Attention type={saveMessageType} alignment="center">{saveMessage}</Attention>}
 
       <ConfigurationsList items={items} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
       <br />
