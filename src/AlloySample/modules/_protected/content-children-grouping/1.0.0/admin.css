@@ -1,3 +1,7 @@
+.epi-contentContainer {
+	max-width: 1200px;
+}
+
 .epi-contentArea {
 	margin-bottom: 32px;
 }
