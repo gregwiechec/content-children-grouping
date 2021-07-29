@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from "axios";
+
+const rootElement = document.getElementById('root');
+axios.defaults.baseURL = rootElement?.dataset.baseurl;
 
 ReactDOM.render(
   <React.StrictMode>

@@ -8,7 +8,7 @@ export interface DataService {
 export const dataService: DataService = {
   load: () => {
     return axios
-      .get("/EPiServer/content-children-grouping/ConfigSettings/LoadConfigurations") //TODO: path to episerver
+      .get("LoadConfigurations") //TODO: path to episerver
       .then((response) => {
         return response.data;
       })
@@ -20,7 +20,7 @@ export const dataService: DataService = {
 
   save: (configurations: any[]) => {
     return axios
-      .post("/EPiServer/content-children-grouping/ConfigSettings/Save", configurations)
+      .post("Save", configurations)
       .then((response) => {
         console.log(response);
       })

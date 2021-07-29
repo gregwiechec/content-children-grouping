@@ -17,7 +17,7 @@ const App = ({ dataService }: AppProps) => {
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
-  const [saveMessageType, setSaveMessageType] = useState("good-news");
+  const [saveMessageType, setSaveMessageType] = useState<"bad-news" | "brand" | "good-news" | "warning">("good-news");
 
   const [items, setItems] = useState<GroupConfiguration[]>([]);
   const [availableNameGenerators, setAvailableGenerators] = useState<string[]>([]);

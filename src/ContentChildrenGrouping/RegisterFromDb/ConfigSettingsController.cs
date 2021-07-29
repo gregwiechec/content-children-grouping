@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -26,15 +27,17 @@ namespace ContentChildrenGrouping.RegisterFromDb
         {
             return new RestResult
             {
-                Data = new {
-                    items = _configSettingsDbRepository.LoadAll().ToList().Select(x=> new ConfigurationViewModel
+                Data = new
+                {
+                    items = _configSettingsDbRepository.LoadAll().ToList().Select(x => new ConfigurationViewModel
                     {
                         containerContentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
                         containerType = x.ContainerType.FullName,
                         routingEnabled = x.RoutingEnabled,
-                        groupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g=>g.Key))
+                        groupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g => g.Key))
                     }),
-                    availableNameGenerators = _groupNameGenerators.Where(x=>x is IDbAvailableGroupNameGenerator).Select(x=>x.Key)
+                    availableNameGenerators = _groupNameGenerators.Where(x => x is IDbAvailableGroupNameGenerator)
+                        .Select(x => x.Key)
                 },
                 SafeResponse = true
             };
@@ -47,6 +50,17 @@ namespace ContentChildrenGrouping.RegisterFromDb
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            var containerConfigurations = configs.Select(x => new ContainerConfiguration
+            {
+                ContainerContentLink = ContentReference.Parse(x.containerContentLink),
+                ContainerType = Type.GetType(x.containerType),
+                RoutingEnabled = x.routingEnabled,
+                GroupLevelConfigurations = x.groupLevelConfigurations
+                    .Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(g => _groupNameGenerators.Single(n => n.Key == g))
+            }).ToList();
+            _configSettingsDbRepository.Save(containerConfigurations);
 
             _dbContentChildrenGroupsLoader.ClearCache();
             return new RestResult
@@ -65,5 +79,3 @@ namespace ContentChildrenGrouping.RegisterFromDb
         }
     }
 }
-
-//http://localhost:50061/EPiServer/content-children-grouping/ConfigSettings/GetSomething
