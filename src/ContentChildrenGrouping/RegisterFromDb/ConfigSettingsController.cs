@@ -29,13 +29,14 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 Data = new {
                     items = _configSettingsDbRepository.LoadAll().ToList().Select(x=> new ConfigurationViewModel
                     {
-                        ContainerContentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
-                        ContainerType = x.ContainerType.FullName,
-                        RoutingEnabled = x.RoutingEnabled,
-                        GroupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g=>g.Key))
+                        containerContentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
+                        containerType = x.ContainerType.FullName,
+                        routingEnabled = x.RoutingEnabled,
+                        groupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g=>g.Key))
                     }),
                     availableNameGenerators = _groupNameGenerators.Where(x=>x is IDbAvailableGroupNameGenerator).Select(x=>x.Key)
-                }
+                },
+                SafeResponse = true
             };
         }
 
@@ -50,16 +51,17 @@ namespace ContentChildrenGrouping.RegisterFromDb
             _dbContentChildrenGroupsLoader.ClearCache();
             return new RestResult
             {
-                Data = "ok"
+                Data = "ok",
+                SafeResponse = true
             };
         }
 
         public class ConfigurationViewModel
         {
-            public string ContainerContentLink { get; set; }
-            public string ContainerType { get; set; }
-            public bool RoutingEnabled { get; set; }
-            public string GroupLevelConfigurations { get; set; }
+            public string containerContentLink { get; set; }
+            public string containerType { get; set; }
+            public bool routingEnabled { get; set; }
+            public string groupLevelConfigurations { get; set; }
         }
     }
 }
