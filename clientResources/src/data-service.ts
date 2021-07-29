@@ -19,13 +19,6 @@ export const dataService: DataService = {
   },
 
   save: (configurations: any[]) => {
-    return axios
-      .post("Save", configurations)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    return axios.post("Save", configurations);
   }
 };
