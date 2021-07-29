@@ -31,10 +31,10 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 {
                     items = _configSettingsDbRepository.LoadAll().ToList().Select(x => new ConfigurationViewModel
                     {
-                        containerContentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
-                        containerType = x.ContainerType.FullName,
+                        contentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
+                        containerTypeName = x.ContainerType?.AssemblyQualifiedName,
                         routingEnabled = x.RoutingEnabled,
-                        groupLevelConfigurations = string.Join(",", x.GroupLevelConfigurations.Select(g => g.Key))
+                        groupLevelConfigurations = x.GroupLevelConfigurations.Select(g => g.Key)
                     }),
                     availableNameGenerators = _groupNameGenerators.Where(x => x is IDbAvailableGroupNameGenerator)
                         .Select(x => x.Key)
@@ -53,11 +53,10 @@ namespace ContentChildrenGrouping.RegisterFromDb
 
             var containerConfigurations = configs.Select(x => new ContainerConfiguration
             {
-                ContainerContentLink = ContentReference.Parse(x.containerContentLink),
-                ContainerType = Type.GetType(x.containerType),
+                ContainerContentLink = ContentReference.Parse(x.contentLink),
+                ContainerType = Type.GetType(x.containerTypeName),
                 RoutingEnabled = x.routingEnabled,
                 GroupLevelConfigurations = x.groupLevelConfigurations
-                    .Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(g => _groupNameGenerators.Single(n => n.Key == g))
             }).ToList();
             _configSettingsDbRepository.Save(containerConfigurations);
@@ -72,10 +71,10 @@ namespace ContentChildrenGrouping.RegisterFromDb
 
         public class ConfigurationViewModel
         {
-            public string containerContentLink { get; set; }
-            public string containerType { get; set; }
+            public string contentLink { get; set; }
+            public string containerTypeName { get; set; }
             public bool routingEnabled { get; set; }
-            public string groupLevelConfigurations { get; set; }
+            public IEnumerable<string> groupLevelConfigurations { get; set; }
         }
     }
 }

@@ -58,7 +58,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     continue;
                 }
 
-                containerConfiguration.ContainerType = userConfig.ContainerType.FullName;
+                containerConfiguration.ContainerType = userConfig.ContainerType?.AssemblyQualifiedName;
                 containerConfiguration.GroupLevelConfigurations =
                     string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key));
                 containerConfiguration.RoutingEnabled = userConfig.RoutingEnabled;
@@ -71,7 +71,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 var dds = new ConfigurationSettingsDds
                 {
                     ContainerContentLink = userConfig.ContainerContentLink,
-                    ContainerType = userConfig.ContainerType.FullName,
+                    ContainerType = userConfig.ContainerType?.AssemblyQualifiedName ?? "",
                     RoutingEnabled = userConfig.RoutingEnabled,
                     GroupLevelConfigurations =
                         string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key))
