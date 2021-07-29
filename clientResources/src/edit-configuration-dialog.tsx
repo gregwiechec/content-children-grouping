@@ -97,7 +97,7 @@ export const EditConfigurationDialog = ({
       <Checkbox
         label="Router enabled"
         checked={isRoutingEnabled}
-        onChange={(e) => setIsRoutingEnabled(e.target.value)}
+        onChange={(e) => setIsRoutingEnabled(e.target.checked)}
       />
       <Label>Name generators</Label>
       <BlockList hasBorder={false} className="configuration-item">
