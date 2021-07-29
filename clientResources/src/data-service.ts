@@ -8,10 +8,9 @@ export interface DataService {
 export const dataService: DataService = {
   load: () => {
     return axios
-      .get("/EPiServer/content-children-grouping/ConfigSettings/LoadConfigurations")
+      .get("/EPiServer/content-children-grouping/ConfigSettings/LoadConfigurations") //TODO: path to episerver
       .then((response) => {
-        const result = JSON.parse(response.data.substring(4));
-        return result;
+        return response.data;
       })
       .catch((error) => {
         console.error(error);
