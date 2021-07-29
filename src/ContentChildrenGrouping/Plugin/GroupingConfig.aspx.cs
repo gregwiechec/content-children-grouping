@@ -33,5 +33,8 @@ namespace ContentChildrenGrouping.Plugin
         {
             return _moduleResilver.Accessor().ResolveClientPath("content-children-grouping", url);
         }
+
+        protected string ControllerUrl =>
+            _moduleResilver.Accessor().ResolvePath("content-children-grouping", "ConfigSettings/");
     }
 }
