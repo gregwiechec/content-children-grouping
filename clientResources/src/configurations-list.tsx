@@ -26,7 +26,8 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
       onDelete(itemToDelete);
       setItemToDelete(null);
   };
-
+TODO: test with AlloySample.Models.Pages.ContainerPage, AlloySample, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    and 744px
   return (
     <>
       <Table density="loose" className="configuration-table">
