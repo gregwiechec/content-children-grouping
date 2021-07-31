@@ -83,7 +83,7 @@ namespace ContentChildrenGrouping
     [ServiceConfiguration(typeof(IGroupNameGenerator))]
     internal class ByExpressionGroupNameGenerator : IGroupNameGenerator
     {
-        public string Key => "Expression"; //TODO: filter this generator from database selection
+        public string Key => "Expression";
         
         private readonly Func<IContent, string> _expression;
 

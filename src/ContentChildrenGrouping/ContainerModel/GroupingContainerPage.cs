@@ -10,8 +10,8 @@ namespace ContentChildrenGrouping.ContainerModel
         GUID = "C5495780-3BC7-4DC3-A5AC-8444617F530C",
         GroupName = "Administration",
         AvailableInEditMode = false)]
-    //[SiteImageUrl]
-    public class GroupingContainerPage : PageData //TODO: grouping render IContainerPage
+    //[SiteImageUrl] //TODO: [grouping] add image for new type
+    public class GroupingContainerPage : PageData
     {
 
     }
