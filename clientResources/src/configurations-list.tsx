@@ -26,18 +26,16 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
       onDelete(itemToDelete);
       setItemToDelete(null);
   };
-TODO: test with AlloySample.Models.Pages.ContainerPage, AlloySample, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-    and 744px
   return (
     <>
       <Table density="loose" className="configuration-table">
         <Table.THead>
           <Table.TR>
-            <Table.TH>Content Link</Table.TH>
+            <Table.TH width={100}>Content Link</Table.TH>
             <Table.TH>Container type</Table.TH>
-            <Table.TH  width="110px">Router enabled</Table.TH>
-            <Table.TH>Generator</Table.TH>
-            <Table.TH>Delete</Table.TH>
+            <Table.TH  width={90}>Router</Table.TH>
+            <Table.TH width={200}>Generator</Table.TH>
+            <Table.TH width={170}>Delete</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
