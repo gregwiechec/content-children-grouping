@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web.UI;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
@@ -8,6 +9,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace ContentChildrenGrouping
 {
@@ -19,24 +21,27 @@ namespace ContentChildrenGrouping
 
         public void Initialize(InitializationEngine context)
         {
-            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>().StructureUpdateEnabled;
+            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
+                .StructureUpdateEnabled;
             if (!structureUpdateEnabled)
             {
                 return;
             }
+
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.SavingContent += ContentEvents_SavingContent;
             _log.Information($"Structure SavingContent registered");
-
         }
 
         public void Uninitialize(InitializationEngine context)
         {
-            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>().StructureUpdateEnabled;
+            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
+                .StructureUpdateEnabled;
             if (!structureUpdateEnabled)
             {
                 return;
             }
+
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.SavingContent -= ContentEvents_SavingContent;
             _log.Information($"Structure SavingContent unregistered");
@@ -51,19 +56,23 @@ namespace ContentChildrenGrouping
     public interface IContentStructureModifier
     {
         void UpdateContentParent(IContent content);
-        ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName, ContentReference parentParentContentLink);
+
+        ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
+            ContentReference parentParentContentLink);
     }
 
     /// <summary>
     /// Update content parent page to match the structure tree
     /// </summary>
     [ServiceConfiguration(typeof(IContentStructureModifier))]
-    public class ContentStructureModifier: IContentStructureModifier
+    public class ContentStructureModifier : IContentStructureModifier
     {
         private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
+        private readonly IContentProviderManager _providerManager;
 
-        public ContentStructureModifier(IContentRepository contentRepository, IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders)
+        public ContentStructureModifier(IContentRepository contentRepository,
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders)
         {
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
@@ -80,7 +89,8 @@ namespace ContentChildrenGrouping
             var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations();
 
             ContainerConfiguration containerConfiguration = null;
-            containerConfiguration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
+            containerConfiguration = containerConfigurations.FirstOrDefault(x =>
+                x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
 
             if (containerConfiguration == null)
             {
@@ -111,7 +121,8 @@ namespace ContentChildrenGrouping
             foreach (var nameGenerator in containerConfiguration.GroupLevelConfigurations)
             {
                 var groupName = nameGenerator.GetName(content);
-                var parent = _contentRepository.GetChildren<IContent>(parentLink).FirstOrDefault(x => x.Name.CompareStrings(groupName));
+                var parent = _contentRepository.GetChildren<IContent>(parentLink)
+                    .FirstOrDefault(x => x.Name.CompareStrings(groupName));
                 if (parent == null)
                 {
                     parentLink = CreateParent(containerConfiguration, groupName, parentLink);
@@ -126,16 +137,40 @@ namespace ContentChildrenGrouping
             {
                 content.ParentLink = parentLink.ToReferenceWithoutVersion();
             }
+
+
+            if (content is PageData pageData)
+            {
+                var ancestors = _contentRepository.GetAncestors(containerConfiguration.ContainerContentLink).Where(x =>
+                        x.ContentLink != ContentReference.StartPage && x.ContentLink != ContentReference.RootPage).Reverse()
+                    .Cast<PageData>();
+                var ancestorUrls = string.Join("/", ancestors.Select(x => x.URLSegment));
+                var container = _contentRepository.Get<PageData>(containerConfiguration.ContainerContentLink);
+
+
+                _providerManager.
+
+
+                pageData.ContentLink.ProviderName
+
+                pageData.URLSegment = ancestorUrls + container.URLSegment + "/" + pageData.Name;
+            }
         }
 
-        public ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName, ContentReference parentParentContentLink)
+        private IContentProviderManager GetProvider()
+        {
+
+        }
+
+        public ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
+            ContentReference parentParentContentLink)
         {
             //TODO: groups for blocks always create ContentFolder
 
             MethodInfo getDefault = typeof(IContentRepository).GetMethod(nameof(IContentRepository.GetDefault),
-                new[] { typeof(ContentReference) });
+                new[] {typeof(ContentReference)});
             MethodInfo generic = getDefault.MakeGenericMethod(containerConfiguration.ContainerType);
-            var container = generic.Invoke(_contentRepository, new[] { parentParentContentLink }) as IContent;
+            var container = generic.Invoke(_contentRepository, new[] {parentParentContentLink}) as IContent;
             container.Name = parentName;
             return _contentRepository.Save(container, SaveAction.Publish);
         }
