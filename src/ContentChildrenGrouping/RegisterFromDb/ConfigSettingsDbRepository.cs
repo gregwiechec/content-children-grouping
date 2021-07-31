@@ -58,7 +58,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     continue;
                 }
 
-                containerConfiguration.ContainerType = userConfig.ContainerType?.AssemblyQualifiedName;
+                containerConfiguration.ContainerType = userConfig.ContainerType.TypeToString();
                 containerConfiguration.GroupLevelConfigurations =
                     string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key));
                 containerConfiguration.RoutingEnabled = userConfig.RoutingEnabled;
@@ -71,7 +71,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 var dds = new ConfigurationSettingsDds
                 {
                     ContainerContentLink = userConfig.ContainerContentLink,
-                    ContainerType = userConfig.ContainerType?.AssemblyQualifiedName ?? "",
+                    ContainerType = userConfig.ContainerType.TypeToString() ?? "",
                     RoutingEnabled = userConfig.RoutingEnabled,
                     GroupLevelConfigurations =
                         string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key))
@@ -84,6 +84,16 @@ namespace ContentChildrenGrouping.RegisterFromDb
         {
             return _dataStoreFactory.GetStore(typeof(ConfigurationSettingsDds)) ??
                    _dataStoreFactory.CreateStore(typeof(ConfigurationSettingsDds));
+        }
+    }
+
+
+    public static class ContainerTypeExtensions
+    {
+        public static string TypeToString(this Type type)
+        {
+            //TODO: get only type, assembly
+            return type?.AssemblyQualifiedName;
         }
     }
 }

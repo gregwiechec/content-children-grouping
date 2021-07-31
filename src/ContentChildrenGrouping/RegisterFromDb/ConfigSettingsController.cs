@@ -32,7 +32,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     items = _configSettingsDbRepository.LoadAll().ToList().Select(x => new ConfigurationViewModel
                     {
                         contentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
-                        containerTypeName = x.ContainerType?.AssemblyQualifiedName,
+                        containerTypeName = x.ContainerType.TypeToString(),
                         routingEnabled = x.RoutingEnabled,
                         groupLevelConfigurations = x.GroupLevelConfigurations.Select(g => g.Key)
                     }),
