@@ -72,10 +72,11 @@ namespace ContentChildrenGrouping
         private readonly IContentProviderManager _providerManager;
 
         public ContentStructureModifier(IContentRepository contentRepository,
-            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders)
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders, IContentProviderManager providerManager)
         {
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
+            _providerManager = providerManager;
         }
 
         public void UpdateContentParent(IContent content)
@@ -84,7 +85,6 @@ namespace ContentChildrenGrouping
             {
                 return;
             }
-
 
             var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations();
 
@@ -138,28 +138,41 @@ namespace ContentChildrenGrouping
                 content.ParentLink = parentLink.ToReferenceWithoutVersion();
             }
 
-
+            /* TODO: not working
             if (content is PageData pageData)
             {
                 var ancestors = _contentRepository.GetAncestors(containerConfiguration.ContainerContentLink).Where(x =>
-                        x.ContentLink != ContentReference.StartPage && x.ContentLink != ContentReference.RootPage).Reverse()
+                        x.ContentLink != ContentReference.StartPage && x.ContentLink != ContentReference.RootPage)
+                    .Reverse()
                     .Cast<PageData>();
                 var ancestorUrls = string.Join("/", ancestors.Select(x => x.URLSegment));
                 var container = _contentRepository.Get<PageData>(containerConfiguration.ContainerContentLink);
 
 
-                _providerManager.
+                var url = pageData.URLSegment;
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    // TODO: IAggregatedSimpleAddressResolver
+                    // TODO: InvalidUrlMessageGenerator
 
 
-                pageData.ContentLink.ProviderName
+                    var isNewContent = pageData.ContentLink == null ||
+                                       pageData.ContentLink == ContentReference.EmptyReference;
+                    var provider = GetProvider(isNewContent ? pageData.ParentLink : pageData.ContentLink, isNewContent);
+                    url = provider.GetUniqueUrlSegment(pageData, pageData.ParentLink);
+                }
 
-                pageData.URLSegment = ancestorUrls + container.URLSegment + "/" + pageData.Name;
+
+                pageData.URLSegment = ancestorUrls + "/" + container.URLSegment + "/" + url;
             }
+            */
         }
 
-        private IContentProviderManager GetProvider()
+        private ContentProvider GetProvider(ContentReference contentLink, bool isNewContent)
         {
-
+            return isNewContent || !this._providerManager.ProviderMap.IsEntryPoint(contentLink)
+                ? this._providerManager.ProviderMap.GetProvider(contentLink)
+                : this._providerManager.GetProvider(contentLink.ProviderName);
         }
 
         public ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
