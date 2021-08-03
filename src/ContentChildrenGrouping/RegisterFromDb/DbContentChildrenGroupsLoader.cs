@@ -4,6 +4,8 @@ using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromDb
 {
+    //TODO: [grouping] register database loader with options
+
     [ServiceConfiguration(typeof(DbContentChildrenGroupsLoader))]
     public class DbContentChildrenGroupsLoader: IContentChildrenGroupsLoader
     {
@@ -40,3 +42,5 @@ namespace ContentChildrenGrouping.RegisterFromDb
         }
     }
 }
+
+//TODO: grouping remove hash from javascripts

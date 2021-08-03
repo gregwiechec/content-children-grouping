@@ -19,3 +19,5 @@ namespace AlloySample.Business.ContentGrouping
         }
     }
 }
+
+//TODO: [grouping] cleanup plugin - remove containers from current structure
