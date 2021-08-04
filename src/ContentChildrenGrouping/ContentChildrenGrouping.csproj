@@ -172,6 +172,7 @@
     <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IContentStructureModifier.cs" />
     <Compile Include="IGroupNameGenerator.cs" />
+    <Compile Include="InitializationModule.cs" />
     <Compile Include="Plugin\GroupingConfig.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

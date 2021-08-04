@@ -4,8 +4,6 @@ using System.Linq;
 using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.Framework;
-using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
@@ -123,35 +121,11 @@ namespace ContentChildrenGrouping
             }
 
             // the url is just content URLSegment
-            return new PartialRouteData()
+            return new PartialRouteData
             {
                 BasePathRoot = configuration.ContainerContentLink.ToReferenceWithoutVersion(),
                 PartialVirtualPath = content.URLSegment
             };
-        }
-    }
-
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class InitializationModule : IInitializableModule
-    {
-        public void Initialize(EPiServer.Framework.Initialization.InitializationEngine context)
-        {
-            var options = context.Locate.Advanced.GetInstance<ContentChildrenGroupingOptions>();
-
-            if (options.RouterEnabled)
-            {
-                var partialRouter = new CustomPartialRouter(context.Locate.ContentLoader(),
-                    context.Locate.Advanced.GetAllInstances<IContentChildrenGroupsLoader>());
-                RouteTable.Routes.RegisterPartialRouter(partialRouter);
-            }
-        }
-
-        public void Preload(string[] parameters)
-        {
-        }
-
-        public void Uninitialize(EPiServer.Framework.Initialization.InitializationEngine context)
-        {
         }
     }
 }

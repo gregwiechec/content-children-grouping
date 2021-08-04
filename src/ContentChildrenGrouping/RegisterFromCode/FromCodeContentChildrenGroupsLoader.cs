@@ -4,6 +4,9 @@ using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromCode
 {
+    /// <summary>
+    /// Containers configuration loader that loads configurations registered from code
+    /// </summary>
     [ServiceConfiguration(typeof(IContentChildrenGroupsLoader))]
     public class FromCodeContentChildrenGroupsLoader : IContentChildrenGroupsLoader
     {

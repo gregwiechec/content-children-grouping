@@ -19,7 +19,21 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="MainRegion">
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    
+    
+    <% if (!IsDatabaseConfigurationsEnabled) {%>
+        Database registration is not enabled. You need to turn it on throught code using options:<br /><br />
+        <pre>
 
+            context.Services.AddTransient(serviceLocator => new ContentChildrenGroupingOptions
+            {
+                DatabaseConfigurationsEnabled = true
+            });
+
+        </pre>
+    <%}%>
+    
+    <% if (IsDatabaseConfigurationsEnabled) {%>
     <div class="epi-formArea">
         <div class="epi-size20">
            <div id="root"></div>
@@ -28,4 +42,5 @@
             <script src='<%= GetPath("static/js/main.e61c33e5.chunk.js") %>'></script>
         </div>
     </div>
+    <%}%>
 </asp:Content>

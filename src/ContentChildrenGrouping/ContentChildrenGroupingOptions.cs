@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping
 {
@@ -19,5 +14,10 @@ namespace ContentChildrenGrouping
         /// When true, thenduring content saving the structure is updated, default true
         /// </summary>
         public bool StructureUpdateEnabled { get; set; } = false;
+
+        /// <summary>
+        /// When true, then containers can be configured using admin plugin
+        /// </summary>
+        public bool DatabaseConfigurationsEnabled { get; set; } = false;
     }
 }

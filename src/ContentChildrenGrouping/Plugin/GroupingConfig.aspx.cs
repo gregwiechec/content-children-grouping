@@ -15,6 +15,7 @@ namespace ContentChildrenGrouping.Plugin
     public partial class GroupingConfig : EPiServer.Shell.WebForms.WebFormsBase
     {
         protected Injected<IModuleResourceResolver> _moduleResilver { get; set; }
+        protected Injected<ContentChildrenGroupingOptions> _options { get; set; }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -28,6 +29,8 @@ namespace ContentChildrenGrouping.Plugin
 
             SystemMessageContainer.Heading = "Configure content groups";
         }
+
+        protected bool IsDatabaseConfigurationsEnabled => _options.Service.DatabaseConfigurationsEnabled;
 
         protected string GetPath(string url)
         {

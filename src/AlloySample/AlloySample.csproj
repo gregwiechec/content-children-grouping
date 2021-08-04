@@ -261,7 +261,7 @@
     <Compile Include="Business\Channels\DisplayResolutions.cs" />
     <Compile Include="Business\Channels\MobileChannel.cs" />
     <Compile Include="Business\Channels\WebChannel.cs" />
-    <Compile Include="Business\ContentGrouping\ContentGroupingInitialization.cs" />
+    <Compile Include="Business\Initialization\ContentGroupingInitialization.cs" />
     <Compile Include="Business\ContentExtensions.cs" />
     <Compile Include="Business\ContentLocator.cs" />
     <Compile Include="Business\EditorDescriptors\ContactPageSelectionFactory.cs" />
@@ -475,7 +475,9 @@
       <Name>ContentChildrenGrouping</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Business\ContentGrouping\" />
+  </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

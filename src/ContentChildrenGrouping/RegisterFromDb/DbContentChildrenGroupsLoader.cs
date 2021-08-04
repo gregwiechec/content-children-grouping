@@ -4,25 +4,32 @@ using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromDb
 {
-    //TODO: [grouping] register database loader with options
-
     [ServiceConfiguration(typeof(DbContentChildrenGroupsLoader))]
-    public class DbContentChildrenGroupsLoader: IContentChildrenGroupsLoader
+    [ServiceConfiguration(typeof(IContentChildrenGroupsLoader))]
+    public class DbContentChildrenGroupsLoader : IContentChildrenGroupsLoader
     {
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
+        private readonly ContentChildrenGroupingOptions _options;
         private readonly object _lock = new object();
 
         public int Rank => 100;
 
         private const string CacheKey = "Configurations";
 
-        public DbContentChildrenGroupsLoader(IConfigSettingsDbRepository configSettingsDbRepository)
+        public DbContentChildrenGroupsLoader(IConfigSettingsDbRepository configSettingsDbRepository,
+            ContentChildrenGroupingOptions options)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
+            _options = options;
         }
 
         public IEnumerable<ContainerConfiguration> GetConfigurations()
         {
+            if (!_options.DatabaseConfigurationsEnabled)
+            {
+                return Enumerable.Empty<ContainerConfiguration>();
+            }
+
             if (EPiServer.CacheManager.Get(CacheKey) is IEnumerable<ContainerConfiguration> containerConfigurations)
             {
                 return containerConfigurations;

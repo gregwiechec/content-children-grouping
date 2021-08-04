@@ -15,9 +15,10 @@ namespace ContentChildrenGrouping
 
     internal static class ContentChildrenGroupsLoaderExtensions
     {
-        public static List<ContainerConfiguration> GellAllConfigurations(this IEnumerable<IContentChildrenGroupsLoader> loaders)
+        public static List<ContainerConfiguration> GellAllConfigurations(
+            this IEnumerable<IContentChildrenGroupsLoader> loaders)
         {
-            return loaders.SelectMany(x => x.GetConfigurations()).ToList();
+            return loaders.OrderBy(x => x.Rank).SelectMany(x => x.GetConfigurations()).ToList();
         }
     }
 }
