@@ -25,7 +25,7 @@ namespace AlloySample.Business.Initialization
             context.Services.AddTransient(serviceLocator => new ContentChildrenGroupingOptions
             {
                 RouterEnabled = false,
-                DatabaseConfigurationsEnabled = false,
+                DatabaseConfigurationsEnabled = true,
                 StructureUpdateEnabled = true
             });
         }
@@ -33,5 +33,3 @@ namespace AlloySample.Business.Initialization
 }
 
 //TODO: [grouping] cleanup plugin - remove containers from current structure
-
-//TODO: [grouping] Admin plugin when DatabaseConfigurationsEnabled is false then show info and hide configuration

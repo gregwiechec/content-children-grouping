@@ -4,6 +4,9 @@ using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromDb
 {
+    /// <summary>
+    /// Loads container configuration from database
+    /// </summary>
     [ServiceConfiguration(typeof(DbContentChildrenGroupsLoader))]
     [ServiceConfiguration(typeof(IContentChildrenGroupsLoader))]
     public class DbContentChildrenGroupsLoader : IContentChildrenGroupsLoader
@@ -43,11 +46,12 @@ namespace ContentChildrenGrouping.RegisterFromDb
             }
         }
 
+        /// <summary>
+        /// clear cached configurations
+        /// </summary>
         public void ClearCache()
         {
             EPiServer.CacheManager.Remove(CacheKey);
         }
     }
 }
-
-//TODO: grouping remove hash from javascripts
