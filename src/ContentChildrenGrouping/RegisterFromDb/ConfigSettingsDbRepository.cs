@@ -92,8 +92,13 @@ namespace ContentChildrenGrouping.RegisterFromDb
     {
         public static string TypeToString(this Type type)
         {
-            //TODO: get only type, assembly
-            return type?.AssemblyQualifiedName;
+            if (type == null)
+            {
+                return null;
+            }
+
+            return $"{type.FullName}, {type.Assembly.GetName().Name}";
+
         }
     }
 }
