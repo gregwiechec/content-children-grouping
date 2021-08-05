@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Extensions
 {
     internal static class StringExtensions
     {

@@ -183,7 +183,7 @@
     <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
     <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
     <Compile Include="RegisterFromDb\DbContentChildrenGroupsLoader.cs" />
-    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

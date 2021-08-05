@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.ContainerModel;
+using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
