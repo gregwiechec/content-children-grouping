@@ -3,7 +3,6 @@ using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.DataAccess;
 using EPiServer.Logging.Compatibility;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
@@ -74,6 +73,7 @@ namespace ContentChildrenGrouping
                         {
                             return;
                         }
+
                         var currentContentParent = content.ParentLink;
                         var correctParentNames = configuration.GroupLevelConfigurations
                             .Select(x => x.GetName(content))
@@ -102,7 +102,8 @@ namespace ContentChildrenGrouping
                                     .FirstOrDefault(x => x.Name.CompareStrings(parentName));
                                 if (parent == null)
                                 {
-                                    currentContainerContentLink = _contentStructureModifier.CreateParent(configuration, parentName, currentContainerContentLink);
+                                    currentContainerContentLink = _contentStructureModifier.CreateParent(configuration,
+                                        parentName, currentContainerContentLink, content);
                                 }
                                 else
                                 {
@@ -110,7 +111,8 @@ namespace ContentChildrenGrouping
                                 }
                             }
 
-                            _contentRepository.Move(content.ContentLink, currentContainerContentLink, AccessLevel.NoAccess, AccessLevel.NoAccess);
+                            _contentRepository.Move(content.ContentLink, currentContainerContentLink,
+                                AccessLevel.NoAccess, AccessLevel.NoAccess);
                         }
                     }
 
@@ -131,6 +133,7 @@ namespace ContentChildrenGrouping
                 {
                     return "Job stopped";
                 }
+
                 FixStructure(configuration, _contentRepository.Get<IContent>(configuration.ContainerContentLink));
             }
 

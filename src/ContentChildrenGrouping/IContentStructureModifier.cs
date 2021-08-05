@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Web.UI;
+using ContentChildrenGrouping.ContainerModel;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
@@ -9,7 +8,6 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 
 namespace ContentChildrenGrouping
 {
@@ -58,7 +56,7 @@ namespace ContentChildrenGrouping
         void UpdateContentParent(IContent content);
 
         ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
-            ContentReference parentParentContentLink);
+            ContentReference parentParentContentLink, IContent content);
     }
 
     /// <summary>
@@ -72,7 +70,8 @@ namespace ContentChildrenGrouping
         private readonly IContentProviderManager _providerManager;
 
         public ContentStructureModifier(IContentRepository contentRepository,
-            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders, IContentProviderManager providerManager)
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
+            IContentProviderManager providerManager)
         {
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
@@ -82,6 +81,12 @@ namespace ContentChildrenGrouping
         public void UpdateContentParent(IContent content)
         {
             if (content == null || ContentReference.IsNullOrEmpty(content.ParentLink))
+            {
+                return;
+            }
+
+            // Containers works only for Pages, blocks and media
+            if (!(content is PageData || content is BlockData || content is MediaData))
             {
                 return;
             }
@@ -125,7 +130,7 @@ namespace ContentChildrenGrouping
                     .FirstOrDefault(x => x.Name.CompareStrings(groupName));
                 if (parent == null)
                 {
-                    parentLink = CreateParent(containerConfiguration, groupName, parentLink);
+                    parentLink = CreateParent(containerConfiguration, groupName, parentLink, content);
                 }
                 else
                 {
@@ -176,14 +181,26 @@ namespace ContentChildrenGrouping
         }
 
         public ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
-            ContentReference parentParentContentLink)
+            ContentReference parentParentContentLink, IContent content)
         {
-            //TODO: groups for blocks always create ContentFolder
+            IContent container;
+            if (content is BlockData || content is MediaData)
+            {
+                container = _contentRepository.GetDefault<ContentFolder>(parentParentContentLink);
+            }
+            else if (containerConfiguration.ContainerType == null ||
+                     containerConfiguration.ContainerType == typeof(GroupingContainerPage))
+            {
+                container = _contentRepository.GetDefault<GroupingContainerPage>(parentParentContentLink);
+            }
+            else
+            {
+                var getDefault = typeof(IContentRepository).GetMethod(nameof(IContentRepository.GetDefault),
+                    new[] { typeof(ContentReference) });
+                var generic = getDefault.MakeGenericMethod(containerConfiguration.ContainerType);
+                container = (IContent)generic.Invoke(_contentRepository, new[] { parentParentContentLink });
+            }
 
-            MethodInfo getDefault = typeof(IContentRepository).GetMethod(nameof(IContentRepository.GetDefault),
-                new[] {typeof(ContentReference)});
-            MethodInfo generic = getDefault.MakeGenericMethod(containerConfiguration.ContainerType);
-            var container = generic.Invoke(_contentRepository, new[] {parentParentContentLink}) as IContent;
             container.Name = parentName;
             return _contentRepository.Save(container, SaveAction.Publish);
         }

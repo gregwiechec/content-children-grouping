@@ -30,7 +30,7 @@ namespace ContentChildrenGrouping.RegisterFromCode
             Register(new ContainerConfiguration
             {
                 ContainerContentLink = containerId,
-                ContainerType = containerType ?? typeof(GroupingContainerPage),
+                ContainerType = containerType,
                 GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, 1, "_no_category")}
             });
         }

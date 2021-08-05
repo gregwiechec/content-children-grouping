@@ -57,7 +57,7 @@ namespace ContentChildrenGrouping
                     return result;
                 }
 
-                //TODO: groups optimization if config[currentLevelIndex] == nameGenerator thenfind child faster
+                //TODO: groups optimization if config[currentLevelIndex] == nameGenerator then find child faster
 
                 foreach (var child in children)
                 {

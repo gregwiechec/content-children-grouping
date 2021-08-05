@@ -19,7 +19,11 @@ namespace ContentChildrenGrouping
         /// </summary>
         public bool RoutingEnabled { get; set; } = true;
 
-        // for assets it should be ContentFolder
+        /// <summary>
+        /// Type of container page used to group pages
+        /// for block and media it will be always ContentFolder
+        /// when null, then GroupingContainerPage is used
+        /// </summary>
         public Type ContainerType { get; set; }
 
         /// <summary>
