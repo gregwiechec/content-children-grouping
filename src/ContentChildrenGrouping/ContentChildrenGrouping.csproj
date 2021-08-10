@@ -162,12 +162,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClusteredSimpleAddress.cs" />
     <Compile Include="ContainerConfiguration.cs" />
     <Compile Include="ContainerModel\ContainerPageController.cs" />
     <Compile Include="ContainerModel\ContainerUIDescriptor.cs" />
     <Compile Include="ContentChildrenGroupingOptions.cs" />
     <Compile Include="CustomPartialRouter.cs" />
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
+    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
+    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
     <Compile Include="FixStructureScheduledJob.cs" />
     <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IContentStructureModifier.cs" />
