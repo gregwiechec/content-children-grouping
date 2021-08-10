@@ -118,7 +118,8 @@ namespace ContentChildrenGrouping
                 return;
             }
 
-            if (containerConfiguration.ContainerType.IsInstanceOfType(content))
+            var containerType = containerConfiguration.ContainerType ?? typeof(GroupingContainerPage);
+            if (containerType.IsInstanceOfType(content))
             {
                 return;
             }
