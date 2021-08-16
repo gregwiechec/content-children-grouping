@@ -15,12 +15,21 @@ namespace ContentChildrenGrouping.EditMode
         /// </summary>
         public IEnumerable<string> ConfigurationContainerLinks { get; set; }
 
+        public bool CustomIconsEnabled { get; set; } = true;
 
-        public ContentChildrenGroupingModuleViewModel(ShellModule shellModule, IClientResourceService clientResourceService,
-            IEnumerable<IContentRepositoryDescriptor> contentRepositoryDescriptors, IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders) :
+        public bool SearchCommandEnabled { get; set; } = true;
+
+        public ContentChildrenGroupingModuleViewModel(ShellModule shellModule,
+            IClientResourceService clientResourceService,
+            IEnumerable<IContentRepositoryDescriptor> contentRepositoryDescriptors,
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
+            ContentChildrenGroupingOptions childrenGroupingOptions) :
             base(shellModule, clientResourceService, contentRepositoryDescriptors)
         {
-            this.ConfigurationContainerLinks = contentChildrenGroupsLoaders.GellAllConfigurations().Select(x=> x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
+            ConfigurationContainerLinks = contentChildrenGroupsLoaders.GellAllConfigurations()
+                .Select(x => x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
+            CustomIconsEnabled = childrenGroupingOptions.CustomIconsEnabled;
+            SearchCommandEnabled = childrenGroupingOptions.SearchCommandEnabled;
         }
     }
 }

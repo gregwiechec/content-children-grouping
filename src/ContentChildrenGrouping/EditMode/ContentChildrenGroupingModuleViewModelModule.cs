@@ -21,10 +21,13 @@ namespace ContentChildrenGrouping.EditMode
     {
         private readonly IEnumerable<IContentRepositoryDescriptor> _contentRepositoryDescriptors;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
+        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
 
-        public ContentChildrenGroupingModuleViewModelModule(string name, string routeBasePath, string resourceBasePath) :
+        public ContentChildrenGroupingModuleViewModelModule(string routeBasePath,
+            string name, string resourceBasePath) :
             base(name, routeBasePath, resourceBasePath)
         {
+            _childrenGroupingOptions = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>();
             _contentRepositoryDescriptors = ServiceLocator.Current.GetAllInstances<IContentRepositoryDescriptor>();
             _contentChildrenGroupsLoaders = ServiceLocator.Current.GetAllInstances<IContentChildrenGroupsLoader>();
         }
@@ -38,18 +41,21 @@ namespace ContentChildrenGrouping.EditMode
             IProjectService projectService, ServiceAccessor<RequestContext> requestContext,
             IFeatureNotificationService featureNotificationService,
             ServiceAccessor<RoutingOptions> routingOptionsAccessor,
-            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders) : base(name, routeBasePath, resourceBasePath, uiUrl,
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
+            ContentChildrenGroupingOptions childrenGroupingOptions) : base(name, routeBasePath, resourceBasePath, uiUrl,
             utilUrl, absolutePathConverter, typeScannerLookup, vpp, contentRepositoryDescriptors, cmsUiDefaults,
             categoryRepository, displayResolutionService, currentSiteDefinition, episerverSection, settings,
             frameRepository, projectService, requestContext, featureNotificationService, routingOptionsAccessor)
         {
             _contentRepositoryDescriptors = contentRepositoryDescriptors;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
+            _childrenGroupingOptions = childrenGroupingOptions;
         }
 
-        public override ModuleViewModel CreateViewModel(ModuleTable moduleTable, IClientResourceService clientResourceService)
+        public override ModuleViewModel CreateViewModel(ModuleTable moduleTable,
+            IClientResourceService clientResourceService)
         {
-            return new ContentChildrenGroupingModuleViewModel(this, clientResourceService, _contentRepositoryDescriptors, _contentChildrenGroupsLoaders);
+            return new ContentChildrenGroupingModuleViewModel(this, clientResourceService, _contentRepositoryDescriptors,  _contentChildrenGroupsLoaders, _childrenGroupingOptions);
         }
     }
 }

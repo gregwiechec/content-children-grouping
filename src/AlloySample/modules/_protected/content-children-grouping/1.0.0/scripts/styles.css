@@ -1,0 +1,12 @@
+﻿.search-content-dialog .dijitDialogPaneActionBar {
+	display: none;
+}
+
+.search-content-dialog .dijitDialogTitleBar {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.search-content-dialog .dijitDialogCloseIcon {
+	top: 4px;
+}
