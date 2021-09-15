@@ -10,6 +10,7 @@ using EPiServer.Web.Routing.Segments;
 
 namespace ContentChildrenGrouping
 {
+    /* We don't need partial router. Routing is handled by ExternalURL
     public class CustomPartialRouter: IPartialRouter<PageData, PageData>
     {
         private readonly IContentLoader _contentLoader;
@@ -128,4 +129,5 @@ namespace ContentChildrenGrouping
             };
         }
     }
+    */
 }

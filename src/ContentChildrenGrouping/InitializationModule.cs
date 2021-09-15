@@ -7,6 +7,7 @@ using EPiServer.Web.Routing;
 
 namespace ContentChildrenGrouping
 {
+    /*  Routing is handled by ExternalURL
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class InitializationModule : IInitializableModule
     {
@@ -30,4 +31,5 @@ namespace ContentChildrenGrouping
         {
         }
     }
+    */
 }

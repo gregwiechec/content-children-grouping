@@ -94,25 +94,7 @@ namespace ContentChildrenGrouping
 
             var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations();
 
-            ContainerConfiguration containerConfiguration = null;
-            containerConfiguration = containerConfigurations.FirstOrDefault(x =>
-                x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
-
-            if (containerConfiguration == null)
-            {
-                var ancestors = _contentRepository.GetAncestors(content.ParentLink);
-                foreach (var ancestor in ancestors)
-                {
-                    var parentContentLink = ancestor.ContentLink.ToReferenceWithoutVersion();
-                    containerConfiguration = containerConfigurations.FirstOrDefault(x =>
-                        x.ContainerContentLink.ToReferenceWithoutVersion() == parentContentLink);
-                    if (containerConfiguration != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
+            var containerConfiguration = FindConfiguration(content, containerConfigurations);
             if (containerConfiguration == null)
             {
                 return;
@@ -124,6 +106,46 @@ namespace ContentChildrenGrouping
                 return;
             }
 
+            UpdateParentLink(content, containerConfiguration);
+            UpdateExternalUrl(content, containerConfiguration);
+        }
+
+        /// <summary>
+        /// Find container configuration for content. It should be parent page or one of the ascendants
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="containerConfigurations"></param>
+        /// <returns></returns>
+        private ContainerConfiguration FindConfiguration(IContent content,
+            IReadOnlyCollection<ContainerConfiguration> containerConfigurations)
+        {
+            // Try to find configuration directly in parent
+            var containerConfiguration = containerConfigurations.FirstOrDefault(x =>
+                x.ContainerContentLink.ToReferenceWithoutVersion() == content.ParentLink.ToReferenceWithoutVersion());
+
+            if (containerConfiguration != null)
+            {
+                return containerConfiguration;
+            }
+
+            var ancestors = _contentRepository.GetAncestors(content.ParentLink);
+            foreach (var ancestor in ancestors)
+            {
+                var parentContentLink = ancestor.ContentLink.ToReferenceWithoutVersion();
+                containerConfiguration = containerConfigurations.FirstOrDefault(x =>
+                    x.ContainerContentLink.ToReferenceWithoutVersion() == parentContentLink);
+                if (containerConfiguration != null)
+                {
+                    break;
+                }
+            }
+
+            return containerConfiguration;
+        }
+
+        // update ParentLink when adding or moving content
+        private void UpdateParentLink(IContent content, ContainerConfiguration containerConfiguration)
+        {
             var parentLink = containerConfiguration.ContainerContentLink;
             foreach (var nameGenerator in containerConfiguration.GroupLevelConfigurations)
             {
@@ -144,35 +166,45 @@ namespace ContentChildrenGrouping
             {
                 content.ParentLink = parentLink.ToReferenceWithoutVersion();
             }
+        }
 
-            /* TODO: not working
-            if (content is PageData pageData)
+        /// <summary>
+        /// Updating ExternalURL to remove content structure segments
+        /// </summary>
+        private void UpdateExternalUrl(IContent content, ContainerConfiguration containerConfiguration)
+        {
+            if (containerConfiguration == null)
             {
-                var ancestors = _contentRepository.GetAncestors(containerConfiguration.ContainerContentLink).Where(x =>
-                        x.ContentLink != ContentReference.StartPage && x.ContentLink != ContentReference.RootPage)
-                    .Reverse()
-                    .Cast<PageData>();
-                var ancestorUrls = string.Join("/", ancestors.Select(x => x.URLSegment));
-                var container = _contentRepository.Get<PageData>(containerConfiguration.ContainerContentLink);
-
-
-                var url = pageData.URLSegment;
-                if (string.IsNullOrWhiteSpace(url))
-                {
-                    // TODO: IAggregatedSimpleAddressResolver
-                    // TODO: InvalidUrlMessageGenerator
-
-
-                    var isNewContent = pageData.ContentLink == null ||
-                                       pageData.ContentLink == ContentReference.EmptyReference;
-                    var provider = GetProvider(isNewContent ? pageData.ParentLink : pageData.ContentLink, isNewContent);
-                    url = provider.GetUniqueUrlSegment(pageData, pageData.ParentLink);
-                }
-
-
-                pageData.URLSegment = ancestorUrls + "/" + container.URLSegment + "/" + url;
+                return;
             }
-            */
+
+            var pageData = content as PageData;
+            if (pageData == null)
+            {
+                return;
+            }
+
+            var ancestors = _contentRepository.GetAncestors(containerConfiguration.ContainerContentLink).Where(
+                    x =>
+                        x.ContentLink != ContentReference.StartPage &&
+                        x.ContentLink != ContentReference.RootPage)
+                .Reverse()
+                .Cast<PageData>();
+            var ancestorUrls = string.Join("/", ancestors.Select(x => x.URLSegment));
+            var container = _contentRepository.Get<PageData>(containerConfiguration.ContainerContentLink);
+
+            var url = pageData.URLSegment;
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                var isNewContent = pageData.ContentLink == null ||
+                                   pageData.ContentLink == ContentReference.EmptyReference;
+                var provider = GetProvider(isNewContent ? pageData.ParentLink : pageData.ContentLink,
+                    isNewContent);
+                url = provider.GetUniqueUrlSegment(pageData, pageData.ParentLink);
+            }
+
+
+            pageData.ExternalURL = ancestorUrls + "/" + container.URLSegment + "/" + url;
         }
 
         private ContentProvider GetProvider(ContentReference contentLink, bool isNewContent)
