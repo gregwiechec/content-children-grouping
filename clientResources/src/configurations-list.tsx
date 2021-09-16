@@ -35,7 +35,7 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
             <Table.TH>Container type</Table.TH>
             <Table.TH  width={90}>Router</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
-            <Table.TH width={170}>Delete</Table.TH>
+            <Table.TH width={170}>&nbsp;</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
@@ -47,7 +47,7 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
                   {!x.containerTypeName && <span style={{ fontStyle: "italic" }}>[default]</span>}
               </Table.TD>
               <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
-              <Table.TD>{(x.groupLevelConfigurations || []).join(", ")}</Table.TD>
+              <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
                 <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
                   Edit
