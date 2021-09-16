@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Attention, Button } from "optimizely-oui";
+import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
@@ -9,21 +9,27 @@ import { ManageConfigurationDialog } from "./manage-configuration-dialog";
 
 interface AppProps {
   dataService?: DataService;
+  structureUpdateEnabled: boolean;
+  availableNameGenerators: string[];
+  databaseConfigurationsEnabled: boolean;
 }
 
 let successTimeoutHandle: number;
 
-const App = ({ dataService }: AppProps) => {
+const App = ({
+  dataService,
+  structureUpdateEnabled,
+  availableNameGenerators,
+  databaseConfigurationsEnabled
+}: AppProps) => {
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
   const [currentManageConfiguration, setCurrentManageConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
-  const [structureUpdateEnabled, setStructureUpdateEnabled] = useState(false);
   const [saveMessageType, setSaveMessageType] = useState<"bad-news" | "brand" | "good-news" | "warning">("good-news");
 
   const [items, setItems] = useState<GroupConfiguration[]>([]);
-  const [availableNameGenerators, setAvailableGenerators] = useState<string[]>([]);
 
   if (!dataService) {
     dataService = defaultDataService;
@@ -32,8 +38,6 @@ const App = ({ dataService }: AppProps) => {
   useEffect(() => {
     dataService?.load().then((result: any) => {
       setItems(result.items || []);
-      setAvailableGenerators(result.availableNameGenerators || []);
-      setStructureUpdateEnabled(result.structureUpdateEnabled || false);
     });
 
     return () => {
@@ -48,6 +52,7 @@ const App = ({ dataService }: AppProps) => {
     setIsNewConfiguration(true);
     setCurrentConfiguration({
       contentLink: "",
+      fromCode: false,
       containerTypeName: "",
       routingEnabled: true,
       groupLevelConfigurations: [availableNameGenerators[0]] || []
@@ -136,23 +141,50 @@ const App = ({ dataService }: AppProps) => {
 
       <ConfigurationsList
         items={items}
+        databaseConfigurationsEnabled={databaseConfigurationsEnabled}
         onEdit={onEditConfiguration}
         onManage={onManageConfiguration}
         onDelete={onDeleteConfiguration}
       />
-      <Button
-        className="add-configuration-button"
-        style="outline"
-        size="narrow"
-        leftIcon="add"
-        onClick={onAddConfiguration}
-      >
-        Add
-      </Button>
+      {databaseConfigurationsEnabled && (
+        <Button
+          className="add-configuration-button"
+          style="outline"
+          size="narrow"
+          leftIcon="add"
+          onClick={onAddConfiguration}
+        >
+          Add
+        </Button>
+      )}
 
-      <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
-        Save configurations
-      </Button>
+      {databaseConfigurationsEnabled && (
+        <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
+          Save configurations
+        </Button>
+      )}
+
+      {!databaseConfigurationsEnabled && (
+        <>
+          <br />
+          <br />
+          <Attention type="warning" alignment="left">
+            Database registration is not enabled. You need to turn it on through code using options:
+            <br />
+            <br />
+            <Code className="sample-code">
+              context.Services.AddTransient(serviceLocator ={">"} new ContentChildrenGroupingOptions
+              <br />
+              {"{"}
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;DatabaseConfigurationsEnabled = true
+              <br />
+              {"}"});
+              <br />
+            </Code>
+          </Attention>
+        </>
+      )}
 
       {!!currentConfiguration && (
         <EditConfigurationDialog

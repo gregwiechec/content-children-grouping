@@ -13,17 +13,28 @@ const Template: ComponentStory<typeof App> = (args) => <App {...args} />;
 
 export const AppStory = Template.bind({});
 AppStory.args = {
-  dataService: fakeService
+  dataService: fakeService,
+  availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
+  databaseConfigurationsEnabled: true,
+  structureUpdateEnabled: true
 };
 
 const emptyService = {
   load: () => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ items: [], availableNameGenerators: ["Name", "Created Date", "Very long name generator"] });
+        resolve({ items: [] });
       }, 500);
     });
-  }
+  },
+  save: () => new Promise(resolve => resolve(true)),
+  clearContainers: () => new Promise(resolve => resolve("test"))
 };
 
-export const EmptyApp = Template.bind({ dataService: emptyService });
+export const EmptyApp = Template.bind({ });
+EmptyApp.args = {
+  dataService: emptyService,
+  availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
+  databaseConfigurationsEnabled: true,
+  structureUpdateEnabled: true
+}

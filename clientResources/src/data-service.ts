@@ -9,7 +9,7 @@ export interface DataService {
 export const dataService: DataService = {
   load: () => {
     return axios
-      .get("LoadConfigurations") //TODO: path to episerver
+      .get("LoadConfigurations")
       .then((response) => {
         return response.data;
       })

@@ -6,16 +6,15 @@ import { GroupConfiguration } from "./models/Groupconfiguration";
 import "optimizely-oui/dist/styles.css";
 import { ConfirmDialog } from "./confirm-dialog";
 
-//TODO: show notification when database configuration is not enabled
-
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
+  databaseConfigurationsEnabled: boolean;
   onEdit: (item: GroupConfiguration) => void;
   onManage: (item: GroupConfiguration) => void;
   onDelete: (item: GroupConfiguration) => void;
 }
 
-export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
+export const ConfigurationsList = ({ items, databaseConfigurationsEnabled, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
 
   if (!items) {
@@ -54,7 +53,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
-                {!x.fromCode && (
+                {!x.fromCode && databaseConfigurationsEnabled && (
                   <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
                     Edit
                   </Button>
@@ -62,7 +61,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 <Button style="plain" size="narrow" leftIcon="settings" onClick={() => onManage(x)}>
                   Manage
                 </Button>
-                {!x.fromCode && (
+                {!x.fromCode && databaseConfigurationsEnabled && (
                   <Button style="plain" size="narrow" leftIcon="ban" onClick={() => setItemToDelete(x)}>
                     Delete
                   </Button>

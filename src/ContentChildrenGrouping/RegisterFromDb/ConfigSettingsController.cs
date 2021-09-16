@@ -53,10 +53,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
             {
                 Data = new
                 {
-                    items = configurationViewModels,
-                    availableNameGenerators = _groupNameGenerators.Where(x => x is IDbAvailableGroupNameGenerator)
-                        .Select(x => x.Key),
-                    structureUpdateEnabled = _childrenGroupingOptions.StructureUpdateEnabled
+                    items = configurationViewModels
                 },
                 SafeResponse = true
             };
