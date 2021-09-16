@@ -120,7 +120,6 @@ const App = ({ dataService }: AppProps) => {
       {saveMessage && <Attention type={saveMessageType} alignment="center">{saveMessage}</Attention>}
 
       <ConfigurationsList items={items} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
-      <br />
       <Button
         className="add-configuration-button"
         style="outline"
@@ -128,11 +127,11 @@ const App = ({ dataService }: AppProps) => {
         leftIcon="add"
         onClick={onAddConfiguration}
       >
-        Add configuration
+        Add
       </Button>
 
-      <Button style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
-        Save
+      <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
+        Save configurations
       </Button>
 
       {!!currentConfiguration && (
