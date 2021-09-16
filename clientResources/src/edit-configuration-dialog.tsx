@@ -9,6 +9,8 @@ interface EditConfigurationDialogProps {
   availableNameGenerators: string[];
   validationMessage: string;
 }
+//TODO: show type format
+//TODO: one generator is mandatory
 
 export const EditConfigurationDialog = ({
   onSave,
@@ -87,6 +89,7 @@ export const EditConfigurationDialog = ({
         min={1}
         onChange={(e) => setContentLink(e.target.value)}
         value={contentLink}
+        isRequired
       />
       <Input
         type="text"
