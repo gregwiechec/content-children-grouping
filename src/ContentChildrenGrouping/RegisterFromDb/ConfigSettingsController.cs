@@ -12,36 +12,51 @@ namespace ContentChildrenGrouping.RegisterFromDb
     {
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
+        private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
         private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
+            IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
             IEnumerable<IGroupNameGenerator> groupNameGenerators,
             ContentChildrenGroupingOptions childrenGroupingOptions)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
+            _childrenGroupsLoaders = childrenGroupsLoaders;
             _groupNameGenerators = groupNameGenerators;
             _childrenGroupingOptions = childrenGroupingOptions;
         }
 
         public ActionResult LoadConfigurations()
         {
+            var configurationViewModels = new List<ConfigurationViewModel>();
+            foreach (var contentChildrenGroupsLoader in _childrenGroupsLoaders)
+            {
+                var containerConfigurations = contentChildrenGroupsLoader.GetConfigurations();
+                foreach (var containerConfiguration in containerConfigurations)
+                {
+                    var viewModel = new ConfigurationViewModel
+                    {
+                        contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
+                        containerTypeName = containerConfiguration.ContainerType.TypeToString(),
+                        routingEnabled = containerConfiguration.RoutingEnabled,
+                        groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
+                        fromCode = !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader)
+                    };
+                    configurationViewModels.Add(viewModel);
+                }
+            }
+
             return new RestResult
             {
                 Data = new
                 {
-                    items = _configSettingsDbRepository.LoadAll().ToList().Select(x => new ConfigurationViewModel
-                    {
-                        contentLink = x.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
-                        containerTypeName = x.ContainerType.TypeToString(),
-                        routingEnabled = x.RoutingEnabled,
-                        groupLevelConfigurations = x.GroupLevelConfigurations.Select(g => g.Key)
-                    }),
+                    items = configurationViewModels,
                     availableNameGenerators = _groupNameGenerators.Where(x => x is IDbAvailableGroupNameGenerator)
                         .Select(x => x.Key),
-                    clearContainersEnabled = _childrenGroupingOptions.StructureUpdateEnabled
+                    structureUpdateEnabled = _childrenGroupingOptions.StructureUpdateEnabled
                 },
                 SafeResponse = true
             };
@@ -55,7 +70,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var containerConfigurations = configs.Select(x => new ContainerConfiguration
+            var containerConfigurations = configs.Where(x => !x.fromCode).Select(x => new ContainerConfiguration
             {
                 ContainerContentLink = ContentReference.Parse(x.contentLink),
                 ContainerType = Type.GetType(x.containerTypeName),
@@ -73,6 +88,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
             };
         }
 
+        //TODO: save and delete single configuration
+
         [HttpPost]
         public ActionResult ClearContainers(string contentLink)
         {
@@ -88,6 +105,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
             public string contentLink { get; set; }
             public string containerTypeName { get; set; }
             public bool routingEnabled { get; set; }
+            public bool fromCode { get; set; }
             public IEnumerable<string> groupLevelConfigurations { get; set; }
         }
     }

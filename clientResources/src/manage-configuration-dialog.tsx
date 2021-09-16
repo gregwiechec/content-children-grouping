@@ -67,7 +67,8 @@ export const ManageConfigurationDialog = ({
       )}
       {structureUpdateEnabled && (
         <div>
-          Containers cannot be cleared, because <strong>StructureUpdateEnabled</strong> is enabled in options.
+          Containers cannot be cleared, because <strong>StructureUpdateEnabled</strong> option is enabled in options.
+          <br />
         </div>
       )}
     </DialogNew>

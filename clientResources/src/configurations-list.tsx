@@ -6,6 +6,8 @@ import { GroupConfiguration } from "./models/Groupconfiguration";
 import "optimizely-oui/dist/styles.css";
 import { ConfirmDialog } from "./confirm-dialog";
 
+//TODO: show notification when database configuration is not enabled
+
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
   onEdit: (item: GroupConfiguration) => void;
@@ -33,6 +35,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
         <Table.THead>
           <Table.TR>
             <Table.TH width={100}>Content Link</Table.TH>
+            <Table.TH width={90}>From code</Table.TH>
             <Table.TH>Container type</Table.TH>
             <Table.TH width={90}>Router</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
@@ -43,6 +46,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           {items.map((x) => (
             <Table.TR key={x.contentLink}>
               <Table.TD>{x.contentLink}</Table.TD>
+              <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
               <Table.TD>
                 {x.containerTypeName}
                 {!x.containerTypeName && <span style={{ fontStyle: "italic" }}>[default]</span>}
@@ -50,15 +54,19 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
-                <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
-                  Edit
-                </Button>
+                {!x.fromCode && (
+                  <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
+                    Edit
+                  </Button>
+                )}
                 <Button style="plain" size="narrow" leftIcon="settings" onClick={() => onManage(x)}>
                   Manage
                 </Button>
-                <Button style="plain" size="narrow" leftIcon="ban" onClick={() => setItemToDelete(x)}>
-                  Delete
-                </Button>
+                {!x.fromCode && (
+                  <Button style="plain" size="narrow" leftIcon="ban" onClick={() => setItemToDelete(x)}>
+                    Delete
+                  </Button>
+                )}
               </Table.TD>
             </Table.TR>
           ))}
