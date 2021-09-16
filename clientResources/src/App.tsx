@@ -19,6 +19,7 @@ const App = ({ dataService }: AppProps) => {
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
+  const [structureUpdateEnabled, setStructureUpdateEnabled] = useState(false);
   const [saveMessageType, setSaveMessageType] = useState<"bad-news" | "brand" | "good-news" | "warning">("good-news");
 
   const [items, setItems] = useState<GroupConfiguration[]>([]);
@@ -32,6 +33,7 @@ const App = ({ dataService }: AppProps) => {
     dataService?.load().then((result: any) => {
       setItems(result.items || []);
       setAvailableGenerators(result.availableNameGenerators || []);
+      setStructureUpdateEnabled(result.structureUpdateEnabled || false);
     });
 
     return () => {
@@ -165,6 +167,7 @@ const App = ({ dataService }: AppProps) => {
       {!!currentManageConfiguration && (
         <ManageConfigurationDialog
           dataService={dataService}
+          structureUpdateEnabled={structureUpdateEnabled}
           configuration={currentManageConfiguration}
           onCancel={() => setCurrentManageConfiguration(null)}
         />

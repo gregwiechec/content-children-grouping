@@ -12,7 +12,7 @@ namespace ContentChildrenGrouping
         public bool RouterEnabled { get; set; } = true;
 
         /// <summary>
-        /// When true, thenduring content saving the structure is updated, default true
+        /// When true, then during content saving the structure is updated, default true
         /// </summary>
         public bool StructureUpdateEnabled { get; set; } = false;
 

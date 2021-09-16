@@ -13,14 +13,17 @@ namespace ContentChildrenGrouping.RegisterFromDb
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
+        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
-            IEnumerable<IGroupNameGenerator> groupNameGenerators)
+            IEnumerable<IGroupNameGenerator> groupNameGenerators,
+            ContentChildrenGroupingOptions childrenGroupingOptions)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
             _groupNameGenerators = groupNameGenerators;
+            _childrenGroupingOptions = childrenGroupingOptions;
         }
 
         public ActionResult LoadConfigurations()
@@ -37,7 +40,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
                         groupLevelConfigurations = x.GroupLevelConfigurations.Select(g => g.Key)
                     }),
                     availableNameGenerators = _groupNameGenerators.Where(x => x is IDbAvailableGroupNameGenerator)
-                        .Select(x => x.Key)
+                        .Select(x => x.Key),
+                    clearContainersEnabled = _childrenGroupingOptions.StructureUpdateEnabled
                 },
                 SafeResponse = true
             };
@@ -65,6 +69,16 @@ namespace ContentChildrenGrouping.RegisterFromDb
             return new RestResult
             {
                 Data = "ok",
+                SafeResponse = true
+            };
+        }
+
+        [HttpPost]
+        public ActionResult ClearContainers(string contentLink)
+        {
+            return new RestResult
+            {
+                Data = "TEST " + contentLink,
                 SafeResponse = true
             };
         }

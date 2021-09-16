@@ -6,7 +6,7 @@ import "./App.scss";
 import { action } from "@storybook/addon-actions";
 
 export default {
-  title: "Dialog",
+  title: "Edit Dialog",
   component: EditConfigurationDialog
 } as ComponentMeta<typeof EditConfigurationDialog>;
 
