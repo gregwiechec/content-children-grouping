@@ -14,7 +14,7 @@ namespace ContentChildrenGrouping.Plugin
         UrlFromModuleFolder = "Plugins/GroupingConfig.aspx")]
     public partial class GroupingConfig : EPiServer.Shell.WebForms.WebFormsBase
     {
-        protected Injected<IModuleResourceResolver> _moduleResilver { get; set; }
+        protected Injected<IModuleResourceResolver> _moduleResolver { get; set; }
         protected Injected<ContentChildrenGroupingOptions> _options { get; set; }
 
         protected override void OnLoad(EventArgs e)
@@ -34,10 +34,19 @@ namespace ContentChildrenGrouping.Plugin
 
         protected string GetPath(string url)
         {
-            return _moduleResilver.Accessor().ResolveClientPath("content-children-grouping", url);
+            _moduleResolver.Accessor()
+                .TryResolveClientPath(typeof(GroupingConfig).Assembly, url, out var resolvedPath);
+            return resolvedPath;
         }
 
-        protected string ControllerUrl =>
-            _moduleResilver.Accessor().ResolvePath("content-children-grouping", "ConfigSettings/");
+        protected string ControllerUrl
+        {
+            get
+            {
+                _moduleResolver.Accessor().TryResolvePath(typeof(GroupingConfig).Assembly, "ConfigSettings/",
+                    out var resolvedPath);
+                return resolvedPath;
+            }
+        }
     }
 }
