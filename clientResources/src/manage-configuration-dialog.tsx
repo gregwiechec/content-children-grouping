@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GroupConfiguration } from "./models/Groupconfiguration";
 import { Attention, Button, DialogNew } from "optimizely-oui";
 import { DataService } from "./data-service";
@@ -19,13 +19,24 @@ export const ManageConfigurationDialog = ({
   const [inProgress, setInProgess] = useState(false);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    setMessage("");
+  }, [configuration]);
+
   const onClearStructureClick = () => {
     setInProgess(true);
     setMessage("");
-    dataService.clearContainers(configuration?.contentLink).then((result) => {
+    dataService.clearContainers(configuration?.contentLink || "").then((result) => {
       setInProgess(false);
       setMessage(result);
     });
+  };
+
+  const onCancelClick = () => {
+    if (inProgress) {
+      return;
+    }
+    onCancel();
   };
 
   return (
@@ -33,9 +44,9 @@ export const ManageConfigurationDialog = ({
       title="Manage"
       hasCloseButton={true}
       hasOverlay={true}
-      onClose={onCancel}
+      onClose={onCancelClick}
       footerButtonList={[
-        <Button style="plain" key={0} onClick={onCancel}>
+        <Button style="plain" key={0} onClick={onCancelClick}>
           Close
         </Button>
       ]}
@@ -54,7 +65,11 @@ export const ManageConfigurationDialog = ({
           </Button>
         </>
       )}
-      {structureUpdateEnabled && <div>Containers cannot be cleared, because <strong>StructureUpdateEnabled</strong> is enabled in options.</div>}
+      {structureUpdateEnabled && (
+        <div>
+          Containers cannot be cleared, because <strong>StructureUpdateEnabled</strong> is enabled in options.
+        </div>
+      )}
     </DialogNew>
   );
 };
