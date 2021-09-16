@@ -48,6 +48,18 @@ export const EditConfigurationDialog = ({
     setGenerators(updatedList);
   };
 
+  const isValid = (): boolean => {
+    if (!contentLink || contentLink.trim() === "") {
+      return false;
+    }
+
+    if (!generators || generators.length === 0) {
+      return false;
+    }
+
+    return true;
+  };
+
   const onDialogSave = () => {
     onSave({
       contentLink: contentLink,
@@ -68,7 +80,7 @@ export const EditConfigurationDialog = ({
         <Button style="plain" key={0} onClick={onCancel}>
           Cancel
         </Button>,
-        <Button style="highlight" key={1} onClick={onDialogSave}>
+        <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onDialogSave}>
           Save
         </Button>
       ]}
@@ -91,18 +103,22 @@ export const EditConfigurationDialog = ({
         value={contentLink}
         isRequired
       />
+      <br/>
       <Input
         type="text"
         label="Container type name"
+        note="Type format: [Full type name, Assembly Name]"
         value={containerTypeName}
         onChange={(e) => setContainerTypeName(e.target.value)}
       />
+      <br/>
       <Checkbox
         label="Router enabled"
         checked={isRoutingEnabled}
         onChange={(e) => setIsRoutingEnabled(e.target.checked)}
       />
-      <Label>Name generators</Label>
+      <br/>
+      <Label>Name generators *</Label>
       <BlockList hasBorder={false} className="configuration-item">
         {generators.map((x, index) => (
           <BlockList.Item key={x + "_" + index}>
