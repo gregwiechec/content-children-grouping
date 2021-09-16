@@ -10,6 +10,8 @@ interface EditConfigurationDialogProps {
   validationMessage: string;
 }
 
+//TODO: dialog should be converted to pages
+
 export const EditConfigurationDialog = ({
   onSave,
   onCancel,
@@ -59,8 +61,11 @@ export const EditConfigurationDialog = ({
   };
 
   const onDialogSave = () => {
+    //TODO: save and delete single value
+
     onSave({
       contentLink: contentLink,
+      fromCode: false,
       containerTypeName: containerTypeName,
       routingEnabled: isRoutingEnabled,
       groupLevelConfigurations: generators

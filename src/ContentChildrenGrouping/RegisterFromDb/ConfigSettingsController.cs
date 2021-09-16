@@ -14,19 +14,17 @@ namespace ContentChildrenGrouping.RegisterFromDb
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
-        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
-            IEnumerable<IGroupNameGenerator> groupNameGenerators,
-            ContentChildrenGroupingOptions childrenGroupingOptions)
+            IEnumerable<IGroupNameGenerator> groupNameGenerators
+            )
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
             _childrenGroupsLoaders = childrenGroupsLoaders;
             _groupNameGenerators = groupNameGenerators;
-            _childrenGroupingOptions = childrenGroupingOptions;
         }
 
         public ActionResult LoadConfigurations()
@@ -85,11 +83,11 @@ namespace ContentChildrenGrouping.RegisterFromDb
             };
         }
 
-        //TODO: save and delete single configuration
-
         [HttpPost]
         public ActionResult ClearContainers(string contentLink)
         {
+            //TODO: implement clear containers
+
             return new RestResult
             {
                 Data = "TEST " + contentLink,

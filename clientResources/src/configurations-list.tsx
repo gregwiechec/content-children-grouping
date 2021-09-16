@@ -53,6 +53,8 @@ export const ConfigurationsList = ({ items, databaseConfigurationsEnabled, onEdi
               <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
+                {/*TODO: should use button with menu*/}
+
                 {!x.fromCode && databaseConfigurationsEnabled && (
                   <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
                     Edit

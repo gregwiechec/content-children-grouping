@@ -15,12 +15,14 @@ DefaultList.args = {
   items: [
     {
       contentLink: "123",
+      fromCode: false,
       routingEnabled: false,
       containerTypeName: "",
       groupLevelConfigurations: ["Name", "CreatedDate"]
     },
     {
       contentLink: "124",
+      fromCode: false,
       routingEnabled: true,
       containerTypeName: "",
       groupLevelConfigurations: ["Name"]

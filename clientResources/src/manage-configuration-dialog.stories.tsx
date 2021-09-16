@@ -12,6 +12,7 @@ export default {
 
 const configuration: GroupConfiguration = {
   contentLink: "5",
+  fromCode: false,
   routingEnabled: true,
   groupLevelConfigurations: [],
   containerTypeName: ""
