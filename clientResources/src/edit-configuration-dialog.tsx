@@ -9,8 +9,6 @@ interface EditConfigurationDialogProps {
   availableNameGenerators: string[];
   validationMessage: string;
 }
-//TODO: show type format
-//TODO: one generator is mandatory
 
 export const EditConfigurationDialog = ({
   onSave,
