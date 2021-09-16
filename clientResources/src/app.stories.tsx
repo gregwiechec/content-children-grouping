@@ -35,7 +35,14 @@ const service = {
     });
   },
   save: () => {
-    return new Promise(resolve => resolve(false));
+    return new Promise((resolve) => resolve(false));
+  },
+  clearContainers: (contentLink: string) => {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve("Containers cleared successfully");
+      }, 3000)
+    );
   }
 };
 

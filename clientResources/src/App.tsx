@@ -5,6 +5,7 @@ import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
 import { EditConfigurationDialog } from "./edit-configuration-dialog";
 import { DataService, dataService as defaultDataService } from "./data-service";
+import { ManageConfigurationDialog } from "./manage-configuration-dialog";
 
 interface AppProps {
   dataService?: DataService;
@@ -14,6 +15,7 @@ let successTimeoutHandle: number;
 
 const App = ({ dataService }: AppProps) => {
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
+  const [currentManageConfiguration, setCurrentManageConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
@@ -93,6 +95,10 @@ const App = ({ dataService }: AppProps) => {
     setCurrentConfiguration(configuration);
   };
 
+  const onManageConfiguration = (configuration: GroupConfiguration) => {
+    setCurrentManageConfiguration(configuration);
+  };
+
   const onDeleteConfiguration = (configuration: GroupConfiguration) => {
     const index = items.indexOf(configuration);
     if (index < 0) {
@@ -106,20 +112,32 @@ const App = ({ dataService }: AppProps) => {
   const onSaveClick = () => {
     setSaveMessage("Saving");
     setSaveMessageType("brand");
-    dataService?.save(items).then(response => {
-      setSaveMessageType("good-news");
-      setSaveMessage("Configuration saved");
-    }).catch(error => {
-      setSaveMessageType("bad-news");
-      setSaveMessage("Saving configuration failed");
-    });
+    dataService
+      ?.save(items)
+      .then((response) => {
+        setSaveMessageType("good-news");
+        setSaveMessage("Configuration saved");
+      })
+      .catch((error) => {
+        setSaveMessageType("bad-news");
+        setSaveMessage("Saving configuration failed");
+      });
   };
 
   return (
     <div className="App">
-      {saveMessage && <Attention type={saveMessageType} alignment="center">{saveMessage}</Attention>}
+      {saveMessage && (
+        <Attention type={saveMessageType} alignment="center">
+          {saveMessage}
+        </Attention>
+      )}
 
-      <ConfigurationsList items={items} onEdit={onEditConfiguration} onDelete={onDeleteConfiguration} />
+      <ConfigurationsList
+        items={items}
+        onEdit={onEditConfiguration}
+        onManage={onManageConfiguration}
+        onDelete={onDeleteConfiguration}
+      />
       <Button
         className="add-configuration-button"
         style="outline"
@@ -141,6 +159,14 @@ const App = ({ dataService }: AppProps) => {
           onSave={onDialogSave}
           onCancel={() => setCurrentConfiguration(null)}
           availableNameGenerators={availableNameGenerators}
+        />
+      )}
+
+      {!!currentManageConfiguration && (
+        <ManageConfigurationDialog
+          dataService={dataService}
+          configuration={currentManageConfiguration}
+          onCancel={() => setCurrentManageConfiguration(null)}
         />
       )}
     </div>

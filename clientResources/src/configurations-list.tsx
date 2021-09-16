@@ -9,22 +9,23 @@ import { ConfirmDialog } from "./confirm-dialog";
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
   onEdit: (item: GroupConfiguration) => void;
+  onManage: (item: GroupConfiguration) => void;
   onDelete: (item: GroupConfiguration) => void;
 }
 
-export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsListProps) => {
+export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
 
   if (!items) {
-      items = [];
+    items = [];
   }
 
   const onConfigurationDelete = () => {
-      if (!itemToDelete) {
-          return;
-      }
-      onDelete(itemToDelete);
-      setItemToDelete(null);
+    if (!itemToDelete) {
+      return;
+    }
+    onDelete(itemToDelete);
+    setItemToDelete(null);
   };
   return (
     <>
@@ -33,7 +34,7 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
           <Table.TR>
             <Table.TH width={100}>Content Link</Table.TH>
             <Table.TH>Container type</Table.TH>
-            <Table.TH  width={90}>Router</Table.TH>
+            <Table.TH width={90}>Router</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
             <Table.TH width={170}>&nbsp;</Table.TH>
           </Table.TR>
@@ -43,14 +44,17 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
             <Table.TR key={x.contentLink}>
               <Table.TD>{x.contentLink}</Table.TD>
               <Table.TD>
-                  {x.containerTypeName}
-                  {!x.containerTypeName && <span style={{ fontStyle: "italic" }}>[default]</span>}
+                {x.containerTypeName}
+                {!x.containerTypeName && <span style={{ fontStyle: "italic" }}>[default]</span>}
               </Table.TD>
               <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
                 <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
                   Edit
+                </Button>
+                <Button style="plain" size="narrow" leftIcon="settings" onClick={() => onManage(x)}>
+                  Manage
                 </Button>
                 <Button style="plain" size="narrow" leftIcon="ban" onClick={() => setItemToDelete(x)}>
                   Delete
@@ -59,9 +63,13 @@ export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsLi
             </Table.TR>
           ))}
 
-            {items.length === 0 && <Table.TR>
-                <Table.TD className="empty-config-table" colSpan={5}>No configuration</Table.TD>
-            </Table.TR>}
+          {items.length === 0 && (
+            <Table.TR>
+              <Table.TD className="empty-config-table" colSpan={5}>
+                No configuration
+              </Table.TD>
+            </Table.TR>
+          )}
         </Table.TBody>
       </Table>
       <ConfirmDialog
