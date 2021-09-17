@@ -14,17 +14,20 @@ namespace ContentChildrenGrouping.RegisterFromDb
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
+        private readonly ContentStructureCleaner _contentStructureCleaner;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
-            IEnumerable<IGroupNameGenerator> groupNameGenerators
-            )
+            IEnumerable<IGroupNameGenerator> groupNameGenerators,
+            ContentStructureCleaner contentStructureCleaner
+        )
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
             _childrenGroupsLoaders = childrenGroupsLoaders;
             _groupNameGenerators = groupNameGenerators;
+            _contentStructureCleaner = contentStructureCleaner;
         }
 
         public ActionResult LoadConfigurations()
@@ -37,7 +40,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 {
                     var viewModel = new ConfigurationViewModel
                     {
-                        contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID.ToString(),
+                        contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
+                            .ToString(),
                         containerTypeName = containerConfiguration.ContainerType.TypeToString(),
                         routingEnabled = containerConfiguration.RoutingEnabled,
                         groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
@@ -84,15 +88,19 @@ namespace ContentChildrenGrouping.RegisterFromDb
         }
 
         [HttpPost]
-        public ActionResult ClearContainers(string contentLink)
+        public ActionResult ClearContainers(ClearContainersViewModel clearContainersViewModel)
         {
-            //TODO: implement clear containers
-
+            _contentStructureCleaner.ClearContainers(clearContainersViewModel.contentLink, out var message);
             return new RestResult
             {
-                Data = "TEST " + contentLink,
+                Data = message,
                 SafeResponse = true
             };
+        }
+
+        public class ClearContainersViewModel
+        {
+            public ContentReference contentLink { get; set; }
         }
 
         public class ConfigurationViewModel
@@ -105,3 +113,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
         }
     }
 }
+
+//TODO: show name for the default type in plugin
+
+//TODO: configuration list add link to container

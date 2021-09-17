@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.Extensions;
 using EPiServer.Cms.Shell.Internal;
 using EPiServer.Core;
 using EPiServer.Framework.Web.Resources;
@@ -26,7 +27,7 @@ namespace ContentChildrenGrouping.EditMode
             ContentChildrenGroupingOptions childrenGroupingOptions) :
             base(shellModule, clientResourceService, contentRepositoryDescriptors)
         {
-            ConfigurationContainerLinks = contentChildrenGroupsLoaders.GellAllConfigurations()
+            ConfigurationContainerLinks = contentChildrenGroupsLoaders.GetAllConfigurations()
                 .Select(x => x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
             CustomIconsEnabled = childrenGroupingOptions.CustomIconsEnabled;
             SearchCommandEnabled = childrenGroupingOptions.SearchCommandEnabled;

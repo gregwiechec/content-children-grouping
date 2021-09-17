@@ -126,7 +126,7 @@ namespace ContentChildrenGrouping
                 }
             }
 
-            var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations().ToList();
+            var containerConfigurations = _contentChildrenGroupsLoaders.GetAllConfigurations().ToList();
             foreach (var configuration in containerConfigurations)
             {
                 Notify(configuration);

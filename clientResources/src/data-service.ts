@@ -24,6 +24,6 @@ export const dataService: DataService = {
   },
 
   clearContainers: (contentLink: string) => {
-    return axios.post("ClearContainers", contentLink);
+    return axios.post("ClearContainers", { contentLink: contentLink });
   }
 };

@@ -92,7 +92,7 @@ namespace ContentChildrenGrouping
                 return;
             }
 
-            var containerConfigurations = _contentChildrenGroupsLoaders.GellAllConfigurations();
+            var containerConfigurations = _contentChildrenGroupsLoaders.GetAllConfigurations();
 
             var containerConfiguration = FindConfiguration(content, containerConfigurations);
             if (containerConfiguration == null)
@@ -100,7 +100,7 @@ namespace ContentChildrenGrouping
                 return;
             }
 
-            var containerType = containerConfiguration.ContainerType ?? typeof(GroupingContainerPage);
+            var containerType = containerConfiguration.GetContainerType();
             if (containerType.IsInstanceOfType(content))
             {
                 return;

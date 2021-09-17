@@ -166,6 +166,8 @@
     <Compile Include="ContainerModel\ContainerPageController.cs" />
     <Compile Include="ContainerModel\ContainerUIDescriptor.cs" />
     <Compile Include="ContentChildrenGroupingOptions.cs" />
+    <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
+    <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
     <Compile Include="CustomPartialRouter.cs" />
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterFromCode\ContentChildrenGroupsRegistration.cs" />
     <Compile Include="RegisterFromCode\FromCodeContentChildrenGroupsLoader.cs" />
+    <Compile Include="RegisterFromDb\ContentStructureCleaner.cs" />
     <Compile Include="RegisterFromDb\ConfigSettingsController.cs" />
     <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
     <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
