@@ -12,8 +12,12 @@ using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping
 {
-    [ScheduledPlugIn(DefaultEnabled = false, DisplayName = "Fix content groups hierarchy",
-        GUID = "D2963BAF-778D-4E3A-8C29-516BEF812260", IntervalLength = 12, IntervalType = ScheduledIntervalType.Hours,
+    [ScheduledPlugIn(DefaultEnabled = false,
+        DisplayName = "Fix content groups hierarchy",
+        Description = "Job will move content to containers based on configuration",
+        GUID = "D2963BAF-778D-4E3A-8C29-516BEF812260",
+        IntervalLength = 12,
+        IntervalType = ScheduledIntervalType.Hours,
         Restartable = true)]
     [ServiceConfiguration]
     public class FixStructureScheduledJob : ScheduledJobBase
@@ -49,8 +53,6 @@ namespace ContentChildrenGrouping
         public override string Execute()
         {
             _isStopped = false;
-            //DelayedPublishJob._log.Debug((object) string.Format("Cannot delay publish content without version (WorkID={0})", (object) content.ContentLink.WorkID));
-            //
 
             var totalUpdated = 0;
             var totalParsed = 0;
@@ -68,7 +70,7 @@ namespace ContentChildrenGrouping
                 foreach (var content in children)
                 {
                     totalParsed++;
-                    if (!configuration.ContainerType.IsInstanceOfType(content))
+                    if (!configuration.GetContainerType().IsInstanceOfType(content))
                     {
                         if (_isStopped)
                         {
@@ -135,7 +137,11 @@ namespace ContentChildrenGrouping
                     return "Job stopped";
                 }
 
-                FixStructure(configuration, _contentRepository.Get<IContent>(configuration.ContainerContentLink));
+                var result = _contentRepository.TryGet<IContent>(configuration.ContainerContentLink, out var content);
+                if (result)
+                {
+                    FixStructure(configuration, content);
+                }
             }
 
             return $"Job completed successfully. {totalUpdated} contents updated";
