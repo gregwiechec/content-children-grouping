@@ -46,23 +46,23 @@ namespace ContentChildrenGrouping.RegisterFromDb
         {
             var store = GetStore();
 
-            var allConfigs = store.Items<ConfigurationSettingsDds>().ToList();
+            var ddsConfigs = store.Items<ConfigurationSettingsDds>().ToList();
 
             var containerConfigurations = configurations.ToList();
-            foreach (var containerConfiguration in allConfigs)
+            foreach (var ddsConfig in ddsConfigs)
             {
-                var userConfig= containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == containerConfiguration.ContainerContentLink);
+                var userConfig = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == ddsConfig.ContainerContentLink);
                 if (userConfig == null)
                 {
-                    store.Delete(containerConfiguration.RoutingEnabled);
+                    store.Delete(ddsConfig);
                     continue;
                 }
 
-                containerConfiguration.ContainerType = userConfig.ContainerType.TypeToString();
-                containerConfiguration.GroupLevelConfigurations =
+                ddsConfig.ContainerType = userConfig.ContainerType.TypeToString();
+                ddsConfig.GroupLevelConfigurations =
                     string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key));
-                containerConfiguration.RoutingEnabled = userConfig.RoutingEnabled;
-                store.Save(containerConfiguration);
+                ddsConfig.RoutingEnabled = userConfig.RoutingEnabled;
+                store.Save(ddsConfig);
                 containerConfigurations.Remove(userConfig);
             }
 

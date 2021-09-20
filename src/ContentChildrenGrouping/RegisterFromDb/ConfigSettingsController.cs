@@ -72,7 +72,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
             var containerConfigurations = configs.Where(x => !x.fromCode).Select(x => new ContainerConfiguration
             {
                 ContainerContentLink = ContentReference.Parse(x.contentLink),
-                ContainerType = Type.GetType(x.containerTypeName),
+                ContainerType = string.IsNullOrWhiteSpace(x.containerTypeName) ? null: Type.GetType(x.containerTypeName),
                 RoutingEnabled = x.routingEnabled,
                 GroupLevelConfigurations = x.groupLevelConfigurations
                     .Select(g => _groupNameGenerators.Single(n => n.Key == g))
