@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
+using ContentChildrenGrouping.ContainerModel;
+using ContentChildrenGrouping.Extensions;
+using EPiServer;
+using EPiServer.Cms.Shell;
+using EPiServer.Core;
 using EPiServer.Framework.Modules;
 using EPiServer.Framework.Serialization;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
+using EPiServer.Web.Routing;
 
 namespace ContentChildrenGrouping.Plugin
 {
@@ -33,6 +40,7 @@ namespace ContentChildrenGrouping.Plugin
             }
 
             SystemMessageContainer.Heading = "Configure content groups";
+            SystemMessageContainer.HelpFile = "home";
         }
 
         protected string GetPath(string url)
@@ -55,12 +63,19 @@ namespace ContentChildrenGrouping.Plugin
         {
             get
             {
+                var startPageUrl = ServiceLocator.Current.GetInstance<IContentLoader>()
+                    .Get<PageData>(ContentReference.StartPage).EditablePreviewUrl(ServiceLocator.Current.GetInstance<UrlResolver>(), 
+                        ServiceLocator.Current.GetInstance<TemplateResolver>());
+
+
                 var config = new
                 {
                     baseUrl = ControllerUrl,
                     availableNameGenerators = _groupNameGenerators.Service.Where(x => x is IDbAvailableGroupNameGenerator).Select(x => x.Key),
                     structureUpdateEnabled = _childrenGroupingOptions.Service.StructureUpdateEnabled,
-                    databaseConfigurationsEnabled = _childrenGroupingOptions.Service.DatabaseConfigurationsEnabled
+                    databaseConfigurationsEnabled = _childrenGroupingOptions.Service.DatabaseConfigurationsEnabled,
+                    startPageUrl = startPageUrl,
+                    defaultContainerType = typeof(GroupingContainerPage).TypeToString()
                 };
 
                 var objectSerializer = _serializerFactory.Service.GetSerializer(KnownContentTypes.Json);

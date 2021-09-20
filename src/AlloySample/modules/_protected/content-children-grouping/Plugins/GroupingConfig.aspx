@@ -21,4 +21,10 @@
             <script src='<%= GetPath("static/js/main.chunk.js") %>'></script>
         </div>
     </div>
+    
+    <script type="text/javascript">
+        var helpLink = document.querySelector("h1.EP-prefix a");
+        helpLink.href = "https://github.com/gregwiechec/content-children-grouping";
+        helpLink.onclick = function() { return true; }
+    </script>
 </asp:Content>
