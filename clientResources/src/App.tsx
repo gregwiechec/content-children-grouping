@@ -6,22 +6,19 @@ import { GroupConfiguration } from "./models/Groupconfiguration";
 import { EditConfigurationDialog } from "./edit-configuration-dialog";
 import { DataService, dataService as defaultDataService } from "./data-service";
 import { ManageConfigurationDialog } from "./manage-configuration-dialog";
+import {useServerSettingsContext} from "./server-settings";
 
 interface AppProps {
   dataService?: DataService;
-  structureUpdateEnabled: boolean;
-  availableNameGenerators: string[];
-  databaseConfigurationsEnabled: boolean;
 }
 
 let successTimeoutHandle: number;
 
 const App = ({
   dataService,
-  structureUpdateEnabled,
-  availableNameGenerators,
-  databaseConfigurationsEnabled
 }: AppProps) => {
+  const serverSettings = useServerSettingsContext();
+
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
   const [currentManageConfiguration, setCurrentManageConfiguration] = useState<GroupConfiguration | null>(null);
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
@@ -55,7 +52,7 @@ const App = ({
       fromCode: false,
       containerTypeName: "",
       routingEnabled: true,
-      groupLevelConfigurations: [availableNameGenerators[0]] || []
+      groupLevelConfigurations: [serverSettings.availableNameGenerators[0]] || []
     });
   };
 
@@ -141,12 +138,11 @@ const App = ({
 
       <ConfigurationsList
         items={items}
-        databaseConfigurationsEnabled={databaseConfigurationsEnabled}
         onEdit={onEditConfiguration}
         onManage={onManageConfiguration}
         onDelete={onDeleteConfiguration}
       />
-      {databaseConfigurationsEnabled && (
+      {serverSettings.databaseConfigurationsEnabled && (
         <Button
           className="add-configuration-button"
           style="outline"
@@ -158,13 +154,13 @@ const App = ({
         </Button>
       )}
 
-      {databaseConfigurationsEnabled && (
+      {serverSettings.databaseConfigurationsEnabled && (
         <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
           Save configurations
         </Button>
       )}
 
-      {!databaseConfigurationsEnabled && (
+      {!serverSettings.databaseConfigurationsEnabled && (
         <>
           <br />
           <br />
@@ -192,14 +188,14 @@ const App = ({
           validationMessage={dialogValidationError}
           onSave={onDialogSave}
           onCancel={() => setCurrentConfiguration(null)}
-          availableNameGenerators={availableNameGenerators}
+          availableNameGenerators={serverSettings.availableNameGenerators}
         />
       )}
 
       {!!currentManageConfiguration && (
         <ManageConfigurationDialog
           dataService={dataService}
-          structureUpdateEnabled={structureUpdateEnabled}
+          structureUpdateEnabled={serverSettings.structureUpdateEnabled}
           configuration={currentManageConfiguration}
           onCancel={() => setCurrentManageConfiguration(null)}
         />

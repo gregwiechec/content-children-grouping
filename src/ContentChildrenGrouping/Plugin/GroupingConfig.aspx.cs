@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
 using ContentChildrenGrouping.ContainerModel;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
@@ -25,6 +24,9 @@ namespace ContentChildrenGrouping.Plugin
     public partial class GroupingConfig : EPiServer.Shell.WebForms.WebFormsBase
     {
         protected Injected<IModuleResourceResolver> _moduleResolver { get; set; }
+        protected Injected<IContentLoader> _contentLoader { get; set; }
+        protected Injected<UrlResolver> _urlResolver { get; set; }
+        protected Injected<TemplateResolver> _templateResolver { get; set; }
         protected Injected<IObjectSerializerFactory> _serializerFactory { get; set; }
         private readonly Injected<ContentChildrenGroupingOptions> _childrenGroupingOptions;
         private readonly Injected<IEnumerable<IGroupNameGenerator>> _groupNameGenerators;
@@ -63,10 +65,8 @@ namespace ContentChildrenGrouping.Plugin
         {
             get
             {
-                var startPageUrl = ServiceLocator.Current.GetInstance<IContentLoader>()
-                    .Get<PageData>(ContentReference.StartPage).EditablePreviewUrl(ServiceLocator.Current.GetInstance<UrlResolver>(), 
-                        ServiceLocator.Current.GetInstance<TemplateResolver>());
-
+                var startPageUrl = _contentLoader.Service.Get<PageData>(ContentReference.StartPage).EditablePreviewUrl(_urlResolver.Service, _templateResolver.Service);
+                startPageUrl = startPageUrl.Replace(ContentReference.StartPage.ToString(), "{contentLink}");
 
                 var config = new
                 {
@@ -74,7 +74,7 @@ namespace ContentChildrenGrouping.Plugin
                     availableNameGenerators = _groupNameGenerators.Service.Where(x => x is IDbAvailableGroupNameGenerator).Select(x => x.Key),
                     structureUpdateEnabled = _childrenGroupingOptions.Service.StructureUpdateEnabled,
                     databaseConfigurationsEnabled = _childrenGroupingOptions.Service.DatabaseConfigurationsEnabled,
-                    startPageUrl = startPageUrl,
+                    contentUrl = startPageUrl,
                     defaultContainerType = typeof(GroupingContainerPage).TypeToString()
                 };
 

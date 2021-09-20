@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using ContentChildrenGrouping.Extensions;
 using EPiServer.Core;
 using EPiServer.Shell.Services.Rest;
 
@@ -113,7 +114,3 @@ namespace ContentChildrenGrouping.RegisterFromDb
         }
     }
 }
-
-//TODO: show name for the default type in plugin
-
-//TODO: configuration list add link to container

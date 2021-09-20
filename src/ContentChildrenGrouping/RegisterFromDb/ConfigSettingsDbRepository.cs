@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.Extensions;
 using EPiServer.Data.Dynamic;
 using EPiServer.ServiceLocation;
 
@@ -84,21 +85,6 @@ namespace ContentChildrenGrouping.RegisterFromDb
         {
             return _dataStoreFactory.GetStore(typeof(ConfigurationSettingsDds)) ??
                    _dataStoreFactory.CreateStore(typeof(ConfigurationSettingsDds));
-        }
-    }
-
-
-    public static class ContainerTypeExtensions
-    {
-        public static string TypeToString(this Type type)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-
-            return $"{type.FullName}, {type.Assembly.GetName().Name}";
-
         }
     }
 }

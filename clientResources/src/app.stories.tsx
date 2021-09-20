@@ -4,6 +4,8 @@ import { fakeService } from "./fake-data/fake-service";
 import App from "./App";
 import "./App.scss";
 
+//TODO: add provider to storybbok
+
 export default {
   title: "App",
   component: App

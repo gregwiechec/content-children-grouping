@@ -172,6 +172,7 @@
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FixStructureScheduledJob.cs" />
     <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IContentStructureModifier.cs" />
