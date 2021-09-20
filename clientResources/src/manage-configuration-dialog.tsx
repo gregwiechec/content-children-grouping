@@ -28,7 +28,7 @@ export const ManageConfigurationDialog = ({
     setMessage("");
     dataService.clearContainers(configuration?.contentLink || "").then((result) => {
       setInProgess(false);
-      setMessage(result);
+      setMessage(result?.data || "");
     });
   };
 
