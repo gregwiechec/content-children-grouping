@@ -33,7 +33,7 @@ const getDefaultProps = (dataService: DataService) => {
     contentUrl: "",
     options: {
       customIconsEnabled: false,
-      databaseConfigurationsEnabled: false,
+      databaseConfigurationsEnabled: true,
       routerEnabled: false,
       searchCommandEnabled: false,
       structureUpdateEnabled: false

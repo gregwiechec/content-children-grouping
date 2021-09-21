@@ -97,6 +97,3 @@ export const ConfigurationsList = ({items, onEdit, onManage, onDelete}: Configur
         </>
     );
 };
-/*
-TODO: Show configured options
-*/

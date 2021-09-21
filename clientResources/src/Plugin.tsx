@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+// @ts-ignore
 import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 import App, { AppProps } from "./App";
-
-const Info = () => {
-  return <div>TEST</div>;
-};
+import { PluginInfo } from "./PluginInfo";
 
 export default function Plugin({ dataService }: AppProps) {
   return (
     <Router>
       <Switch>
-        <Route path="/" render={props => <App {...props} dataService={dataService} />} />
-        <Route path="/info" render={props => <Info {...props} />} />
+        <Route exact path="/" render={(props: any) => <App {...props} dataService={dataService} />} />
+        <Route path="/info" render={(props: any) => <PluginInfo {...props} />} />
       </Switch>
     </Router>
   );

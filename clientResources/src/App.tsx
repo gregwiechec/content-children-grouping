@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// @ts-ignore
 import { Link } from "react-router-dom";
 import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
@@ -7,7 +8,7 @@ import { GroupConfiguration } from "./models/Groupconfiguration";
 import { EditConfigurationDialog } from "./edit-configuration-dialog";
 import { DataService, dataService as defaultDataService } from "./data-service";
 import { ManageConfigurationDialog } from "./manage-configuration-dialog";
-import {useServerSettingsContext} from "./server-settings";
+import { useServerSettingsContext } from "./server-settings";
 
 export interface AppProps {
   dataService?: DataService;
@@ -15,9 +16,7 @@ export interface AppProps {
 
 let successTimeoutHandle: number;
 
-const App = ({
-  dataService,
-}: AppProps) => {
+const App = ({ dataService }: AppProps) => {
   const serverSettings = useServerSettingsContext();
 
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
@@ -137,7 +136,9 @@ const App = ({
         </Attention>
       )}
 
-      <Link to="/info">Check plugin configuration</Link>
+      <Link to="/info">Show plugin configuration</Link>
+      <br />
+      <br />
 
       <ConfigurationsList
         items={items}
