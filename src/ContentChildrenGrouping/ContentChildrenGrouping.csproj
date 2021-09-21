@@ -168,7 +168,7 @@
     <Compile Include="ContentChildrenGroupingOptions.cs" />
     <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
     <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
-    <Compile Include="CustomPartialRouter.cs" />
+    <Compile Include="PartialRouter\CustomPartialRouter.cs" />
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
@@ -177,7 +177,7 @@
     <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IContentStructureModifier.cs" />
     <Compile Include="IGroupNameGenerator.cs" />
-    <Compile Include="InitializationModule.cs" />
+    <Compile Include="PartialRouter\PartialRouterInitialization.cs" />
     <Compile Include="Plugin\GroupingConfig.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

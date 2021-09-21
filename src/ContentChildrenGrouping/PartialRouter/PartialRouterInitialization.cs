@@ -1,15 +1,16 @@
 ﻿using System.Web.Routing;
-using ContentChildrenGrouping.RegisterFromDb;
 using EPiServer;
 using EPiServer.Framework;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.PartialRouter
 {
-    /*  Routing is handled by ExternalURL
+    /// <summary>
+    /// Register CustomPartialRouter
+    /// </summary>
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class InitializationModule : IInitializableModule
+    public class PartialRouterInitialization : IInitializableModule
     {
         public void Initialize(EPiServer.Framework.Initialization.InitializationEngine context)
         {
@@ -31,5 +32,4 @@ namespace ContentChildrenGrouping
         {
         }
     }
-    */
 }

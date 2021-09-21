@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
+using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 using EPiServer.Web.Routing.Segments;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.PartialRouter
 {
-    /* We don't need partial router. Routing is handled by ExternalURL
+    /// <summary>
+    /// Partial router responsible for remoing container segments from URL
+    /// </summary>
     public class CustomPartialRouter: IPartialRouter<PageData, PageData>
     {
         private readonly IContentLoader _contentLoader;
@@ -24,7 +26,10 @@ namespace ContentChildrenGrouping
 
         public object RoutePartial(PageData content, SegmentContext segmentContext)
         {
-            if (string.IsNullOrWhiteSpace(segmentContext.RemainingPath))
+            /* We don't need partial router. Routing is handled by ExternalURL*/
+
+            return null;
+            /*if (string.IsNullOrWhiteSpace(segmentContext.RemainingPath))
             {
                 return null;
             }
@@ -82,7 +87,7 @@ namespace ContentChildrenGrouping
             }
             var nextSegment = segmentContext.GetNextValue(segmentContext.RemainingPath);
             segmentContext.RemainingPath = nextSegment.Remaining;
-            return resolvedContent;
+            return resolvedContent;*/
         }
 
         public PartialRouteData GetPartialVirtualPath(PageData content, string language, RouteValueDictionary routeValues,
@@ -93,7 +98,7 @@ namespace ContentChildrenGrouping
                 return null;
             }
 
-            var configurations = _contentChildrenGroupsLoaders.GellAllConfigurations().ToList();
+            var configurations = _contentChildrenGroupsLoaders.GetAllConfigurations().ToList();
             ContainerConfiguration configuration = null;
             foreach (var ancestor in _contentLoader.GetAncestors(content.ContentLink))
             {
@@ -129,5 +134,4 @@ namespace ContentChildrenGrouping
             };
         }
     }
-    */
 }
