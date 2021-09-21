@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
@@ -8,7 +9,7 @@ import { DataService, dataService as defaultDataService } from "./data-service";
 import { ManageConfigurationDialog } from "./manage-configuration-dialog";
 import {useServerSettingsContext} from "./server-settings";
 
-interface AppProps {
+export interface AppProps {
   dataService?: DataService;
 }
 
@@ -136,13 +137,15 @@ const App = ({
         </Attention>
       )}
 
+      <Link to="/info">Check plugin configuration</Link>
+
       <ConfigurationsList
         items={items}
         onEdit={onEditConfiguration}
         onManage={onManageConfiguration}
         onDelete={onDeleteConfiguration}
       />
-      {serverSettings.databaseConfigurationsEnabled && (
+      {serverSettings.options.databaseConfigurationsEnabled && (
         <Button
           className="add-configuration-button"
           style="outline"
@@ -154,13 +157,13 @@ const App = ({
         </Button>
       )}
 
-      {serverSettings.databaseConfigurationsEnabled && (
+      {serverSettings.options.databaseConfigurationsEnabled && (
         <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
           Save configurations
         </Button>
       )}
 
-      {!serverSettings.databaseConfigurationsEnabled && (
+      {!serverSettings.options.databaseConfigurationsEnabled && (
         <>
           <br />
           <br />
@@ -195,7 +198,7 @@ const App = ({
       {!!currentManageConfiguration && (
         <ManageConfigurationDialog
           dataService={dataService}
-          structureUpdateEnabled={serverSettings.structureUpdateEnabled}
+          structureUpdateEnabled={serverSettings.options.structureUpdateEnabled}
           configuration={currentManageConfiguration}
           onCancel={() => setCurrentManageConfiguration(null)}
         />

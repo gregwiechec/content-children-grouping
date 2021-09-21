@@ -61,7 +61,7 @@ export const ConfigurationsList = ({items, onEdit, onManage, onDelete}: Configur
                             <Table.TD>
                                 {/*TODO: should use button with menu*/}
 
-                                {!x.fromCode && serverSettings.databaseConfigurationsEnabled && (
+                                {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
                                     <Button style="plain" size="narrow" leftIcon="projects" onClick={() => onEdit(x)}>
                                         Edit
                                     </Button>
@@ -69,7 +69,7 @@ export const ConfigurationsList = ({items, onEdit, onManage, onDelete}: Configur
                                 <Button style="plain" size="narrow" leftIcon="settings" onClick={() => onManage(x)}>
                                     Manage
                                 </Button>
-                                {!x.fromCode && serverSettings.databaseConfigurationsEnabled && (
+                                {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
                                     <Button style="plain" size="narrow" leftIcon="ban"
                                             onClick={() => setItemToDelete(x)}>
                                         Delete
@@ -97,3 +97,6 @@ export const ConfigurationsList = ({items, onEdit, onManage, onDelete}: Configur
         </>
     );
 };
+/*
+TODO: Show configured options
+*/

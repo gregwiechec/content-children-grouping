@@ -1,24 +1,19 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { fakeService } from "./fake-data/fake-service";
-import App from "./App";
+import Plugin from "./Plugin";
 import "./App.scss";
-import ServerSettingsContext from "./server-settings";
-import {DataService} from "./data-service";
+import ServerSettingsContext, { ServerSettings } from "./server-settings";
+import { DataService } from "./data-service";
 
-interface ComponentProps {
-  structureUpdateEnabled: boolean;
-  availableNameGenerators: string[];
-  databaseConfigurationsEnabled: boolean;
-  contentUrl: string;
-  defaultContainerType: string;
+interface ComponentProps extends ServerSettings {
   dataService: DataService;
 }
 
 const Component = (settings: ComponentProps) => {
   return (
     <ServerSettingsContext.Provider value={settings}>
-      <App dataService={settings.dataService}/>
+      <Plugin dataService={settings.dataService} />
     </ServerSettingsContext.Provider>
   );
 };
@@ -30,13 +25,24 @@ export default {
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const AppStory = Template.bind({});
-AppStory.args = {
-  dataService: fakeService,
-  availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
-  databaseConfigurationsEnabled: true,
-  structureUpdateEnabled: true
+const getDefaultProps = (dataService: DataService) => {
+  return {
+    dataService: dataService,
+    availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
+    defaultContainerType: "",
+    contentUrl: "",
+    options: {
+      customIconsEnabled: false,
+      databaseConfigurationsEnabled: false,
+      routerEnabled: false,
+      searchCommandEnabled: false,
+      structureUpdateEnabled: false
+    }
+  };
 };
+
+export const AppStory = Template.bind({});
+AppStory.args = getDefaultProps(fakeService);
 
 const emptyService = {
   load: () => {
@@ -51,9 +57,4 @@ const emptyService = {
 };
 
 export const EmptyApp = Template.bind({});
-EmptyApp.args = {
-  dataService: emptyService,
-  availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
-  databaseConfigurationsEnabled: true,
-  structureUpdateEnabled: true
-};
+EmptyApp.args = getDefaultProps(emptyService);

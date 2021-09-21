@@ -1,20 +1,32 @@
 import { createContext, useContext } from "react";
 
-export type ServerSettings = {
+export type ContentChildrenGroupingOptions = {
+    readonly routerEnabled: boolean;
     readonly structureUpdateEnabled: boolean;
-    readonly availableNameGenerators: string[];
     readonly databaseConfigurationsEnabled: boolean;
+    readonly customIconsEnabled: boolean;
+    readonly searchCommandEnabled: boolean;
+}
+
+export type ServerSettings = {
+    readonly availableNameGenerators: string[];
     readonly contentUrl: string;
     readonly defaultContainerType: string;
+    readonly options: ContentChildrenGroupingOptions
 }
 
 
 const defaultSettings: ServerSettings = {
     availableNameGenerators: [],
-    databaseConfigurationsEnabled: false,
     defaultContainerType: "",
     contentUrl: "",
-    structureUpdateEnabled: false
+    options: {
+        customIconsEnabled: false,
+        databaseConfigurationsEnabled: false,
+        routerEnabled: false,
+        searchCommandEnabled: false,
+        structureUpdateEnabled: false
+    }
 };
 
 const ServerSettingsContext = createContext<ServerSettings>(defaultSettings);

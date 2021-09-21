@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import Plugin from "./Plugin";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 import ServerSettingsContext, {ServerSettings} from "./server-settings";
@@ -11,9 +11,8 @@ const configuration = JSON.parse(rootElement?.dataset?.configuration || "{}");
 axios.defaults.baseURL = configuration.baseUrl;
 
 const settings: ServerSettings = {
-    structureUpdateEnabled: configuration.structureUpdateEnabled,
+    options: configuration.options,
     availableNameGenerators: configuration.availableNameGenerators,
-    databaseConfigurationsEnabled: configuration.databaseConfigurationsEnabled,
     contentUrl: configuration.contentUrl,
     defaultContainerType: configuration.defaultContainerType
 };
@@ -21,7 +20,7 @@ const settings: ServerSettings = {
 ReactDOM.render(
     <React.StrictMode>
         <ServerSettingsContext.Provider value={settings}>
-            <App />
+            <Plugin />
         </ServerSettingsContext.Provider>
     </React.StrictMode>,
     document.getElementById("root")

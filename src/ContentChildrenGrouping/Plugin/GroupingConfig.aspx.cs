@@ -72,8 +72,7 @@ namespace ContentChildrenGrouping.Plugin
                 {
                     baseUrl = ControllerUrl,
                     availableNameGenerators = _groupNameGenerators.Service.Where(x => x is IDbAvailableGroupNameGenerator).Select(x => x.Key),
-                    structureUpdateEnabled = _childrenGroupingOptions.Service.StructureUpdateEnabled,
-                    databaseConfigurationsEnabled = _childrenGroupingOptions.Service.DatabaseConfigurationsEnabled,
+                    options = _childrenGroupingOptions.Service,
                     contentUrl = startPageUrl,
                     defaultContainerType = typeof(GroupingContainerPage).TypeToString()
                 };
