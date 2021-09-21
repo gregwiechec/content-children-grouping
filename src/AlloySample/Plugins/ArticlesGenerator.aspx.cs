@@ -50,7 +50,7 @@ namespace AlloySample.Plugins
                 var articlePage = _contentRepository.Service.GetDefault<ArticlePage>(containerContentLink);
                 articlePage.Name = ListOfAnimals.Animals[i % ListOfAnimals.Animals.Length] +
                                    (index == 0 ? "" : index.ToString());
-                articlePage.Created = now.AddMonths(i % 20);
+                articlePage.Created = now.AddMonths(-i % 20);
                 _contentRepository.Service.Save(articlePage, SaveAction.Publish, AccessLevel.NoAccess);
             }
 
