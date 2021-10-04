@@ -1,5 +1,6 @@
 ﻿using ContentChildrenGrouping;
 using ContentChildrenGrouping.RegisterFromCode;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -7,6 +8,9 @@ using EPiServer.ServiceLocation;
 
 namespace AlloySample.Business.Initialization
 {
+    /// <summary>
+    /// Change configuration for Content Containers
+    /// </summary>
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class ContentGroupingInitialization : IConfigurableModule
     {
@@ -26,10 +30,12 @@ namespace AlloySample.Business.Initialization
             {
                 RouterEnabled = true,
                 DatabaseConfigurationsEnabled = true,
-                StructureUpdateEnabled = true
+                StructureUpdateEnabled = true,
+            });
+            context.Services.AddTransient(serviceLocator => new VirtualContainersOptions
+            {
+                Enabled = true
             });
         }
     }
 }
-
-//TODO: [grouping] cleanup plugin - remove containers from current structure

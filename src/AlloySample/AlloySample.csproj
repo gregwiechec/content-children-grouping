@@ -492,6 +492,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj">
+      <Project>{2866667b-7d2a-49cf-9352-ceb3e4d121c9}</Project>
+      <Name>ContentChildrenGrouping.VirtualContainers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ContentChildrenGrouping\ContentChildrenGrouping.csproj">
       <Project>{9395953d-305d-4078-bfe3-d6ee2b264eb7}</Project>
       <Name>ContentChildrenGrouping</Name>
@@ -508,7 +512,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50061/</IISUrl>
+          <IISUrl>http://localhost:50062/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
