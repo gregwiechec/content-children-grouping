@@ -5,6 +5,8 @@
     "epi-cms/ApplicationSettings",
     "./page-tree-initialization",
     "./search-command-initiaization",
+	
+	"./virtual-containers",
 
     "xstyle/css!./styles.css"
 ], function (
@@ -14,7 +16,8 @@
     ApplicationSettings,
 	
     pageTreeInitialization,
-    searchCommandInitialization
+    searchCommandInitialization,
+	virtualContainersInitialization
 ) {
     return declare([_Module], {
         initialize: function () {
@@ -27,6 +30,8 @@
                 ApplicationSettings.configurationContainerLinks = this._settings.configurationContainerLinks;
                 searchCommandInitialization();
             }
+			
+			virtualContainersInitialization();
         }
     });
 });

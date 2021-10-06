@@ -162,6 +162,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentVersionTransform.cs" />
     <Compile Include="CustomContentDataModelBaseTransform.cs" />
     <Compile Include="CustomContentLanguageSettingsHandler.cs" />
     <Compile Include="CustomContentProviderManager.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="ExtendedGetChildrenQuery.cs" />
     <Compile Include="ExtendedMissingContentLanguageInformationResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualContainerExtensions.cs" />
     <Compile Include="VirtualContainerPage.cs" />
     <Compile Include="VirtualContainersInitialization.cs" />
     <Compile Include="VirtualContainersOptions.cs" />

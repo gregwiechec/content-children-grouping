@@ -24,7 +24,7 @@ namespace ContentChildrenGrouping.VirtualContainers
 
         public override ContentLanguageInformation Resolve(IContent content, string preferredLanguage)
         {
-            if (content.ContentLink.ProviderName?.StartsWith("VirtualContainers") == true)
+            if (content.IsVirtualContainer())
             {
                 return new ContentLanguageInformation
                 {
@@ -32,7 +32,9 @@ namespace ContentChildrenGrouping.VirtualContainers
                     HasTranslationAccess = false,
                     IsPreferredLanguageAvailable = false,
                     IsTranslationNeeded = false,
-                    PreferredLanguage = "en"
+                    PreferredLanguage = "en",
+                    Reason = LanguageSelectionSource.Requested,
+                    Warning = ""
                 };
             }
 
