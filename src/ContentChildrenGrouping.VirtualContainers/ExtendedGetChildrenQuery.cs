@@ -51,6 +51,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                 {
                     //TODO: vc allow multiple levels of virtual containers
                     //TODO: vc store containers in configuration
+                    //TODO: vs should be available only for pages
                     var contentReference = new ContentReference(parameters.ReferenceId.ID);
                     var filteredChildren = GetChildren(parameters, contentReference, selector).ToList();
                     var startLetter = ParseFilter(parameters.ReferenceId);
