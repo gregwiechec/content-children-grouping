@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Routing;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;

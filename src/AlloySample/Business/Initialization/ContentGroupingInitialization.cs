@@ -1,7 +1,5 @@
-﻿using ContentChildrenGrouping;
-using ContentChildrenGrouping.Core;
+﻿using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.RegisterFromCode;
-using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -17,7 +15,8 @@ namespace AlloySample.Business.Initialization
     {
         public void Initialize(InitializationEngine context)
         {
-           context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterByLetter(new ContentReference(113));
+           context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterByLetter(113);
+           context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterVirtualContainerByLetter(220);
         }
 
         public void Uninitialize(InitializationEngine context)

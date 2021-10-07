@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ContentChildrenGrouping.Core.Extensions
 {
-    internal static class ContentChildrenGroupsLoaderExtensions
+    public static class ContentChildrenGroupsLoaderExtensions
     {
         private static List<ContainerConfiguration> GetAllConfigurations(
             this IEnumerable<IContentChildrenGroupsLoader> loaders)

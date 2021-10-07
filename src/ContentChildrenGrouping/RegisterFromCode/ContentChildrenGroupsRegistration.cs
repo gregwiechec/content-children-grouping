@@ -14,6 +14,23 @@ namespace ContentChildrenGrouping.RegisterFromCode
         void RegisterByLetter(ContentReference containerId, Type containerType = null);
 
         void RegisterByCreateDate(ContentReference containerId, Type containerType = null);
+
+        void RegisterVirtualContainerByLetter(ContentReference containerId);
+    }
+
+    public static class ContentChildrenGroupsRegistrationExtensions
+    {
+        public static void RegisterByLetter(this IContentChildrenGroupsRegistration childrenGroupsRegistration,
+            int containerId, Type containerType = null)
+        {
+            childrenGroupsRegistration.RegisterByLetter(new ContentReference(containerId), containerType);
+        }
+
+        public static void RegisterVirtualContainerByLetter(
+            this IContentChildrenGroupsRegistration childrenGroupsRegistration, int containerId)
+        {
+            childrenGroupsRegistration.RegisterVirtualContainerByLetter(new ContentReference(containerId));
+        }
     }
 
     [ServiceConfiguration(typeof(IContentChildrenGroupsRegistration), Lifecycle = ServiceInstanceScope.Singleton)]
@@ -45,5 +62,15 @@ namespace ContentChildrenGrouping.RegisterFromCode
                 GroupLevelConfigurations = new[] {new ByCreateDateGroupNameGenerator("yy-mm-dd", "no_date")}
             });
         }
-    }
+
+        public void RegisterVirtualContainerByLetter(ContentReference containerId)
+        {
+            Register(new ContainerConfiguration
+            {
+                ContainerContentLink = containerId,
+                IsVirtualContainer = true,
+                GroupLevelConfigurations = new[] { new ByNameGroupNameGenerator(0, 1, "_no_category") }
+            });
+        }
+   }
 }

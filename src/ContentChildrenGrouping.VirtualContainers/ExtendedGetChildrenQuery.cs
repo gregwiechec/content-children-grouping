@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.Extensions;
 using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
 using EPiServer.Core;
@@ -11,6 +12,9 @@ using EPiServer.Shell.ContentQuery;
 
 namespace ContentChildrenGrouping.VirtualContainers
 {
+    /// <summary>
+    /// Customized GetChildren query that returns virtual containers
+    /// </summary>
     [ServiceConfiguration(typeof(IContentQuery))]
     public class ExtendedGetChildrenQuery: GetChildrenQuery
     {
@@ -18,16 +22,20 @@ namespace ContentChildrenGrouping.VirtualContainers
         private readonly IContentRepository _contentRepository;
         private readonly LanguageSelectorFactory _languageSelectorFactory;
         private readonly VirtualContainersOptions _options;
+        private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         public override int Rank => base.Rank + (_options.Enabled ? 1 : -1);
 
         public ExtendedGetChildrenQuery(IContentQueryHelper queryHelper, IContentRepository contentRepository,
-            LanguageSelectorFactory languageSelectorFactory, VirtualContainersOptions options) : base(queryHelper, contentRepository,
+            LanguageSelectorFactory languageSelectorFactory, VirtualContainersOptions options, 
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders) : base(queryHelper,
+            contentRepository,
             languageSelectorFactory)
         {
             _queryHelper = queryHelper;
             _contentRepository = contentRepository;
             _languageSelectorFactory = languageSelectorFactory;
             _options = options;
+            _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
         }
 
         private string ParseFilter(ContentReference virtualContainerReference)
@@ -47,22 +55,26 @@ namespace ContentChildrenGrouping.VirtualContainers
             {
                 var selector = _languageSelectorFactory.AutoDetect(true);
 
+                // get children of virtual container
                 if (parameters.ReferenceId.IsVirtualContainer())
                 {
                     //TODO: vc allow multiple levels of virtual containers
-                    //TODO: vc store containers in configuration
                     //TODO: vs should be available only for pages
                     var contentReference = new ContentReference(parameters.ReferenceId.ID);
                     var filteredChildren = GetChildren(parameters, contentReference, selector).ToList();
-                    var startLetter = ParseFilter(parameters.ReferenceId);
+                    var startLetter = ParseFilter(parameters.ReferenceId).ToLowerInvariant();
                     var result = filteredChildren.Where(x => x.Name.ToLowerInvariant().StartsWith(startLetter)).ToList();
                     return result;
                 }
 
-                var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
-                if (children.Count > 10)
+                // get virtual containers for configured container
+                var containerContentLink = parameters.ReferenceId.ToReferenceWithoutVersion();
+                var virtualContainer = _contentChildrenGroupsLoaders.GetAllVirtualContainersConfigurations()
+                    .FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == containerContentLink);
+                if (virtualContainer != null)
                 {
-                    var fakeContents = children.Select(x => x.Name[0].ToString()).ToList().Distinct().OrderBy(x => x);
+                    var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
+                    var fakeContents = children.Select(x => x.Name[0].ToString().ToLowerInvariant()).ToList().Distinct().OrderBy(x => x);
                     var result = fakeContents.Select(x =>
                     {
                         var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
@@ -74,7 +86,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                     return result;
                 }
 
-                return children;
+                return base.GetContent(parameters);
             }
 
             return base.GetContent(parameters);

@@ -2,6 +2,7 @@
 using System.Linq;
 using ContentChildrenGrouping.ContainerModel;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;

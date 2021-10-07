@@ -165,7 +165,6 @@
     <Compile Include="ContainerModel\ContainerPageController.cs" />
     <Compile Include="ContainerModel\ContainerUIDescriptor.cs" />
     <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
-    <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
     <Compile Include="PartialRouter\CustomPartialRouter.cs" />
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
