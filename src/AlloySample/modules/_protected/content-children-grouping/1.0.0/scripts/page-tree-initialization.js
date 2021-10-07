@@ -27,7 +27,7 @@ define([
             }
             return result;
         };
-        ContentTree.prototype.getTooltip.nom = "getIconClass";
+        ContentTree.prototype.getTooltip.nom = "getTooltip";
     };
 });
 

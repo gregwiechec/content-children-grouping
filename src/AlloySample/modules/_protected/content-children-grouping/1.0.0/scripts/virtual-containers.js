@@ -88,5 +88,15 @@ define([
             return deferred.promise;
         };
         ContentTree.prototype._getTargetPath.nom = "_getTargetPath";
+        
+        // override default content tree tooltip
+        var originalGetTooltip = ContentTree.prototype.getTooltip;
+        ContentTree.prototype.getTooltip = function (item, opened) {
+            if (item.contentLink.indexOf(virtaulContainersProvider) !== -1) {
+                return "This content is configured as virtual container. It can't be selected, moved or deleted.";
+            }
+            return originalGetTooltip.apply(this, arguments);
+        };
+        ContentTree.prototype.getTooltip.nom = "getTooltip";
     };
 });
