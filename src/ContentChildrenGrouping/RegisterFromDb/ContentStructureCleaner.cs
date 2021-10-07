@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
@@ -37,7 +38,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 return false;
             }
 
-            var containerConfigurations = _childrenGroupsLoaders.GetAllConfigurations();
+            var containerConfigurations = _childrenGroupsLoaders.GetAllContainersConfigurations();
             var containerConfiguration = containerConfigurations.FirstOrDefault(x=> x.ContainerContentLink.CompareToIgnoreWorkID(containerContentLink));
             if (containerConfiguration == null)
             {

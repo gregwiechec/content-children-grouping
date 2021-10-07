@@ -1,22 +1,10 @@
 ﻿using System;
+using ContentChildrenGrouping.Core;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping
 {
-    /// <summary>
-    /// Generating name for structure
-    /// </summary>
-    public interface IGroupNameGenerator
-    {
-        /// <summary>
-        /// unique generator name
-        /// </summary>
-        string Key { get; }
-
-        string GetName(IContent content);
-    }
-
     /// <summary>
     /// When generator class implements this interface, then generator is available as DB plugin
     /// </summary>

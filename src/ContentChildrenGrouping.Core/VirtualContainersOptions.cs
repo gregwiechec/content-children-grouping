@@ -1,6 +1,6 @@
 ﻿using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping.VirtualContainers
+namespace ContentChildrenGrouping.Core
 {
     [Options]
     public class VirtualContainersOptions

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ContentChildrenGrouping.ContainerModel;
+using ContentChildrenGrouping.Core;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 

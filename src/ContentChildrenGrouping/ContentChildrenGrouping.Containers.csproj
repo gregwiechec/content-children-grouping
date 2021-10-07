@@ -7,8 +7,8 @@
     <ProjectGuid>{9395953D-305D-4078-BFE3-D6EE2B264EB7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ContentChildrenGrouping</RootNamespace>
-    <AssemblyName>ContentChildrenGrouping</AssemblyName>
+    <RootNamespace>ContentChildrenGrouping.Containers</RootNamespace>
+    <AssemblyName>ContentChildrenGrouping.Containers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -162,10 +162,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContainerConfiguration.cs" />
     <Compile Include="ContainerModel\ContainerPageController.cs" />
     <Compile Include="ContainerModel\ContainerUIDescriptor.cs" />
-    <Compile Include="ContentChildrenGroupingOptions.cs" />
     <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
     <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
     <Compile Include="PartialRouter\CustomPartialRouter.cs" />
@@ -174,7 +172,6 @@
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FixStructureScheduledJob.cs" />
-    <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IContentStructureModifier.cs" />
     <Compile Include="IGroupNameGenerator.cs" />
     <Compile Include="PartialRouter\PartialRouterInitialization.cs" />
@@ -196,6 +193,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ContentChildrenGrouping.Core\ContentChildrenGrouping.Core.csproj">
+      <Project>{75a3bbbf-b030-4b6a-ad3e-f83e8df3e9e1}</Project>
+      <Name>ContentChildrenGrouping.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj">
       <Project>{2866667b-7d2a-49cf-9352-ceb3e4d121c9}</Project>
       <Name>ContentChildrenGrouping.VirtualContainers</Name>

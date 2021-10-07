@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Core
 {
     /// <summary>
     /// Load configurations for containers

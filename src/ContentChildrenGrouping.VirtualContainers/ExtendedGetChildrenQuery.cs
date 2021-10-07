@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.Core;
 using EPiServer;
 using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
 using EPiServer.Core;

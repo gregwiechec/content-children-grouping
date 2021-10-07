@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
@@ -128,7 +129,7 @@ namespace ContentChildrenGrouping
                 }
             }
 
-            var containerConfigurations = _contentChildrenGroupsLoaders.GetAllConfigurations().ToList();
+            var containerConfigurations = _contentChildrenGroupsLoaders.GetAllContainersConfigurations().ToList();
             foreach (var configuration in containerConfigurations)
             {
                 Notify(configuration);

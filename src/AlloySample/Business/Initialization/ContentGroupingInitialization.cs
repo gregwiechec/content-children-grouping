@@ -1,4 +1,5 @@
 ﻿using ContentChildrenGrouping;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.RegisterFromCode;
 using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Core;
@@ -31,6 +32,8 @@ namespace AlloySample.Business.Initialization
                 RouterEnabled = true,
                 DatabaseConfigurationsEnabled = true,
                 StructureUpdateEnabled = true,
+                SearchCommandEnabled = true,
+                CustomIconsEnabled = true
             });
             context.Services.AddTransient(serviceLocator => new VirtualContainersOptions
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ContentChildrenGrouping.ContainerModel;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Cms.Shell;

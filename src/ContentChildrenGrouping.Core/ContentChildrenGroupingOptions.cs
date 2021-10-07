@@ -1,6 +1,6 @@
 ﻿using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Core
 {
     [Options]
     public class ContentChildrenGroupingOptions

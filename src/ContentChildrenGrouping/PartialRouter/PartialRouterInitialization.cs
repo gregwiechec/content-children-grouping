@@ -1,4 +1,5 @@
 ﻿using System.Web.Routing;
+using ContentChildrenGrouping.Core;
 using EPiServer;
 using EPiServer.Framework;
 using EPiServer.ServiceLocation;

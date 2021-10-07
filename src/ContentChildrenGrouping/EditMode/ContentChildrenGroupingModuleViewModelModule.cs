@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ContentChildrenGrouping.VirtualContainers;
+using ContentChildrenGrouping.Core;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;

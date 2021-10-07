@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
@@ -98,7 +99,7 @@ namespace ContentChildrenGrouping.PartialRouter
                 return null;
             }
 
-            var configurations = _contentChildrenGroupsLoaders.GetAllConfigurations().ToList();
+            var configurations = _contentChildrenGroupsLoaders.GetAllContainersConfigurations().ToList();
             ContainerConfiguration configuration = null;
             foreach (var ancestor in _contentLoader.GetAncestors(content.ContentLink))
             {

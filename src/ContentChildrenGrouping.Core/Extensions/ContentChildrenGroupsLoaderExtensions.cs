@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ContentChildrenGrouping.Core;
 
-namespace ContentChildrenGrouping.Extensions
+namespace ContentChildrenGrouping.Core.Extensions
 {
     internal static class ContentChildrenGroupsLoaderExtensions
     {

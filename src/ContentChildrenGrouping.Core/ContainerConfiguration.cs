@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using EPiServer.Core;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Core
 {
     /// <summary>
     /// Configuration for container content
@@ -24,7 +24,13 @@ namespace ContentChildrenGrouping
         /// for block and media it will be always ContentFolder
         /// when null, then GroupingContainerPage is used
         /// </summary>
-        public Type ContainerType { get; set; }
+        public Type ContainerType { get; set; } = null;
+
+        /// <summary>
+        /// When true, then container is virtual
+        /// Container is not stored in repository, just displayed on the UI
+        /// </summary>
+        public bool IsVirtualContainer { get; set; } = false;
 
         /// <summary>
         /// Configurations for groups

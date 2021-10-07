@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
+using ContentChildrenGrouping.RegisterFromDb;
 using EPiServer.Core;
 using EPiServer.Shell.Services.Rest;
 
-namespace ContentChildrenGrouping.RegisterFromDb
+namespace ContentChildrenGrouping.Containers.RegisterFromDb
 {
     public class ConfigSettingsController : Controller
     {
