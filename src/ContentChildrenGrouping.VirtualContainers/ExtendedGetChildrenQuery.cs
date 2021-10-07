@@ -29,6 +29,17 @@ namespace ContentChildrenGrouping.VirtualContainers
             _options = options;
         }
 
+        private string ParseFilter(ContentReference virtualContainerReference)
+        {
+            if (string.IsNullOrWhiteSpace(virtualContainerReference.ProviderName))
+            {
+                return string.Empty;
+            }
+
+            var result = virtualContainerReference.ProviderName.Substring((VirtualContainerExtensions.ProviderPrefix + "-").Length);
+            return result;
+        }
+
         protected override IEnumerable<IContent> GetContent(ContentQueryParameters parameters)
         {
             if (!ContentReference.IsNullOrEmpty(parameters.ReferenceId))
@@ -37,9 +48,11 @@ namespace ContentChildrenGrouping.VirtualContainers
 
                 if (parameters.ReferenceId.IsVirtualContainer())
                 {
+                    //TODO: vc allow multiple levels of virtual containers
+                    //TODO: vc store containers in configuration
                     var contentReference = new ContentReference(parameters.ReferenceId.ID);
                     var filteredChildren = GetChildren(parameters, contentReference, selector).ToList();
-                    var startLetter = ((char)parameters.ReferenceId.WorkID).ToString();
+                    var startLetter = ParseFilter(parameters.ReferenceId);
                     var result = filteredChildren.Where(x => x.Name.ToLowerInvariant().StartsWith(startLetter)).ToList();
                     return result;
                 }
@@ -53,7 +66,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                         var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
                         virtualContainerPage.Name = x.ToUpperInvariant();
                         virtualContainerPage.ContentLink =
-                            new ContentReference(parameters.ReferenceId.ID, (int)(x[0]), "VirtualContainers1");
+                            new ContentReference(parameters.ReferenceId.ID, 0, VirtualContainerExtensions.ProviderPrefix + "-" + x[0]);
                         return virtualContainerPage;
                     }).ToList();
                     return result;
