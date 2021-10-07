@@ -30,8 +30,10 @@
                 ApplicationSettings.configurationContainerLinks = this._settings.configurationContainerLinks;
                 searchCommandInitialization();
             }
-			
-			virtualContainersInitialization();
+
+            if (this._settings.virtualContainersEnabled) {
+                virtualContainersInitialization();
+            }
         }
     });
 });

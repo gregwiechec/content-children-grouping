@@ -195,6 +195,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj">
+      <Project>{2866667b-7d2a-49cf-9352-ceb3e4d121c9}</Project>
+      <Name>ContentChildrenGrouping.VirtualContainers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
