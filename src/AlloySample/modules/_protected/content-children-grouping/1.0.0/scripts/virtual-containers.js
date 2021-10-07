@@ -1,17 +1,19 @@
 define([
-	"dojo/Deferred",
+    "dojo/Deferred",
+    "dijit/Tree",
 	"epi/shell/dnd/tree/multiDndSource",
 	"epi-cms/component/ContentNavigationTree",
 	"epi-cms/widget/ContentTree"
 ], function (
-	Deferred,
+    Deferred,
+    Tree,
 	multiDndSource,
 	ContentNavigationTree,
 	ContentTree
 ) {
     return function(configuredContainerIds) {
 		var virtaulContainersProvider = "_VirtualContainers";
-
+        
 		// do not allow to select virtual containers
 		var originalOnMouseDown = multiDndSource.prototype.onMouseDown;
         multiDndSource.prototype.onMouseDown = function (e) {
@@ -33,6 +35,18 @@ define([
 			return originalOnTreeNodeClicked.apply(this, arguments);
         };
         ContentNavigationTree.prototype._onTreeNodeClicked.nom = "_onTreeNodeClicked";
+        
+        // do not allow to select virtual containers in Content Selector
+        var originalSetSelected = Tree._TreeNode.prototype.setSelected;
+        Tree._TreeNode.prototype.setSelected = function () {
+            if (this.item && this.item.contentLink && this.item.contentLink.indexOf(virtaulContainersProvider) !== -1) {
+                return;
+            }
+
+            return originalSetSelected.apply(this, arguments);
+        };
+        Tree._TreeNode.prototype.setSelected.nom = "setSelected";
+
 
 		// hide context menu for virtual container
 		var originalBuildNodeFromTemplate = ContentTree.prototype.buildNodeFromTemplate;
@@ -49,7 +63,9 @@ define([
 		var originalGetTreePath = ContentTree.prototype._getTargetPath;
 		ContentTree.prototype._getTargetPath = function (args) {
 			if (!this.selectedNode) {
-				return originalGetTreePath.apply(this, arguments);
+                //TODO: VC When refreshing page with selected article, the path is not selected. Maybe path should be stored in contentItem
+                // new field array VirtualParents
+			    return originalGetTreePath.apply(this, arguments);
             }
 			var parent = this.selectedNode.getParent();
 			if (!parent || !parent.item || !parent.item.contentLink) {
@@ -63,7 +79,8 @@ define([
 
 			var result = originalGetTreePath.apply(this, arguments);
 			var deferred = new Deferred();
-			result.then(function (targetPath) {
+            result.then(function (targetPath) {
+                //TODO: VC allow more than one virtual container
 				targetPath.splice(targetPath.length - 1, 0, parent.item.contentLink);
 				deferred.resolve(targetPath);
 			});
