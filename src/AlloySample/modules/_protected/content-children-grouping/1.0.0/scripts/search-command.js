@@ -27,7 +27,7 @@ define([
                 return;
             }
 
-            var configurationContainerLinks = ApplicationSettings.configurationContainerLinks;
+            var configurationContainerLinks = (ApplicationSettings.configurationContainerLinks || []).concat(ApplicationSettings.virtualContainerLinks || []);
             this.set("isAvailable", configurationContainerLinks.indexOf(contentLink) !== -1);
         },
 

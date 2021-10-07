@@ -7,12 +7,10 @@ define([
     assetsPanePluginArea,
     SearchCommand
 ) {
-    return function(configurationContainerLinks) {
-        SearchCommand.prototype.configurationContainerLinks = configurationContainerLinks;
-
+    return function () {
         navigationTreePluginArea.add(SearchCommand);
         assetsPanePluginArea.add(SearchCommand);
-	}
+    };
 });
 
 

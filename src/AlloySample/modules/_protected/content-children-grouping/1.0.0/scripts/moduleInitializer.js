@@ -28,6 +28,7 @@
             }
             if (this._settings.searchCommandEnabled) {
                 ApplicationSettings.configurationContainerLinks = this._settings.configurationContainerLinks;
+                ApplicationSettings.virtualContainerLinks = this._settings.virtualContainerLinks;
                 searchCommandInitialization();
             }
 
