@@ -1,13 +1,28 @@
 ﻿using EPiServer.Core;
 using EPiServer.DataAnnotations;
+using EPiServer.Shell;
 
 namespace ContentChildrenGrouping.VirtualContainers
 {
+    /// <summary>
+    /// Type of virtual Container
+    /// </summary>
     [ContentType(
         GUID = "22F84DED-6005-4040-9C86-BA2A4377A19E",
         AvailableInEditMode = false)]
     public class VirtualContainerPage : PageData
     {
+    }
+
+    [UIDescriptorRegistration]
+    public class VirtualContainerPageUIDescriptor : UIDescriptor<VirtualContainerPage>
+    {
+        public VirtualContainerPageUIDescriptor()
+            : base(ContentTypeCssClassNames.Container)
+        {
+            DefaultView = CmsViewNames.AllPropertiesView;
+            DisabledViews = new[] { CmsViewNames.OnPageEditView };
+        }
     }
 
     /*

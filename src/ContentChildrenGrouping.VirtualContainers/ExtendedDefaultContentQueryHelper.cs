@@ -20,7 +20,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                 return items;
             }
 
-            return items.Where(m => m.ContentLink.ProviderName?.StartsWith("VirtualContainers") == true || !_contentProviderManager.IsWastebasket(m.ContentLink));
+            return items.Where(m => m.IsVirtualContainer() || !_contentProviderManager.IsWastebasket(m.ContentLink));
         }
 
         public ExtendedDefaultContentQueryHelper(IContentRepository contentRepository,

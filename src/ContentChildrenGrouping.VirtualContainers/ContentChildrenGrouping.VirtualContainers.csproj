@@ -167,6 +167,7 @@
     <Compile Include="CustomContentLanguageSettingsHandler.cs" />
     <Compile Include="CustomContentProviderManager.cs" />
     <Compile Include="CustomHasChildrenEvaluator.cs" />
+    <Compile Include="ExtendedCapability.cs" />
     <Compile Include="ExtendedDefaultContentQueryHelper.cs" />
     <Compile Include="ExtendedGetChildrenQuery.cs" />
     <Compile Include="ExtendedMissingContentLanguageInformationResolver.cs" />

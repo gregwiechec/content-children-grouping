@@ -35,7 +35,7 @@ namespace ContentChildrenGrouping.VirtualContainers
             {
                 var selector = _languageSelectorFactory.AutoDetect(true);
 
-                if (parameters.ReferenceId.ProviderName == "VirtualContainers1")
+                if (parameters.ReferenceId.IsVirtualContainer())
                 {
                     var contentReference = new ContentReference(parameters.ReferenceId.ID);
                     var filteredChildren = GetChildren(parameters, contentReference, selector).ToList();

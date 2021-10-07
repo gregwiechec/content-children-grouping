@@ -20,7 +20,7 @@ namespace ContentChildrenGrouping.VirtualContainers
         public int Rank => _childrenEvaluator.Rank;
         public bool Execute(IContent content, IEnumerable<string> typeIdentifiers, bool allLanguages, IModelTransformContext context)
         {
-            if (content != null && content.ContentLink.ProviderName?.StartsWith("VirtualContainers") == true)
+            if (content != null && content.IsVirtualContainer())
             {
                 return true;
             }

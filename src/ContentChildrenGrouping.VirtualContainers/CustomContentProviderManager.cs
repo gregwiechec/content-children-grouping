@@ -28,7 +28,7 @@ namespace ContentChildrenGrouping.VirtualContainers
 
         public bool IsWastebasket(ContentReference contentLink)
         {
-            if (contentLink.ProviderName?.StartsWith("VirtualContainers") == true)
+            if (contentLink.IsVirtualContainer())
             {
                 return false;
             }

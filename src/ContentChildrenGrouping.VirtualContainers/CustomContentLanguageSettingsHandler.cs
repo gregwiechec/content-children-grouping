@@ -40,7 +40,7 @@ namespace ContentChildrenGrouping.VirtualContainers
 
         public bool IsLanguageAllowedForCreation(ContentReference contentLink, string languageBranch)
         {
-            if (contentLink.ProviderName?.StartsWith("VirtualContainers") == true)
+            if (contentLink.IsVirtualContainer())
             {
                 return false;
             }

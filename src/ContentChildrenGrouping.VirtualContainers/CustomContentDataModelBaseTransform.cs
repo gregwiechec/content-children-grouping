@@ -51,7 +51,7 @@ namespace ContentChildrenGrouping.VirtualContainers
 
         public override void TransformInstance(IContent source, ContentDataStoreModelBase target, IModelTransformContext context)
         {
-            if (source.ContentLink.ProviderName?.StartsWith("VirtualContainers") == true)
+            if (source.IsVirtualContainer())
             {
                 target.Name = source.Name;
                 target.ContentLink = source.ContentLink;
