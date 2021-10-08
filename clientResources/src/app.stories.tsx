@@ -13,6 +13,7 @@ interface ComponentProps extends ServerSettings {
 const Component = (settings: ComponentProps) => {
   return (
     <ServerSettingsContext.Provider value={settings}>
+      {/*TODO: dataService has to be context to use mock on edit configuration */}
       <Plugin dataService={settings.dataService} />
     </ServerSettingsContext.Provider>
   );
