@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BlockList, Button, ButtonIcon, Link, OverlayWrapper, Popover, Table } from "optimizely-oui";
+import { BlockList, ButtonIcon, Link, OverlayWrapper, Popover, Table } from "optimizely-oui";
 // @ts-ignore
 import Icon from "react-oui-icons";
 import { GroupConfiguration } from "./models/Groupconfiguration";
@@ -78,22 +78,16 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                     <Popover>
                       <BlockList hasBorder={false}>
                         <BlockList.Item onClick={() => onEdit(x)}>
-                          <Link leftIcon="projects" >
-                            Edit
-                          </Link>
+                          <Link leftIcon="projects">Edit</Link>
                         </BlockList.Item>
                         {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
-                          <BlockList.Item  onClick={() => onManage(x)}>
-                            <Link leftIcon="settings">
-                              Manage
-                            </Link>
+                          <BlockList.Item onClick={() => onManage(x)}>
+                            <Link leftIcon="settings">Manage</Link>
                           </BlockList.Item>
                         )}
                         {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
                           <BlockList.Item onClick={() => setItemToDelete(x)}>
-                            <Link leftIcon="ban">
-                              Delete
-                            </Link>
+                            <Link leftIcon="ban">Delete</Link>
                           </BlockList.Item>
                         )}
                       </BlockList>

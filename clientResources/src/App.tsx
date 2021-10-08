@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 // @ts-ignore
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
-import { EditConfigurationDialog } from "./edit-configuration-dialog";
 import { DataService, dataService as defaultDataService } from "./data-service";
 import { ManageConfigurationDialog } from "./manage-configuration-dialog";
 import { useServerSettingsContext } from "./server-settings";
@@ -17,11 +16,19 @@ export interface AppProps {
 let successTimeoutHandle: number;
 
 const App = ({ dataService }: AppProps) => {
+  const history = useHistory();
+
   const serverSettings = useServerSettingsContext();
 
+  //TODO: remove
   const [currentConfiguration, setCurrentConfiguration] = useState<GroupConfiguration | null>(null);
+
   const [currentManageConfiguration, setCurrentManageConfiguration] = useState<GroupConfiguration | null>(null);
+
+  //TODO: remove
   const [isNewConfiguration, setIsNewConfiguration] = useState(false);
+
+  //TODO: remove
   const [dialogValidationError, setDialogValidationError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
   const [saveMessageType, setSaveMessageType] = useState<"bad-news" | "brand" | "good-news" | "warning">("good-news");
@@ -45,15 +52,7 @@ const App = ({ dataService }: AppProps) => {
   }, [dataService]);
 
   const onAddConfiguration = () => {
-    setDialogValidationError("");
-    setIsNewConfiguration(true);
-    setCurrentConfiguration({
-      contentLink: "",
-      fromCode: false,
-      containerTypeName: "",
-      routingEnabled: true,
-      groupLevelConfigurations: [serverSettings.availableNameGenerators[0]] || []
-    });
+    history.push("/add");
   };
 
   const onDialogSave = (configuration: GroupConfiguration): void => {
@@ -94,9 +93,13 @@ const App = ({ dataService }: AppProps) => {
   };
 
   const onEditConfiguration = (configuration: GroupConfiguration) => {
+    history.push("/edit/" + configuration.contentLink);
+/*
+TODO: remove setIsNewConfiguration, setDialogValidationError, setCurrentConfiguration
     setIsNewConfiguration(false);
     setDialogValidationError("");
     setCurrentConfiguration(configuration);
+ */
   };
 
   const onManageConfiguration = (configuration: GroupConfiguration) => {
@@ -184,16 +187,6 @@ const App = ({ dataService }: AppProps) => {
             </Code>
           </Attention>
         </>
-      )}
-
-      {!!currentConfiguration && (
-        <EditConfigurationDialog
-          configuration={currentConfiguration}
-          validationMessage={dialogValidationError}
-          onSave={onDialogSave}
-          onCancel={() => setCurrentConfiguration(null)}
-          availableNameGenerators={serverSettings.availableNameGenerators}
-        />
       )}
 
       {!!currentManageConfiguration && (
