@@ -22,6 +22,7 @@ export const EditConfigurationDialog = ({
   const [contentLink, setContentLink] = useState(configuration?.contentLink || "");
   const [containerTypeName, setContainerTypeName] = useState(configuration?.containerTypeName || "");
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(configuration?.routingEnabled || false);
+  const [isVirtualContainer, setIsVirtualContainer] = useState(configuration?.isVirtualContainer || false);
   const [generators, setGenerators] = useState(configuration?.groupLevelConfigurations || []);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ export const EditConfigurationDialog = ({
       fromCode: false,
       containerTypeName: containerTypeName,
       routingEnabled: isRoutingEnabled,
+      isVirtualContainer: isVirtualContainer,
       groupLevelConfigurations: generators
     });
   };
@@ -106,21 +108,31 @@ export const EditConfigurationDialog = ({
         value={contentLink}
         isRequired
       />
-      <br/>
-      <Input
-        type="text"
-        label="Container type name"
-        note="Type format: [Full type name, Assembly Name]"
-        value={containerTypeName}
-        onChange={(e) => setContainerTypeName(e.target.value)}
-      />
-      <br/>
+      <br />
       <Checkbox
-        label="Router enabled"
-        checked={isRoutingEnabled}
-        onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+        label="Is virtual container"
+        checked={isVirtualContainer}
+        onChange={(e) => setIsVirtualContainer(e.target.checked)}
       />
-      <br/>
+      {!isVirtualContainer && (
+        <>
+          <br />
+          <Input
+            type="text"
+            label="Container type name"
+            note="Type format: [Full type name, Assembly Name]"
+            value={containerTypeName}
+            onChange={(e) => setContainerTypeName(e.target.value)}
+          />
+          <br />
+          <Checkbox
+            label="Router enabled"
+            checked={isRoutingEnabled}
+            onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+          />
+        </>
+      )}
+      <br />
       <Label>Name generators *</Label>
       <BlockList hasBorder={false} className="configuration-item">
         {generators.map((x, index) => (
@@ -130,6 +142,7 @@ export const EditConfigurationDialog = ({
               isOptional={false}
               onChange={(value) => onGeneratorValueChange(index, value.target.value)}
             >
+              {/*allow to configure namegenerator*/}
               {availableNameGenerators.map((generator) => (
                 <option key={generator} value={generator} selected={generator === x}>
                   {generator}
