@@ -15,7 +15,7 @@ namespace ContentChildrenGrouping.RegisterFromCode
 
         void RegisterByCreateDate(ContentReference containerId, Type containerType = null);
 
-        void RegisterVirtualContainerByLetter(ContentReference containerId);
+        void RegisterVirtualContainerByLetter(ContentReference containerId, int countLetters = 1);
     }
 
     public static class ContentChildrenGroupsRegistrationExtensions
@@ -27,9 +27,9 @@ namespace ContentChildrenGrouping.RegisterFromCode
         }
 
         public static void RegisterVirtualContainerByLetter(
-            this IContentChildrenGroupsRegistration childrenGroupsRegistration, int containerId)
+            this IContentChildrenGroupsRegistration childrenGroupsRegistration, int containerId, int countLetters = 1)
         {
-            childrenGroupsRegistration.RegisterVirtualContainerByLetter(new ContentReference(containerId));
+            childrenGroupsRegistration.RegisterVirtualContainerByLetter(new ContentReference(containerId), countLetters);
         }
     }
 
@@ -63,13 +63,13 @@ namespace ContentChildrenGrouping.RegisterFromCode
             });
         }
 
-        public void RegisterVirtualContainerByLetter(ContentReference containerId)
+        public void RegisterVirtualContainerByLetter(ContentReference containerId, int countLetters)
         {
             Register(new ContainerConfiguration
             {
                 ContainerContentLink = containerId,
                 IsVirtualContainer = true,
-                GroupLevelConfigurations = new[] { new ByNameGroupNameGenerator(0, 1, "_no_category") }
+                GroupLevelConfigurations = new[] { new ByNameGroupNameGenerator(0, countLetters, "_no_category") }
             });
         }
    }

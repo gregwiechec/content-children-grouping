@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
@@ -38,51 +39,23 @@ namespace ContentChildrenGrouping.VirtualContainers
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
         }
 
-        private string ParseFilter(ContentReference virtualContainerReference)
-        {
-            if (string.IsNullOrWhiteSpace(virtualContainerReference.ProviderName))
-            {
-                return string.Empty;
-            }
-
-            var result = virtualContainerReference.ProviderName.Substring((VirtualContainerExtensions.ProviderPrefix + "-").Length);
-            return result;
-        }
-
         protected override IEnumerable<IContent> GetContent(ContentQueryParameters parameters)
         {
             if (!ContentReference.IsNullOrEmpty(parameters.ReferenceId))
             {
                 var selector = _languageSelectorFactory.AutoDetect(true);
+                
+                //TODO: vc allow multiple levels of virtual containers
+                //TODO: vs should be available only for pages
 
                 // get children of virtual container
                 if (parameters.ReferenceId.IsVirtualContainer())
                 {
-                    //TODO: vc allow multiple levels of virtual containers
-                    //TODO: vs should be available only for pages
-                    var contentReference = new ContentReference(parameters.ReferenceId.ID);
-                    var filteredChildren = GetChildren(parameters, contentReference, selector).ToList();
-                    var startLetter = ParseFilter(parameters.ReferenceId).ToLowerInvariant();
-                    var result = filteredChildren.Where(x => x.Name.ToLowerInvariant().StartsWith(startLetter)).ToList();
-                    return result;
+                    return GetVirtualContainerChildren(parameters, selector);
                 }
 
-                // get virtual containers for configured container
-                var containerContentLink = parameters.ReferenceId.ToReferenceWithoutVersion();
-                var virtualContainer = _contentChildrenGroupsLoaders.GetAllVirtualContainersConfigurations()
-                    .FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == containerContentLink);
-                if (virtualContainer != null)
+                if (GetVirtualContainers(parameters, selector, out var result))
                 {
-                    var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
-                    var fakeContents = children.Select(x => x.Name[0].ToString().ToLowerInvariant()).ToList().Distinct().OrderBy(x => x);
-                    var result = fakeContents.Select(x =>
-                    {
-                        var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
-                        virtualContainerPage.Name = x.ToUpperInvariant();
-                        virtualContainerPage.ContentLink =
-                            new ContentReference(parameters.ReferenceId.ID, 0, VirtualContainerExtensions.ProviderPrefix + "-" + x[0]);
-                        return virtualContainerPage;
-                    }).ToList();
                     return result;
                 }
 
@@ -92,6 +65,101 @@ namespace ContentChildrenGrouping.VirtualContainers
             return base.GetContent(parameters);
         }
 
+        /// <summary>
+        /// Get Virtual Containers for selected content
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="selector"></param>
+        /// <param name="virtualContainers"></param>
+        /// <returns></returns>
+        private bool GetVirtualContainers(ContentQueryParameters parameters, LanguageSelector selector,
+            out IEnumerable<IContent> virtualContainers)
+        {
+            var virtualContainer = GetContainerConfiguration(parameters.ReferenceId);
+            if (virtualContainer == null)
+            {
+                virtualContainers = null;
+                return false;
+            }
+
+            var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
+
+            var groupNameGenerator = virtualContainer.GroupLevelConfigurations.First();
+            var virtualContainerNames = children.Select(x => groupNameGenerator.GetName(x))
+                .Select(x => x.Replace("_", "-")) // ContentReference provider name cannot contains "_", because it's a separator
+                .Select(x => x.ToLowerInvariant())
+                .ToList()
+                .Distinct()
+                .OrderBy(x => x);
+
+            virtualContainers = virtualContainerNames.Select(x =>
+            {
+                var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
+                virtualContainerPage.Name = x.ToUpperInvariant();
+                virtualContainerPage.ContentLink =
+                    new ContentReference(parameters.ReferenceId.ID, 0,
+                        VirtualContainerExtensions.ProviderPrefix + "-" + x);
+                return virtualContainerPage;
+            }).ToList();
+            return true;
+        }
+
+        /// <summary>
+        /// Get children of virtual content
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="languageSelector"></param>
+        /// <returns></returns>
+        private IEnumerable<IContent> GetVirtualContainerChildren(ContentQueryParameters parameters, LanguageSelector languageSelector)
+        {
+            var configuration = GetContainerConfiguration(parameters.ReferenceId);
+
+            if (configuration == null)
+            {
+                throw new Exception("Configuration not found for " + parameters.ReferenceId);
+            }
+
+            string ParseFilter(ContentReference virtualContainerReference)
+            {
+                if (string.IsNullOrWhiteSpace(virtualContainerReference.ProviderName))
+                {
+                    return string.Empty;
+                }
+
+                var pageFilter = virtualContainerReference.ProviderName.Substring((VirtualContainerExtensions.ProviderPrefix + "-").Length);
+                return pageFilter;
+            }
+
+            var groupNameGenerator = configuration.GroupLevelConfigurations.First();
+
+            var contentReference = new ContentReference(parameters.ReferenceId.ID);
+            var filteredChildren = GetChildren(parameters, contentReference, languageSelector).ToList();
+            var filterText = ParseFilter(parameters.ReferenceId).ToLowerInvariant();
+            var result = filteredChildren.Where(x => groupNameGenerator.GetName(x).ToLowerInvariant() == filterText).ToList();
+            return result;
+        }
+
+        /// <summary>
+        /// Returns Virtual Container configuration for content
+        /// </summary>
+        /// <param name="contentLink"></param>
+        /// <returns></returns>
+        private ContainerConfiguration GetContainerConfiguration(ContentReference contentLink)
+        {
+            // get virtual containers for configured container
+            var containerContentLink = new ContentReference(contentLink.ID);
+            var result = _contentChildrenGroupsLoaders.GetAllVirtualContainersConfigurations()
+                .FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == containerContentLink);
+            return result;
+        }
+
+        /// <summary>
+        /// Get all content children
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="parentId"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
         private IEnumerable<IContent> GetChildren(ContentQueryParameters parameters, ContentReference parentId, LanguageSelector selector)
         {
             IEnumerable<IContent> children = null;
