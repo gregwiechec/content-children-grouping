@@ -46,7 +46,6 @@ namespace ContentChildrenGrouping.VirtualContainers
                 var selector = _languageSelectorFactory.AutoDetect(true);
                 
                 //TODO: vc allow multiple levels of virtual containers
-                //TODO: vs should be available only for pages
 
                 // get children of virtual container
                 if (parameters.ReferenceId.IsVirtualContainer())
@@ -75,6 +74,13 @@ namespace ContentChildrenGrouping.VirtualContainers
         private bool GetVirtualContainers(ContentQueryParameters parameters, LanguageSelector selector,
             out IEnumerable<IContent> virtualContainers)
         {
+            var parent = _contentRepository.Get<IContent>(parameters.ReferenceId);
+            if (!(parent is PageData))
+            {
+                virtualContainers = null;
+                return false;
+            }
+
             var virtualContainer = GetContainerConfiguration(parameters.ReferenceId);
             if (virtualContainer == null)
             {
