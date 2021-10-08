@@ -3,14 +3,15 @@ const result = {
     {
       contentLink: "1",
       fromCode: false,
-      routingEnabled: false,
-      containerTypeName: "",
+      routingEnabled: true,
+      containerTypeName: "Alloy.CustomContainer",
       groupLevelConfigurations: ["Name", "Created Date"]
     },
     {
       contentLink: "2",
       fromCode: true,
       routingEnabled: false,
+      isVirtualContainer: true,
       containerTypeName: "",
       groupLevelConfigurations: ["Name", "Created Date"]
     },
@@ -44,7 +45,7 @@ export const fakeService = {
   get: (contentLink: string) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(result.filter(x => x.contentLink == contentLink)[0]);
+        resolve(result.items.filter(x => x.contentLink == contentLink)[0]);
       }, 500);
     });
   },

@@ -16,20 +16,14 @@ import {
   Select
 } from "optimizely-oui";
 import { useServerSettingsContext } from "./server-settings";
-import { dataService as defaultDataService, DataService } from "./data-service";
+import { useDataServiceContext } from "./data-service";
 
-interface EditConfigurationDialogProps {
-  dataService?: DataService;
-}
-
-export const EditConfiguration = ({ dataService }: EditConfigurationDialogProps) => {
-  if (!dataService) {
-    dataService = defaultDataService;
-  }
-
+export const EditConfiguration = () => {
   const { editContentLink } = useParams();
-  const history = useHistory();
+  const dataService = useDataServiceContext();
   const { availableNameGenerators = [] } = useServerSettingsContext();
+
+  const history = useHistory();
   const [configuration, setConfiguration] = useState<GroupConfiguration | null>(null);
 
   const [contentLink, setContentLink] = useState("");
@@ -42,7 +36,10 @@ export const EditConfiguration = ({ dataService }: EditConfigurationDialogProps)
 
   useEffect(() => {
     if (editContentLink) {
-      dataService?.get(contentLink).then((result: GroupConfiguration) => {
+      dataService?.get(editContentLink).then((result: GroupConfiguration) => {
+        if (!result) {
+          return;
+        }
         setConfiguration(result);
         setContentLink(result.contentLink);
         setContainerTypeName(result.containerTypeName);

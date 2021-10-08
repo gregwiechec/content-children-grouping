@@ -1,9 +1,11 @@
 import axios from "axios";
+import { createContext, useContext } from "react";
+import { GroupConfiguration } from "./models/Groupconfiguration";
 
 export interface DataService {
   load: () => Promise<any>;
   save: (configurations: any) => Promise<any>;
-  get: (contentLink: string) => Promise<any>;
+  get: (contentLink: string) => Promise<GroupConfiguration>;
   clearContainers: (contentLink: string) => Promise<any>;
 }
 
@@ -39,4 +41,16 @@ export const dataService: DataService = {
   clearContainers: (contentLink: string) => {
     return axios.post("ClearContainers", { contentLink: contentLink });
   }
+};
+
+const DataServiceContext = createContext<DataService>(dataService);
+
+export default DataServiceContext;
+
+export const useDataServiceContext = (): DataService => {
+  const dataServiceContext = useContext(DataServiceContext);
+  if (!dataServiceContext) {
+    throw new Error("dataServiceContext must be used within the ServerSettingsContext.Provider");
+  }
+  return dataServiceContext;
 };

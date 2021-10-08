@@ -5,19 +5,15 @@ import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
-import { DataService, dataService as defaultDataService } from "./data-service";
 import { ManageConfigurationDialog } from "./manage-configuration-dialog";
 import { useServerSettingsContext } from "./server-settings";
-
-export interface AppProps {
-  dataService?: DataService;
-}
+import { useDataServiceContext } from "./data-service";
 
 let successTimeoutHandle: number;
 
-const App = ({ dataService }: AppProps) => {
+const App = () => {
   const history = useHistory();
-
+  const dataService = useDataServiceContext();
   const serverSettings = useServerSettingsContext();
 
   //TODO: remove
@@ -34,10 +30,6 @@ const App = ({ dataService }: AppProps) => {
   const [saveMessageType, setSaveMessageType] = useState<"bad-news" | "brand" | "good-news" | "warning">("good-news");
 
   const [items, setItems] = useState<GroupConfiguration[]>([]);
-
-  if (!dataService) {
-    dataService = defaultDataService;
-  }
 
   useEffect(() => {
     dataService?.load().then((result: any) => {
@@ -94,7 +86,7 @@ const App = ({ dataService }: AppProps) => {
 
   const onEditConfiguration = (configuration: GroupConfiguration) => {
     history.push("/edit/" + configuration.contentLink);
-/*
+    /*
 TODO: remove setIsNewConfiguration, setDialogValidationError, setCurrentConfiguration
     setIsNewConfiguration(false);
     setDialogValidationError("");
