@@ -66,6 +66,7 @@ define([
             if (!this.selectedNode) {
                 //TODO: VC When refreshing page with selected article, the path is not selected. Maybe path should be stored in contentItem
                 // new field array VirtualParents
+                // When using search, the content is also not selected
                 return originalGetTreePath.apply(this, arguments);
             }
             var parent = this.selectedNode.getParent();
