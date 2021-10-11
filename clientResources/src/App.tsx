@@ -155,12 +155,6 @@ const App = ({ onDeleteMessage }: AppProps) => {
         </Button>
       )}
 
-      {serverSettings.options.databaseConfigurationsEnabled && (
-        <Button className="save-button" style="highlight" size="narrow" leftIcon="save" onClick={onSaveClick}>
-          Save configurations
-        </Button>
-      )}
-
       {!serverSettings.options.databaseConfigurationsEnabled && (
         <>
           <br />

@@ -37,7 +37,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [generators, setGenerators] = useState<string[]>([]);
 
   const [validationMessage, setValidationMessage] = useState("");
-
+//TODO: readonly when databaseConfigurationsEnabled is false
   useEffect(() => {
     if (editContentLink) {
       dataService?.get(editContentLink).then((result: GroupConfiguration) => {
