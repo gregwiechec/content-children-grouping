@@ -52,7 +52,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setGenerators(result.groupLevelConfigurations || []);
       });
     }
-  }, []);
+  }, [editContentLink, dataService]);
 
   useEffect(() => {
     setContentLink(configuration?.contentLink || "");
@@ -99,7 +99,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
       routingEnabled: isRoutingEnabled,
       isVirtualContainer: isVirtualContainer,
       groupLevelConfigurations: generators
-    }).then(result => {
+    }).then(() => {
       onSaveSuccess("Configuration saved");
       history.push("/");
     }).catch(error => {
