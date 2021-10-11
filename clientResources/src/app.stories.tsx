@@ -13,7 +13,6 @@ interface ComponentProps extends ServerSettings {
 const Component = (settings: ComponentProps) => {
   return (
     <ServerSettingsContext.Provider value={settings}>
-      {/*TODO: dataService has to be context to use mock on edit configuration */}
       <Plugin dataService={settings.dataService} />
     </ServerSettingsContext.Provider>
   );
@@ -45,7 +44,7 @@ const getDefaultProps = (dataService: DataService) => {
 export const AppStory = Template.bind({});
 AppStory.args = getDefaultProps(fakeService);
 
-const emptyService = {
+const emptyService: DataService = {
   load: () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -54,7 +53,18 @@ const emptyService = {
     });
   },
   save: () => new Promise((resolve) => resolve(true)),
-  clearContainers: () => new Promise((resolve) => resolve("test"))
+  clearContainers: () => new Promise((resolve) => resolve("test")),
+  get: (contentLink: string) =>
+    new Promise((resolve) =>
+      resolve({
+        routingEnabled: false,
+        contentLink: contentLink,
+        isVirtualContainer: false,
+        fromCode: false,
+        containerTypeName: "",
+        groupLevelConfigurations: []
+      })
+    )
 };
 
 export const EmptyApp = Template.bind({});

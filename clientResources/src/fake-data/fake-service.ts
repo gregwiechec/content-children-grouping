@@ -1,3 +1,5 @@
+import {DataService} from "../data-service";
+
 const result = {
   items: [
     {
@@ -5,7 +7,8 @@ const result = {
       fromCode: false,
       routingEnabled: true,
       containerTypeName: "Alloy.CustomContainer",
-      groupLevelConfigurations: ["Name", "Created Date"]
+      groupLevelConfigurations: ["Name", "Created Date"],
+      isVirtualContainer: true
     },
     {
       contentLink: "2",
@@ -20,21 +23,23 @@ const result = {
       fromCode: true,
       routingEnabled: false,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name", "Created Date"]
+      groupLevelConfigurations: ["Name", "Created Date"],
+      isVirtualContainer: false,
     },
     {
       contentLink: "4",
       fromCode: false,
       routingEnabled: true,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name"]
+      groupLevelConfigurations: ["Name"],
+      isVirtualContainer: false
     }
   ],
   availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
   structureUpdateEnabled: false
 };
 
-export const fakeService = {
+export const fakeService: DataService = {
   load: () => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -45,7 +50,7 @@ export const fakeService = {
   get: (contentLink: string) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(result.items.filter(x => x.contentLink == contentLink)[0]);
+        resolve(result.items.filter(x => x.contentLink === contentLink)[0]);
       }, 500);
     });
   },
@@ -55,7 +60,7 @@ export const fakeService = {
   clearContainers: (contentLink: string) => {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve("Containers cleared successfully");
+        resolve(`Containers cleared successfully (${contentLink})`);
       }, 3000)
     );
   }
