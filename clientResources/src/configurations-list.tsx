@@ -37,6 +37,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           <Table.TR>
             <Table.TH width={100}>Content Link</Table.TH>
             <Table.TH width={90}>From code</Table.TH>
+            <Table.TH width={90}>Is virtual</Table.TH>
             <Table.TH>Container type</Table.TH>
             <Table.TH width={90}>Router</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
@@ -56,6 +57,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 )}
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
+              <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>
               <Table.TD>
                 {x.containerTypeName}
                 {!x.containerTypeName && (
@@ -94,7 +96,8 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                     </Popover>
                   }
                 >
-                  <ButtonIcon iconName="ellipsis" style="plain" />
+                  {/* eslint-disable-next-line react/style-prop-object */}
+                  <ButtonIcon title="" iconName="ellipsis" style="plain" />
                 </OverlayWrapper>
               </Table.TD>
             </Table.TR>
