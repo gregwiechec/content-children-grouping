@@ -1,4 +1,5 @@
-import {DataService} from "../data-service";
+import { DataService } from "../data-service";
+import { GroupConfiguration } from "../models/Groupconfiguration";
 
 const result = {
   items: [
@@ -24,7 +25,7 @@ const result = {
       routingEnabled: false,
       containerTypeName: "",
       groupLevelConfigurations: ["Name", "Created Date"],
-      isVirtualContainer: false,
+      isVirtualContainer: false
     },
     {
       contentLink: "4",
@@ -50,12 +51,15 @@ export const fakeService: DataService = {
   get: (contentLink: string) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(result.items.filter(x => x.contentLink === contentLink)[0]);
+        resolve(result.items.filter((x) => x.contentLink === contentLink)[0]);
       }, 500);
     });
   },
-  save: () => {
-    return new Promise((resolve) => resolve(false));
+  save: (configuration: GroupConfiguration) => {
+    if (configuration.contentLink === "111") {
+      return new Promise((resolve, reject) => reject({ message: "Cannot save item" }));
+    }
+    return new Promise((resolve) => setTimeout(() => resolve(true), 2000));
   },
   clearContainers: (contentLink: string) => {
     return new Promise((resolve) =>

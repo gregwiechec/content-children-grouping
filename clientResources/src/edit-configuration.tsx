@@ -18,7 +18,11 @@ import {
 import { useServerSettingsContext } from "./server-settings";
 import { useDataServiceContext } from "./data-service";
 
-export const EditConfiguration = () => {
+interface EditConfigurationProps {
+  onSaveSuccess: (message: string) => void;
+}
+
+export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => {
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
   const { availableNameGenerators = [] } = useServerSettingsContext();
@@ -32,7 +36,7 @@ export const EditConfiguration = () => {
   const [isVirtualContainer, setIsVirtualContainer] = useState(false);
   const [generators, setGenerators] = useState<string[]>([]);
 
-  const validationMessage = "";
+  const [validationMessage, setValidationMessage] = useState("");
 
   useEffect(() => {
     if (editContentLink) {
@@ -86,17 +90,21 @@ export const EditConfiguration = () => {
     return true;
   };
 
-  const onDialogSave = () => {
-    //TODO: save and delete single value
-
-    onSave({
-      contentLink: contentLink,
+  const onSave = () => {
+    dataService.save({
+      isNew: !isEditing,
+      contentLink: contentLink || editContentLink,
       fromCode: false,
       containerTypeName: containerTypeName,
       routingEnabled: isRoutingEnabled,
       isVirtualContainer: isVirtualContainer,
       groupLevelConfigurations: generators
-    });
+    }).then(result => {
+      onSaveSuccess("Configuration saved");
+      history.push("/");
+    }).catch(error => {
+      setValidationMessage(error.message);
+    })
   };
 
   const isEditing = !!editContentLink;
@@ -213,7 +221,7 @@ export const EditConfiguration = () => {
           <Button style="plain" key={0} onClick={() => history.push("/")}>
             Cancel
           </Button>
-          <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onDialogSave}>
+          <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onSave}>
             Save
           </Button>
         </GridCell>

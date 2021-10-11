@@ -1,26 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import App from "./App";
 import { PluginInfo } from "./PluginInfo";
 import { EditConfiguration } from "./edit-configuration";
-import DataServiceContext, { dataService as defautDataService } from "./data-service";
+import DataServiceContext, { DataService, dataService as defaultDataService } from "./data-service";
+import { Message } from "./Message";
 
-export default function Plugin({ dataService }: AppProps) {
+interface PluginProps {
+  dataService: DataService | null;
+}
+
+export default function Plugin({ dataService }: PluginProps) {
   if (!dataService) {
-    dataService = defautDataService;
+    dataService = defaultDataService;
   }
 
+  const [message, setMessage] = useState("");
+
+  let msgTimeoutHandler: number | null = null;
+  useEffect(() => {
+    setMessage(message);
+    // @ts-ignore
+    msgTimeoutHandler = setTimeout(() => setMessage(""), 5000);
+
+    return () => {
+      if (msgTimeoutHandler) {
+        clearTimeout(msgTimeoutHandler);
+        msgTimeoutHandler = null;
+      }
+    };
+  }, [message]);
+
+  const onSaveSuccess = (msg: string) => {
+    setMessage(msg);
+  };
+
   return (
-    <DataServiceContext.Provider value={dataService}>
-      <Router>
-        <Switch>
-          <Route exact path="/" render={(props: any) => <App {...props} />} />
-          <Route path="/info" render={(props: any) => <PluginInfo {...props} />} />
-          <Route path="/edit/:editContentLink" render={(props: any) => <EditConfiguration {...props} />} />
-          <Route path="/add" render={(props: any) => <EditConfiguration {...props} />} />
-        </Switch>
-      </Router>
-    </DataServiceContext.Provider>
+    <>
+      <Message message={message} />
+      <DataServiceContext.Provider value={dataService}>
+        <Router>
+          <Switch>
+            <Route exact path="/" render={(props: any) => <App {...props} />} />
+            <Route path="/info" render={(props: any) => <PluginInfo {...props} />} />
+            <Route
+              path="/edit/:editContentLink"
+              render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onSaveSuccess} />}
+            />
+            <Route path="/add" render={(props: any) => <EditConfiguration {...props} />} />
+          </Switch>
+        </Router>
+      </DataServiceContext.Provider>
+    </>
   );
 }

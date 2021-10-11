@@ -34,8 +34,8 @@ export const dataService: DataService = {
       });
   },
 
-  save: (configurations: any[]) => {
-    return axios.post("Save", configurations);
+  save: (configuration: any) => {
+    return axios.post("Save", configuration);
   },
 
   clearContainers: (contentLink: string) => {
