@@ -32,7 +32,7 @@ export default function Plugin({ dataService }: PluginProps) {
     };
   }, [message]);
 
-  const onSaveSuccess = (msg: string) => {
+  const onMessageSet = (msg: string) => {
     setMessage(msg);
   };
 
@@ -42,11 +42,11 @@ export default function Plugin({ dataService }: PluginProps) {
       <DataServiceContext.Provider value={dataService}>
         <Router>
           <Switch>
-            <Route exact path="/" render={(props: any) => <App {...props} />} />
+            <Route exact path="/" render={(props: any) => <App {...props} onDeleteMessage={onMessageSet} />} />
             <Route path="/info" render={(props: any) => <PluginInfo {...props} />} />
             <Route
               path="/edit/:editContentLink"
-              render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onSaveSuccess} />}
+              render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onMessageSet} />}
             />
             <Route path="/add" render={(props: any) => <EditConfiguration {...props} />} />
           </Switch>

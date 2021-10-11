@@ -7,6 +7,7 @@ export interface DataService {
   save: (configurations: any) => Promise<any>;
   get: (contentLink: string) => Promise<GroupConfiguration>;
   clearContainers: (contentLink: string) => Promise<any>;
+  delete(configuration: GroupConfiguration): Promise<GroupConfiguration[]>;
 }
 
 export const dataService: DataService = {
@@ -36,6 +37,10 @@ export const dataService: DataService = {
 
   save: (configuration: any) => {
     return axios.post("Save", configuration);
+  },
+
+  delete: (configuration: GroupConfiguration) => {
+    return axios.delete("Delete/" + configuration.contentLink);
   },
 
   clearContainers: (contentLink: string) => {

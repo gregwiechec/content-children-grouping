@@ -11,7 +11,11 @@ import { useDataServiceContext } from "./data-service";
 
 let successTimeoutHandle: number;
 
-const App = () => {
+interface AppProps {
+  onDeleteMessage: (message: string) => void;
+}
+
+const App = ({ onDeleteMessage }: AppProps) => {
   const history = useHistory();
   const dataService = useDataServiceContext();
   const serverSettings = useServerSettingsContext();
@@ -47,6 +51,7 @@ const App = () => {
     history.push("/add");
   };
 
+  //TODO: move validation
   const onDialogSave = (configuration: GroupConfiguration): void => {
     if (!currentConfiguration) {
       return;
@@ -84,28 +89,25 @@ const App = () => {
     setDialogValidationError("");
   };
 
-  const onEditConfiguration = (configuration: GroupConfiguration) => {
-    history.push("/edit/" + configuration.contentLink);
-    /*
-TODO: remove setIsNewConfiguration, setDialogValidationError, setCurrentConfiguration
-    setIsNewConfiguration(false);
-    setDialogValidationError("");
-    setCurrentConfiguration(configuration);
- */
-  };
-
   const onManageConfiguration = (configuration: GroupConfiguration) => {
     setCurrentManageConfiguration(configuration);
   };
 
   const onDeleteConfiguration = (configuration: GroupConfiguration) => {
+    dataService
+      .delete(configuration)
+      .then(result => {
+        onDeleteMessage("Configuration deleted");
+        setItems(result);
+      })
+      .catch((error) => {
+        onDeleteMessage(error.message);
+      });
+
     const index = items.indexOf(configuration);
     if (index < 0) {
       return;
     }
-    const itemsCopy = [...items];
-    itemsCopy.splice(index, 1);
-    setItems(itemsCopy);
   };
 
   const onSaveClick = () => {
@@ -137,7 +139,7 @@ TODO: remove setIsNewConfiguration, setDialogValidationError, setCurrentConfigur
 
       <ConfigurationsList
         items={items}
-        onEdit={onEditConfiguration}
+        onEdit={(c) => history.push("/edit/" + c.contentLink)}
         onManage={onManageConfiguration}
         onDelete={onDeleteConfiguration}
       />

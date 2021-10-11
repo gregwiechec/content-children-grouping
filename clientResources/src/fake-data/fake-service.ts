@@ -1,7 +1,7 @@
 import { DataService } from "../data-service";
 import { GroupConfiguration } from "../models/Groupconfiguration";
 
-const result = {
+let result = {
   items: [
     {
       contentLink: "1",
@@ -66,6 +66,17 @@ export const fakeService: DataService = {
       setTimeout(() => {
         resolve(`Containers cleared successfully (${contentLink})`);
       }, 3000)
+    );
+  },
+  delete(configuration: GroupConfiguration): Promise<GroupConfiguration[]> {
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        const index = result.items.indexOf(result.items.filter((x) => x.contentLink === configuration.contentLink)[0]);
+        if (index > -1) {
+          result.items.splice(index, 1);
+        }
+        resolve(result.items);
+      }, 2000)
     );
   }
 };
