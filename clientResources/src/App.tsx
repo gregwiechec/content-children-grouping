@@ -5,7 +5,7 @@ import { Attention, Button, Code } from "optimizely-oui";
 import "./App.scss";
 import { ConfigurationsList } from "./configurations-list";
 import { GroupConfiguration } from "./models/Groupconfiguration";
-import { ManageConfigurationDialog } from "./manage-configuration-dialog";
+import { ManageConfiguration } from "./manage-configuration";
 import { useServerSettingsContext } from "./server-settings";
 import { useDataServiceContext } from "./data-service";
 
@@ -89,14 +89,10 @@ const App = ({ onDeleteMessage }: AppProps) => {
     setDialogValidationError("");
   };
 
-  const onManageConfiguration = (configuration: GroupConfiguration) => {
-    setCurrentManageConfiguration(configuration);
-  };
-
   const onDeleteConfiguration = (configuration: GroupConfiguration) => {
     dataService
       .delete(configuration)
-      .then(result => {
+      .then((result) => {
         onDeleteMessage("Configuration deleted");
         setItems(result);
       })
@@ -140,7 +136,7 @@ const App = ({ onDeleteMessage }: AppProps) => {
       <ConfigurationsList
         items={items}
         onEdit={(c) => history.push("/edit/" + c.contentLink)}
-        onManage={onManageConfiguration}
+        onManage={(c) => history.push("/manage/" + c.contentLink)}
         onDelete={onDeleteConfiguration}
       />
       {serverSettings.options.databaseConfigurationsEnabled && (
@@ -178,7 +174,7 @@ const App = ({ onDeleteMessage }: AppProps) => {
       )}
 
       {!!currentManageConfiguration && (
-        <ManageConfigurationDialog
+        <ManageConfiguration
           dataService={dataService}
           structureUpdateEnabled={serverSettings.options.structureUpdateEnabled}
           configuration={currentManageConfiguration}

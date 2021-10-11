@@ -64,7 +64,7 @@ export const fakeService: DataService = {
   clearContainers: (contentLink: string) => {
     return new Promise((resolve) =>
       setTimeout(() => {
-        resolve(`Containers cleared successfully (${contentLink})`);
+        resolve({ data: `Containers cleared successfully (${contentLink})` });
       }, 3000)
     );
   },

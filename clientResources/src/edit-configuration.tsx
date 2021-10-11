@@ -28,7 +28,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const { availableNameGenerators = [] } = useServerSettingsContext();
 
   const history = useHistory();
-  const [configuration, setConfiguration] = useState<GroupConfiguration | null>(null);
 
   const [contentLink, setContentLink] = useState("");
   const [containerTypeName, setContainerTypeName] = useState("");
@@ -44,7 +43,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         if (!result) {
           return;
         }
-        setConfiguration(result);
         setContentLink(result.contentLink);
         setContainerTypeName(result.containerTypeName);
         setIsRoutingEnabled(result.routingEnabled);
@@ -53,13 +51,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
       });
     }
   }, [editContentLink, dataService]);
-
-  useEffect(() => {
-    setContentLink(configuration?.contentLink || "");
-    setContainerTypeName(configuration?.containerTypeName || "");
-    setIsRoutingEnabled(configuration?.routingEnabled || false);
-    setGenerators(configuration?.groupLevelConfigurations || []);
-  }, [configuration]);
 
   const onAddGenerator = () => {
     const updatedList = [...generators, availableNameGenerators[0]];

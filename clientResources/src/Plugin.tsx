@@ -6,6 +6,7 @@ import { PluginInfo } from "./PluginInfo";
 import { EditConfiguration } from "./edit-configuration";
 import DataServiceContext, { DataService, dataService as defaultDataService } from "./data-service";
 import { Message } from "./Message";
+import { ManageConfiguration } from "./manage-configuration";
 
 interface PluginProps {
   dataService: DataService | null;
@@ -47,6 +48,10 @@ export default function Plugin({ dataService }: PluginProps) {
             <Route
               path="/edit/:editContentLink"
               render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onMessageSet} />}
+            />
+            <Route
+              path="/manage/:contentLink"
+              render={(props: any) => <ManageConfiguration {...props} />}
             />
             <Route path="/add" render={(props: any) => <EditConfiguration {...props} />} />
           </Switch>
