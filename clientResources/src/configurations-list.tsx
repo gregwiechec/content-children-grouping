@@ -38,8 +38,8 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
             <Table.TH width={100}>Content Link</Table.TH>
             <Table.TH width={90}>From code</Table.TH>
             <Table.TH width={90}>Is virtual</Table.TH>
-            <Table.TH>Container type</Table.TH>
             <Table.TH width={90}>Router</Table.TH>
+            <Table.TH>Container type</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
             <Table.TH width={120}>&nbsp;</Table.TH>
           </Table.TR>
@@ -58,6 +58,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
               <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>
+              <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>
                 {x.containerTypeName}
                 {!x.containerTypeName && (
@@ -66,7 +67,6 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                   </span>
                 )}
               </Table.TD>
-              <Table.TD className="centered">{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD>
                 <OverlayWrapper
