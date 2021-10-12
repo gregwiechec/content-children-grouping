@@ -220,6 +220,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             <Button style="plain" key={0} onClick={() => history.push("/")}>
               Cancel
             </Button>
+            &nbsp;
             <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onSave}>
               Save
             </Button>

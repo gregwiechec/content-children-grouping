@@ -1,11 +1,12 @@
 import React from "react";
 // @ts-ignore
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useServerSettingsContext } from "./server-settings";
-import { Grid, GridCell, GridContainer, Table } from "optimizely-oui";
+import {Button, Grid, GridCell, GridContainer, Table} from "optimizely-oui";
 
 export const PluginInfo = () => {
   const serverSettings = useServerSettingsContext();
+  const history = useHistory();
 
   const options = Object.keys(serverSettings.options);
 
@@ -30,7 +31,9 @@ export const PluginInfo = () => {
               ))}
             </Table.TBody>
           </Table>
-          <Link to="/">Back</Link>
+          <Button style="plain" key={0} onClick={() => history.push("/")}>
+            Back
+          </Button>
         </GridCell>
       </Grid>
     </GridContainer>
