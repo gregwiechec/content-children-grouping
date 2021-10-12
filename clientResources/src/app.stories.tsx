@@ -25,7 +25,7 @@ export default {
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-const getDefaultProps = (dataService: DataService) => {
+const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled?: boolean = true) => {
   return {
     dataService: dataService,
     availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
@@ -33,7 +33,7 @@ const getDefaultProps = (dataService: DataService) => {
     contentUrl: "",
     options: {
       customIconsEnabled: false,
-      databaseConfigurationsEnabled: true,
+      databaseConfigurationsEnabled: databaseConfigurationsEnabled,
       routerEnabled: false,
       searchCommandEnabled: false,
       structureUpdateEnabled: false
@@ -69,3 +69,6 @@ const emptyService: DataService = {
 
 export const EmptyApp = Template.bind({});
 EmptyApp.args = getDefaultProps(emptyService);
+
+export const NoDataBaseConfiguration = Template.bind({});
+NoDataBaseConfiguration.args = getDefaultProps(fakeService, false);
