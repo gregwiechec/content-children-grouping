@@ -25,7 +25,12 @@ interface EditConfigurationProps {
 export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => {
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
-  const { availableNameGenerators = [] } = useServerSettingsContext();
+  const {
+    availableNameGenerators = [],
+    options: { databaseConfigurationsEnabled = true }
+  } = useServerSettingsContext();
+
+  const isReadonly = !databaseConfigurationsEnabled;
 
   const history = useHistory();
 
@@ -36,7 +41,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [generators, setGenerators] = useState<string[]>([]);
 
   const [validationMessage, setValidationMessage] = useState("");
-//TODO: readonly when databaseConfigurationsEnabled is false
+
   useEffect(() => {
     if (editContentLink) {
       dataService?.get(editContentLink).then((result: GroupConfiguration) => {
@@ -82,20 +87,23 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   };
 
   const onSave = () => {
-    dataService.save({
-      isNew: !isEditing,
-      contentLink: contentLink || editContentLink,
-      fromCode: false,
-      containerTypeName: containerTypeName,
-      routingEnabled: isRoutingEnabled,
-      isVirtualContainer: isVirtualContainer,
-      groupLevelConfigurations: generators
-    }).then(() => {
-      onSaveSuccess("Configuration saved");
-      history.push("/");
-    }).catch(error => {
-      setValidationMessage(error.message);
-    })
+    dataService
+      .save({
+        isNew: !isEditing,
+        contentLink: contentLink || editContentLink,
+        fromCode: false,
+        containerTypeName: containerTypeName,
+        routingEnabled: isRoutingEnabled,
+        isVirtualContainer: isVirtualContainer,
+        groupLevelConfigurations: generators
+      })
+      .then(() => {
+        onSaveSuccess("Configuration saved");
+        history.push("/");
+      })
+      .catch((error) => {
+        setValidationMessage(error.message);
+      });
   };
 
   const isEditing = !!editContentLink;
@@ -126,13 +134,14 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
               onChange={(e) => setContentLink(e.target.value)}
               value={contentLink}
               isRequired
+              isDisabled={isReadonly}
             />
           </GridCell>
         )}
 
         {isEditing && (
           <GridCell large={12} medium={8} small={4}>
-            <label>Content link {editContentLink}</label>
+            <label>Editing content link <span style={{ fontWeight: "bold" }}>{editContentLink}</span></label>
           </GridCell>
         )}
         <GridCell large={12} medium={8} small={4}>
@@ -140,11 +149,20 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             label="Is virtual container"
             checked={isVirtualContainer}
             onChange={(e) => setIsVirtualContainer(e.target.checked)}
+            isDisabled={isReadonly}
           />
         </GridCell>
 
         {!isVirtualContainer && (
           <>
+            <GridCell>
+              <Checkbox
+                  label="Router enabled"
+                  checked={isRoutingEnabled}
+                  onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+                  isDisabled={isReadonly}
+              />
+            </GridCell>
             <GridCell large={12} medium={8} small={4}>
               <Input
                 type="text"
@@ -152,13 +170,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
                 note="Type format: [Full type name, Assembly Name]"
                 value={containerTypeName}
                 onChange={(e) => setContainerTypeName(e.target.value)}
-              />
-            </GridCell>
-            <GridCell>
-              <Checkbox
-                label="Router enabled"
-                checked={isRoutingEnabled}
-                onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+                isDisabled={isReadonly}
               />
             </GridCell>
           </>
@@ -173,24 +185,22 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
                   isOptional={false}
                   onChange={(value) => onGeneratorValueChange(index, value.target.value)}
                 >
-                  {/*allow to configure namegenerator*/}
+                  {/*TODO: allow to configure namegenerator*/}
                   {availableNameGenerators.map((generator) => (
                     <option key={generator} value={generator} selected={generator === x}>
                       {generator}
                     </option>
                   ))}
                 </Select>
-                {index > 0 && (
                   <ButtonIcon
                     className="remove-button"
                     iconName="close"
-                    isDisabled={false}
+                    isDisabled={index === 0}
                     onClick={() => onRemoveGenerator(index)}
                     size="small"
                     style="outline"
                     title="Close Dialog"
                   />
-                )}
               </BlockList.Item>
             ))}
           </BlockList>
@@ -199,23 +209,29 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             size="narrow"
             leftIcon="add"
             onClick={onAddGenerator}
-            isDisabled={(availableNameGenerators?.length || 0) === 0}
+            isDisabled={databaseConfigurationsEnabled && (availableNameGenerators?.length || 0) === 0}
           >
             Add generator
           </Button>
         </GridCell>
-      </Grid>
 
-      <Grid>
-        <GridCell large={12} medium={8} small={4}>
-          <br />
-          <Button style="plain" key={0} onClick={() => history.push("/")}>
-            Cancel
-          </Button>
-          <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onSave}>
-            Save
-          </Button>
-        </GridCell>
+        {databaseConfigurationsEnabled && (
+          <GridCell large={12} medium={8} small={4}>
+            <Button style="plain" key={0} onClick={() => history.push("/")}>
+              Cancel
+            </Button>
+            <Button isDisabled={!isValid()} style="highlight" key={1} onClick={onSave}>
+              Save
+            </Button>
+          </GridCell>
+        )}
+        {isReadonly && (
+          <GridCell large={12} medium={8} small={4}>
+            <Button style="plain" key={0} onClick={() => history.push("/")}>
+              Back
+            </Button>
+          </GridCell>
+        )}
       </Grid>
     </GridContainer>
   );
