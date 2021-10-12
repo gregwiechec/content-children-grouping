@@ -31,11 +31,12 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
     options: { databaseConfigurationsEnabled = true }
   } = useServerSettingsContext();
 
-  const isReadonly = !databaseConfigurationsEnabled;
+  const [isReadonly, setIsReadonly] = useState(!databaseConfigurationsEnabled);
 
   const history = useHistory();
 
   const [contentLink, setContentLink] = useState("");
+  const [fromCode, setFromCode] = useState(false);
   const [containerTypeName, setContainerTypeName] = useState("");
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const [isVirtualContainer, setIsVirtualContainer] = useState(false);
@@ -50,10 +51,12 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
           return;
         }
         setContentLink(result.contentLink);
+        setFromCode(result.fromCode);
         setContainerTypeName(result.containerTypeName);
         setIsRoutingEnabled(result.routingEnabled);
         setIsVirtualContainer(result.isVirtualContainer);
         setGenerators(result.groupLevelConfigurations || []);
+        setIsReadonly(!databaseConfigurationsEnabled || result.fromCode);
       });
     }
   }, [editContentLink, dataService]);
@@ -117,9 +120,19 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         </GridCell>
 
         {validationMessage && (
-          <Attention alignment="center" type="bad-news">
-            {validationMessage}
-          </Attention>
+          <GridCell large={12} medium={8} small={4}>
+            <Attention alignment="center" type="bad-news">
+              {validationMessage}
+            </Attention>
+          </GridCell>
+        )}
+
+        {fromCode && (
+          <GridCell large={12} medium={8} small={4}>
+            <Attention alignment="center" type="warning">
+              Configuration registered from code cannot be edited
+            </Attention>
+          </GridCell>
         )}
 
         {!isEditing && (
@@ -186,42 +199,50 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
           <BlockList hasBorder={false} className="configuration-item">
             {generators.map((x, index) => (
               <BlockList.Item key={x + "_" + index}>
-                <Select
-                  className="configuration-generator-select"
-                  isOptional={false}
-                  onChange={(value) => onGeneratorValueChange(index, value.target.value)}
-                >
-                  {/*TODO: allow to configure namegenerator*/}
-                  {availableNameGenerators.map((generator) => (
-                    <option key={generator} value={generator} selected={generator === x}>
-                      {generator}
-                    </option>
-                  ))}
-                </Select>
-                <ButtonIcon
-                  className="remove-button"
-                  iconName="close"
-                  isDisabled={index === 0}
-                  onClick={() => onRemoveGenerator(index)}
-                  size="small"
-                  style="outline"
-                  title="Close Dialog"
-                />
+                {!isReadonly && (
+                  <>
+                    <Select
+                      className="configuration-generator-select"
+                      isOptional={false}
+                      onChange={(value) => onGeneratorValueChange(index, value.target.value)}
+                    >
+                      {/*TODO: allow to configure namegenerator*/}
+                      {availableNameGenerators.map((generator) => (
+                        <option key={generator} value={generator} selected={generator === x}>
+                          {generator}
+                        </option>
+                      ))}
+                    </Select>
+                    <ButtonIcon
+                      className="remove-button"
+                      iconName="close"
+                      isDisabled={index === 0}
+                      onClick={() => onRemoveGenerator(index)}
+                      size="small"
+                      style="outline"
+                      title="Close Dialog"
+                    />
+                  </>
+                )}
+
+                {isReadonly && <span key={x}>{x}</span>}
               </BlockList.Item>
             ))}
           </BlockList>
-          <Button
-            style="outline"
-            size="narrow"
-            leftIcon="add"
-            onClick={onAddGenerator}
-            isDisabled={databaseConfigurationsEnabled && (availableNameGenerators?.length || 0) === 0}
-          >
-            Add generator
-          </Button>
+          {!isReadonly && (
+            <Button
+              style="outline"
+              size="narrow"
+              leftIcon="add"
+              onClick={onAddGenerator}
+              isDisabled={databaseConfigurationsEnabled && (availableNameGenerators?.length || 0) === 0}
+            >
+              Add generator
+            </Button>
+          )}
         </GridCell>
 
-        {databaseConfigurationsEnabled && (
+        {!isReadonly && (
           <GridCell large={12} medium={8} small={4}>
             <Button style="plain" key={0} onClick={() => history.push("/")}>
               Cancel
