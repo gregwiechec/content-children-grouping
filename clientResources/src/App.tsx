@@ -92,7 +92,7 @@ const App = ({ onDeleteMessage }: AppProps) => {
         )}
 
         <GridCell large={12} medium={8} small={4}>
-          <Link to="/info">Show plugin configuration</Link>
+          <Link to="/info">Show plugin information</Link>
         </GridCell>
       </Grid>
     </GridContainer>
