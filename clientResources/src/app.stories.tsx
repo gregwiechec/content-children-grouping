@@ -5,6 +5,7 @@ import Plugin from "./Plugin";
 import "./App.scss";
 import ServerSettingsContext, { ServerSettings } from "./server-settings";
 import { DataService } from "./data-service";
+import { GroupConfiguration } from "./models/Groupconfiguration";
 
 interface ComponentProps extends ServerSettings {
   dataService: DataService;
@@ -25,12 +26,12 @@ export default {
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled?: boolean = true) => {
+const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled: boolean = true) => {
   return {
     dataService: dataService,
     availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
     defaultContainerType: "",
-    contentUrl: "",
+    contentUrl: "http://google.com/{contentLink}",
     options: {
       customIconsEnabled: false,
       databaseConfigurationsEnabled: databaseConfigurationsEnabled,
@@ -64,7 +65,10 @@ const emptyService: DataService = {
         containerTypeName: "",
         groupLevelConfigurations: []
       })
-    )
+    ),
+  delete(configuration: GroupConfiguration): Promise<GroupConfiguration[]> {
+    return new Promise((resolve) => resolve([]));
+  }
 };
 
 export const EmptyApp = Template.bind({});

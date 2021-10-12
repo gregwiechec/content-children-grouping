@@ -6,6 +6,7 @@ import { GroupConfiguration } from "./models/Groupconfiguration";
 import "optimizely-oui/dist/styles.css";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useServerSettingsContext } from "./server-settings";
+import { ContentLink } from "./ContentLink";
 
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
@@ -15,7 +16,7 @@ interface ConfigurationsListProps {
 }
 
 export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
-  const serverSettings = useServerSettingsContext();
+  const { defaultContainerType, options: {databaseConfigurationsEnabled} } = useServerSettingsContext();
 
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
 
@@ -48,13 +49,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           {items.map((x) => (
             <Table.TR key={x.contentLink}>
               <Table.TD>
-                {serverSettings.contentUrl ? (
-                  <Link href={serverSettings.contentUrl.replace("{contentLink}", x.contentLink)} newWindow>
-                    {x.contentLink}
-                  </Link>
-                ) : (
-                  x.contentLink
-                )}
+                <ContentLink value={x.contentLink} />
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
               <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>
@@ -62,7 +57,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               <Table.TD>
                 {x.containerTypeName}
                 {!x.containerTypeName && (
-                  <span style={{ fontStyle: "italic" }} title={serverSettings.defaultContainerType}>
+                  <span style={{ fontStyle: "italic" }} title={defaultContainerType}>
                     [default]
                   </span>
                 )}
@@ -82,12 +77,10 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                         <BlockList.Item onClick={() => onEdit(x)}>
                           <Link leftIcon="projects">Edit</Link>
                         </BlockList.Item>
-                        {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
-                          <BlockList.Item onClick={() => onManage(x)}>
-                            <Link leftIcon="settings">Manage</Link>
-                          </BlockList.Item>
-                        )}
-                        {!x.fromCode && serverSettings.options.databaseConfigurationsEnabled && (
+                        <BlockList.Item onClick={() => onManage(x)}>
+                          <Link leftIcon="settings">Manage</Link>
+                        </BlockList.Item>
+                        {!x.fromCode && databaseConfigurationsEnabled && (
                           <BlockList.Item onClick={() => setItemToDelete(x)}>
                             <Link leftIcon="ban">Delete</Link>
                           </BlockList.Item>

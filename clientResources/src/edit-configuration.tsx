@@ -17,6 +17,7 @@ import {
 } from "optimizely-oui";
 import { useServerSettingsContext } from "./server-settings";
 import { useDataServiceContext } from "./data-service";
+import { ContentLink } from "./ContentLink";
 
 interface EditConfigurationProps {
   onSaveSuccess: (message: string) => void;
@@ -141,7 +142,12 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
         {isEditing && (
           <GridCell large={12} medium={8} small={4}>
-            <label>Editing content link <span style={{ fontWeight: "bold" }}>{editContentLink}</span></label>
+            <label>
+              Editing content link{" "}
+              <span style={{ fontWeight: "bold" }}>
+                <ContentLink value={editContentLink} />
+              </span>
+            </label>
           </GridCell>
         )}
         <GridCell large={12} medium={8} small={4}>
@@ -157,10 +163,10 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
           <>
             <GridCell>
               <Checkbox
-                  label="Router enabled"
-                  checked={isRoutingEnabled}
-                  onChange={(e) => setIsRoutingEnabled(e.target.checked)}
-                  isDisabled={isReadonly}
+                label="Router enabled"
+                checked={isRoutingEnabled}
+                onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+                isDisabled={isReadonly}
               />
             </GridCell>
             <GridCell large={12} medium={8} small={4}>
@@ -192,15 +198,15 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
                     </option>
                   ))}
                 </Select>
-                  <ButtonIcon
-                    className="remove-button"
-                    iconName="close"
-                    isDisabled={index === 0}
-                    onClick={() => onRemoveGenerator(index)}
-                    size="small"
-                    style="outline"
-                    title="Close Dialog"
-                  />
+                <ButtonIcon
+                  className="remove-button"
+                  iconName="close"
+                  isDisabled={index === 0}
+                  onClick={() => onRemoveGenerator(index)}
+                  size="small"
+                  style="outline"
+                  title="Close Dialog"
+                />
               </BlockList.Item>
             ))}
           </BlockList>
