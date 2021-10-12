@@ -105,7 +105,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
 
           {items.length === 0 && (
             <Table.TR>
-              <Table.TD className="empty-config-table" colSpan={5}>
+              <Table.TD className="empty-config-table" colSpan={7}>
                 No configuration
               </Table.TD>
             </Table.TR>
