@@ -22,6 +22,9 @@ export default function Plugin({ dataService }: PluginProps) {
   let msgTimeoutHandler: number | null = null;
   useEffect(() => {
     setMessage(message);
+    if (msgTimeoutHandler) {
+      clearTimeout(msgTimeoutHandler);
+    }
     // @ts-ignore
     msgTimeoutHandler = setTimeout(() => setMessage(""), 5000);
 
@@ -53,7 +56,7 @@ export default function Plugin({ dataService }: PluginProps) {
               path="/manage/:contentLink"
               render={(props: any) => <ManageConfiguration {...props} />}
             />
-            <Route path="/add" render={(props: any) => <EditConfiguration {...props} />} />
+            <Route path="/add" render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onMessageSet} />} />
           </Switch>
         </Router>
       </DataServiceContext.Provider>
