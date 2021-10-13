@@ -77,6 +77,8 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 }
             }
 
+            configurationViewModels = configurationViewModels.OrderBy(x => x.contentLink).ToList();
+
             return configurationViewModels;
         }
 
