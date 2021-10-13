@@ -1,5 +1,6 @@
 .edit-configuration {
   max-width: 500px;
+  padding-top: 0;
 
   &.axiom-grid-container {
     margin-left: 0;
@@ -8,6 +9,19 @@
   .content-link.oui-text-input[type=number] {
     text-align: left;
     max-width: 100px;
+    display: block;
+  }
+}
+
+.menu-cell {
+  a.flex--inline {
+    display: none !important;
+  }
+
+  &:hover {
+    a.flex--inline {
+      display: inline-flex!important;
+    }
   }
 }
 

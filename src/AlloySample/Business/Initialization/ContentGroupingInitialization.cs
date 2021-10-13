@@ -1,6 +1,5 @@
 ﻿using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.RegisterFromCode;
-using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;

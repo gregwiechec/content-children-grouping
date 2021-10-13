@@ -16,7 +16,10 @@ interface ConfigurationsListProps {
 }
 
 export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
-  const { defaultContainerType, options: {databaseConfigurationsEnabled} } = useServerSettingsContext();
+  const {
+    defaultContainerType,
+    options: { databaseConfigurationsEnabled }
+  } = useServerSettingsContext();
 
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
 
@@ -42,7 +45,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
             <Table.TH width={90}>Router</Table.TH>
             <Table.TH>Container type</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
-            <Table.TH width={120}>&nbsp;</Table.TH>
+            <Table.TH width={200}>&nbsp;</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
@@ -63,7 +66,8 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 )}
               </Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
-              <Table.TD>
+              <Table.TD className="menu-cell">
+{/*
                 <OverlayWrapper
                   behavior="click"
                   horizontalAttachment="left"
@@ -89,9 +93,14 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                     </Popover>
                   }
                 >
-                  {/* eslint-disable-next-line react/style-prop-object */}
                   <ButtonIcon title="" iconName="ellipsis" style="plain" />
                 </OverlayWrapper>
+*/}
+
+{/*//TODO: context menu is not working*/}
+                <Link leftIcon="projects" onClick={() => onEdit(x)}>Edit</Link>&nbsp;
+                <Link leftIcon="settings" onClick={() => onManage(x)}>Manage</Link>&nbsp;
+                {!x.fromCode && databaseConfigurationsEnabled && <Link onClick={() => setItemToDelete(x)} leftIcon="ban">Delete</Link>}
               </Table.TD>
             </Table.TR>
           ))}

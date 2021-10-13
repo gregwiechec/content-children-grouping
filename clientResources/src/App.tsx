@@ -47,7 +47,7 @@ const App = ({ onDeleteMessage }: AppProps) => {
   };
 
   return (
-    <GridContainer className="configuration-item">
+    <GridContainer>
       <Grid>
         <GridCell large={12} medium={8} small={4}>
           <ConfigurationsList

@@ -37,7 +37,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
             return result.Select(x => new ContainerConfiguration
             {
                 ContainerContentLink = x.ContainerContentLink,
-                ContainerType = Type.GetType(x.ContainerType),
+                ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
                 RoutingEnabled = x.RoutingEnabled,
                 GroupLevelConfigurations = (x.GroupLevelConfigurations ?? "").Split(',')
                     .Select(str => _groupNameGenerators.FirstOrDefault(g => g.Key == str)).Where(g => g != null)
