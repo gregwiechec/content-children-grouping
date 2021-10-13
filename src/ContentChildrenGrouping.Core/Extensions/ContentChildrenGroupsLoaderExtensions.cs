@@ -5,7 +5,7 @@ namespace ContentChildrenGrouping.Core.Extensions
 {
     public static class ContentChildrenGroupsLoaderExtensions
     {
-        private static List<ContainerConfiguration> GetAllConfigurations(
+        public static List<ContainerConfiguration> GetAllConfigurations(
             this IEnumerable<IContentChildrenGroupsLoader> loaders)
         {
             return loaders.OrderBy(x => x.Rank).SelectMany(x => x.GetConfigurations()).ToList();

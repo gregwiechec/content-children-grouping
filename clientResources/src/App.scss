@@ -17,10 +17,12 @@
   a.flex--inline {
     display: none !important;
   }
+}
 
-  &:hover {
+tr:hover {
+  .menu-cell {
     a.flex--inline {
-      display: inline-flex!important;
+      display: inline-flex !important;
     }
   }
 }
