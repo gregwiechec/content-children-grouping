@@ -5,4 +5,5 @@ export interface GroupConfiguration {
     isVirtualContainer: boolean;
     containerTypeName: string;
     groupLevelConfigurations: string[];
+    contentExists?: boolean;
 }

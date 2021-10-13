@@ -52,7 +52,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           {items.map((x) => (
             <Table.TR key={x.contentLink}>
               <Table.TD>
-                <ContentLink value={x.contentLink} />
+                <ContentLink value={x.contentLink} contentExists={x.contentExists} />
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
               <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>

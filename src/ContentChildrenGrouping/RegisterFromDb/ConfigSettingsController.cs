@@ -60,6 +60,8 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 var containerConfigurations = contentChildrenGroupsLoader.GetConfigurations();
                 foreach (var containerConfiguration in containerConfigurations)
                 {
+                    var contentExists = _contentLoader.TryGet<IContent>(containerConfiguration.ContainerContentLink, out var _);
+
                     var viewModel = new ConfigurationViewModel
                     {
                         contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
@@ -68,7 +70,8 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                         routingEnabled = containerConfiguration.RoutingEnabled,
                         groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
                         isVirtualContainer = containerConfiguration.IsVirtualContainer,
-                        fromCode = !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader)
+                        fromCode = !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader),
+                        contentExists = contentExists
                     };
                     configurationViewModels.Add(viewModel);
                 }
@@ -256,6 +259,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             public bool fromCode { get; set; }
             public bool isVirtualContainer { get; set; }
             public IEnumerable<string> groupLevelConfigurations { get; set; }
+            public bool contentExists { get; set; }
         }
 
         public class SaveConfigurationViewModel : ConfigurationViewModel

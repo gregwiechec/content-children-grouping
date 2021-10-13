@@ -58,3 +58,12 @@
 .sample-code {
   font-family: "Courier New";
 }
+
+.content-link-with-icon {
+  display: inline-block;
+
+  svg {
+    float: left;
+    margin-right: 4px;
+  }
+}

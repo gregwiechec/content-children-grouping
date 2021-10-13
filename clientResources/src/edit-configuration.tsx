@@ -39,6 +39,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [fromCode, setFromCode] = useState(false);
   const [containerTypeName, setContainerTypeName] = useState("");
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
+  const [contentExists, setIsContentExists] = useState<boolean | undefined>(false);
   const [isVirtualContainer, setIsVirtualContainer] = useState(false);
   const [generators, setGenerators] = useState<string[]>([]);
 
@@ -57,6 +58,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setIsVirtualContainer(result.isVirtualContainer);
         setGenerators(result.groupLevelConfigurations || []);
         setIsReadonly(!databaseConfigurationsEnabled || result.fromCode);
+        setIsContentExists(result.contentExists);
       });
     } else {
       setGenerators([availableNameGenerators[0]]);
@@ -159,7 +161,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
               {fromCode && <>Content link&nbsp;</>}
               {!fromCode && <>Editing content link&nbsp;</>}
               <span style={{ fontWeight: "bold" }}>
-                <ContentLink value={editContentLink} />
+                <ContentLink value={editContentLink} contentExists={contentExists} />
               </span>
             </label>
           </GridCell>
