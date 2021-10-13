@@ -58,6 +58,8 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setGenerators(result.groupLevelConfigurations || []);
         setIsReadonly(!databaseConfigurationsEnabled || result.fromCode);
       });
+    } else {
+      setGenerators([availableNameGenerators[0]]);
     }
   }, [editContentLink, dataService]);
 
@@ -263,7 +265,3 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
     </GridContainer>
   );
 };
-/*
-TODO: set max width*/
-
-/*TODO: when defining configuration then add name generator*/
