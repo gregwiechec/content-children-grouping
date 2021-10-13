@@ -7,6 +7,7 @@ using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
 using ContentChildrenGrouping.RegisterFromDb;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.Shell.Services.Rest;
 
@@ -22,19 +23,20 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
         private readonly ContentStructureCleaner _contentStructureCleaner;
+        private readonly IContentLoader _contentLoader;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
             IEnumerable<IGroupNameGenerator> groupNameGenerators,
-            ContentStructureCleaner contentStructureCleaner
-        )
+            ContentStructureCleaner contentStructureCleaner, IContentLoader contentLoader)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
             _childrenGroupsLoaders = childrenGroupsLoaders;
             _groupNameGenerators = groupNameGenerators;
             _contentStructureCleaner = contentStructureCleaner;
+            _contentLoader = contentLoader;
         }
 
         [HttpGet]
@@ -117,17 +119,22 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         {
             if (config == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Configuration is empty");
+                return GetError("Configuration is empty");
             }
 
             if (!ContentReference.TryParse(config.contentLink, out var contentLink))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "ContentLink has wrong format");
+                return GetError("ContentLink has wrong format");
             }
 
             if (ContentReference.IsNullOrEmpty(contentLink))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "ContentLink cannot be empty");
+                return GetError("ContentLink cannot be empty");
+            }
+
+            if (!_contentLoader.TryGet<IContent>(contentLink, out var _))
+            {
+                return GetError($"Content not found for {contentLink} content link");
             }
 
 
@@ -147,7 +154,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             {
                 return new ContainerConfiguration
                 {
-                    ContainerContentLink = ContentReference.Parse(config.contentLink),
+                    ContainerContentLink = contentLink,
                     ContainerType = containerType,
                     RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
                     IsVirtualContainer = config.isVirtualContainer,
