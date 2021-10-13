@@ -52,7 +52,7 @@ export const dataService: DataService = {
   delete: (configuration: GroupConfiguration) => {
     return axios
       .delete("Delete?contentLink=" + configuration.contentLink)
-      .then((result) => result.data.items)
+      .then((result) => result.data)
       .catch((error) => {
         console.error(error);
         return {};
