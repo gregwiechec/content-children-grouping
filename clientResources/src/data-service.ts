@@ -25,7 +25,7 @@ export const dataService: DataService = {
 
   get: (contentLink: string) => {
     return axios
-      .get("get/" + contentLink)
+      .get("get?contentLink=" + contentLink)
       .then((response) => {
         return response.data;
       })
@@ -40,7 +40,13 @@ export const dataService: DataService = {
   },
 
   delete: (configuration: GroupConfiguration) => {
-    return axios.delete("Delete/" + configuration.contentLink);
+    return axios
+      .delete("Delete?contentLink=" + configuration.contentLink)
+      .then((result) => result.data.items)
+      .catch((error) => {
+        console.error(error);
+        return {};
+      });
   },
 
   clearContainers: (contentLink: string) => {

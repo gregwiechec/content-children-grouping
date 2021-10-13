@@ -37,6 +37,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             _contentStructureCleaner = contentStructureCleaner;
         }
 
+        [HttpGet]
         public ActionResult LoadConfigurations()
         {
             var configurationViewModels = new List<ConfigurationViewModel>();
@@ -52,6 +53,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                         containerTypeName = containerConfiguration.ContainerType.TypeToString(),
                         routingEnabled = containerConfiguration.RoutingEnabled,
                         groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
+                        isVirtualContainer = containerConfiguration.IsVirtualContainer,
                         fromCode = !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader)
                     };
                     configurationViewModels.Add(viewModel);
@@ -64,6 +66,43 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 {
                     items = configurationViewModels
                 },
+                SafeResponse = true
+            };
+        }
+
+        [HttpGet]
+        public ActionResult Get(ContentReference contentLink)
+        {
+            if (ContentReference.IsNullOrEmpty(contentLink))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "ContentLink cannot be empty");
+            }
+
+
+            var containerConfigurations = _configSettingsDbRepository.LoadAll().ToList();
+            var configuration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == contentLink);
+            if (configuration == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Configuration not found for [{contentLink}]");
+            }
+
+            var isDbConfig = _dbContentChildrenGroupsLoader.GetConfigurations()
+                .Any(x => x.ContainerContentLink == contentLink);
+
+            var viewModel = new ConfigurationViewModel
+            {
+                contentLink = configuration.ContainerContentLink.ToReferenceWithoutVersion().ID
+                    .ToString(),
+                containerTypeName = configuration.ContainerType.TypeToString(),
+                routingEnabled = configuration.RoutingEnabled,
+                groupLevelConfigurations = configuration.GroupLevelConfigurations.Select(g => g.Key),
+                isVirtualContainer = configuration.IsVirtualContainer,
+                fromCode = !isDbConfig
+            };
+
+            return new RestResult
+            {
+                Data = viewModel,
                 SafeResponse = true
             };
         }
@@ -87,15 +126,25 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             }
 
 
+            Type containerType;
+            try
+            {
+                containerType = config.isVirtualContainer || string.IsNullOrWhiteSpace(config.containerTypeName)
+                    ? null
+                    : Type.GetType(config.containerTypeName, true);
+            }
+            catch (Exception e)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Cannot parse type: " + e.Message);
+            }
+
             ContainerConfiguration ConvertViewModelToModel()
             {
                 return new ContainerConfiguration
                 {
                     ContainerContentLink = ContentReference.Parse(config.contentLink),
-                    ContainerType = string.IsNullOrWhiteSpace(config.containerTypeName)
-                        ? null
-                        : Type.GetType(config.containerTypeName),
-                    RoutingEnabled = config.routingEnabled,
+                    ContainerType = containerType,
+                    RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
                     IsVirtualContainer = config.isVirtualContainer,
                     GroupLevelConfigurations = config.groupLevelConfigurations
                         .Select(g => _groupNameGenerators.Single(n => n.Key == g))
