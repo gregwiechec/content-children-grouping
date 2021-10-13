@@ -18,14 +18,16 @@ DefaultList.args = {
       fromCode: false,
       routingEnabled: false,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name", "CreatedDate"]
+      groupLevelConfigurations: ["Name", "CreatedDate"],
+      isVirtualContainer: true
     },
     {
       contentLink: "124",
       fromCode: false,
       routingEnabled: true,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name"]
+      groupLevelConfigurations: ["Name"],
+      isVirtualContainer: false
     }
   ]
 };
