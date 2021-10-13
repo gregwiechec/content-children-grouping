@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
@@ -21,6 +22,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
     [ServiceConfiguration(typeof(IConfigSettingsDbRepository))]
     public class ConfigSettingsDbRepository : IConfigSettingsDbRepository
     {
+        private static string DateFormat = "yyyy-MM-dd HH:mm:ss";
+
         private readonly DynamicDataStoreFactory _dataStoreFactory;
         private readonly IReadOnlyList<IGroupNameGenerator> _groupNameGenerators;
 
@@ -34,13 +37,20 @@ namespace ContentChildrenGrouping.RegisterFromDb
         public IEnumerable<ContainerConfiguration> LoadAll()
         {
             var result = GetStore().Items<ConfigurationSettingsDds>().ToList();
-            return result.Select(x => new ContainerConfiguration
+            return result.Select(x =>
             {
-                ContainerContentLink = x.ContainerContentLink,
-                ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
-                RoutingEnabled = x.RoutingEnabled,
-                GroupLevelConfigurations = (x.GroupLevelConfigurations ?? "").Split(',')
-                    .Select(str => _groupNameGenerators.FirstOrDefault(g => g.Key == str)).Where(g => g != null)
+                DateTime.TryParseExact(x.ChangedOn, DateFormat, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var date);
+                return new ContainerConfiguration
+                {
+                    ContainerContentLink = x.ContainerContentLink,
+                    ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
+                    RoutingEnabled = x.RoutingEnabled,
+                    GroupLevelConfigurations = (x.GroupLevelConfigurations ?? "").Split(',')
+                        .Select(str => _groupNameGenerators.FirstOrDefault(g => g.Key == str)).Where(g => g != null),
+                    ChangedBy = x.ChangedBy,
+                    ChangedOn = date
+                };
             });
         }
 
@@ -76,7 +86,9 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     ContainerType = userConfig.ContainerType.TypeToString() ?? "",
                     RoutingEnabled = userConfig.RoutingEnabled,
                     GroupLevelConfigurations =
-                        string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key))
+                        string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key)),
+                    ChangedBy = userConfig.ChangedBy,
+                    ChangedOn = userConfig.ChangedOn?.ToString(DateFormat)
                 };
                 store.Save(dds);
             }

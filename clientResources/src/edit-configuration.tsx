@@ -41,6 +41,8 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const [contentExists, setIsContentExists] = useState<boolean | undefined>(false);
   const [isVirtualContainer, setIsVirtualContainer] = useState(false);
+  const [changedBy, setChangedBy] = useState<string | undefined>("");
+  const [changedOn, setChangedOn] = useState<string | undefined>("");
   const [generators, setGenerators] = useState<string[]>([]);
 
   const [validationMessage, setValidationMessage] = useState("");
@@ -59,6 +61,8 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setGenerators(result.groupLevelConfigurations || []);
         setIsReadonly(!databaseConfigurationsEnabled || result.fromCode);
         setIsContentExists(result.contentExists);
+        setChangedBy(result.changedBy);
+        setChangedOn(result.changedOn);
       });
     } else {
       setGenerators([availableNameGenerators[0]]);
@@ -244,6 +248,17 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             </Button>
           )}
         </GridCell>
+
+        {isEditing && !fromCode && (
+          <GridCell large={12} medium={8} small={4}>
+            <div>
+              Changed by: <span style={{ fontWeight: "bold" }}>{changedBy}</span>
+            </div>
+            <div>
+              Changed on: <span style={{ fontWeight: "bold" }}>{changedOn}</span>
+            </div>
+          </GridCell>
+        )}
 
         {!isReadonly && (
           <GridCell large={12} medium={8} small={4}>

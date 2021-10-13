@@ -9,6 +9,7 @@ using ContentChildrenGrouping.Extensions;
 using ContentChildrenGrouping.RegisterFromDb;
 using EPiServer;
 using EPiServer.Core;
+using EPiServer.Security;
 using EPiServer.Shell.Services.Rest;
 
 namespace ContentChildrenGrouping.Containers.RegisterFromDb
@@ -24,12 +25,15 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
         private readonly ContentStructureCleaner _contentStructureCleaner;
         private readonly IContentLoader _contentLoader;
+        private readonly IPrincipalAccessor _principalAccessor;
 
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
             IEnumerable<IGroupNameGenerator> groupNameGenerators,
-            ContentStructureCleaner contentStructureCleaner, IContentLoader contentLoader)
+            ContentStructureCleaner contentStructureCleaner,
+            IContentLoader contentLoader,
+            IPrincipalAccessor principalAccessor)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
@@ -37,6 +41,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             _groupNameGenerators = groupNameGenerators;
             _contentStructureCleaner = contentStructureCleaner;
             _contentLoader = contentLoader;
+            _principalAccessor = principalAccessor;
         }
 
         [HttpGet]
@@ -60,19 +65,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 var containerConfigurations = contentChildrenGroupsLoader.GetConfigurations();
                 foreach (var containerConfiguration in containerConfigurations)
                 {
-                    var contentExists = _contentLoader.TryGet<IContent>(containerConfiguration.ContainerContentLink, out var _);
-
-                    var viewModel = new ConfigurationViewModel
-                    {
-                        contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
-                            .ToString(),
-                        containerTypeName = containerConfiguration.ContainerType.TypeToString(),
-                        routingEnabled = containerConfiguration.RoutingEnabled,
-                        groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
-                        isVirtualContainer = containerConfiguration.IsVirtualContainer,
-                        fromCode = !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader),
-                        contentExists = contentExists
-                    };
+                    var viewModel = ConvertModelToViewModel(containerConfiguration, !(contentChildrenGroupsLoader is DbContentChildrenGroupsLoader));
                     configurationViewModels.Add(viewModel);
                 }
             }
@@ -80,6 +73,25 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             configurationViewModels = configurationViewModels.OrderBy(x => x.contentLink).ToList();
 
             return configurationViewModels;
+        }
+
+        private ConfigurationViewModel ConvertModelToViewModel(ContainerConfiguration containerConfiguration, bool fromCode)
+        {
+            var contentExists = _contentLoader.TryGet<IContent>(containerConfiguration.ContainerContentLink, out var _);
+
+            return new ConfigurationViewModel
+            {
+                contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
+                    .ToString(),
+                containerTypeName = containerConfiguration.ContainerType.TypeToString(),
+                routingEnabled = containerConfiguration.RoutingEnabled,
+                groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
+                isVirtualContainer = containerConfiguration.IsVirtualContainer,
+                fromCode = fromCode,
+                contentExists = contentExists,
+                changedBy = containerConfiguration.ChangedBy,
+                changedOn = containerConfiguration.ChangedOn?.ToString("yyyy-MM-dd HH:mm")
+            };
         }
 
         [HttpGet]
@@ -91,7 +103,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             }
 
 
-            var containerConfigurations = _configSettingsDbRepository.LoadAll().ToList();
+            var containerConfigurations = _childrenGroupsLoaders.GetAllConfigurations();
             var configuration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == contentLink);
             if (configuration == null)
             {
@@ -101,16 +113,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             var isDbConfig = _dbContentChildrenGroupsLoader.GetConfigurations()
                 .Any(x => x.ContainerContentLink == contentLink);
 
-            var viewModel = new ConfigurationViewModel
-            {
-                contentLink = configuration.ContainerContentLink.ToReferenceWithoutVersion().ID
-                    .ToString(),
-                containerTypeName = configuration.ContainerType.TypeToString(),
-                routingEnabled = configuration.RoutingEnabled,
-                groupLevelConfigurations = configuration.GroupLevelConfigurations.Select(g => g.Key),
-                isVirtualContainer = configuration.IsVirtualContainer,
-                fromCode = !isDbConfig
-            };
+            var viewModel = ConvertModelToViewModel(configuration, !isDbConfig);
 
             return new RestResult
             {
@@ -164,7 +167,9 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
                     IsVirtualContainer = config.isVirtualContainer,
                     GroupLevelConfigurations = config.groupLevelConfigurations
-                        .Select(g => _groupNameGenerators.Single(n => n.Key == g))
+                        .Select(g => _groupNameGenerators.Single(n => n.Key == g)),
+                    ChangedBy = _principalAccessor?.Principal?.Identity?.Name,
+                    ChangedOn = DateTime.Now
                 };
             }
 
@@ -262,6 +267,8 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             public bool isVirtualContainer { get; set; }
             public IEnumerable<string> groupLevelConfigurations { get; set; }
             public bool contentExists { get; set; }
+            public string changedBy { get; set; }
+            public string changedOn { get; set; }
         }
 
         public class SaveConfigurationViewModel : ConfigurationViewModel

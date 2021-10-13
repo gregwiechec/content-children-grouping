@@ -17,5 +17,9 @@ namespace ContentChildrenGrouping.RegisterFromDb
         public string ContainerType { get; set; }
 
         public string GroupLevelConfigurations { get; set; }
+
+        public string ChangedBy { get; set; }
+
+        public string ChangedOn { get; set; }
     }
 }

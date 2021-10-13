@@ -6,4 +6,6 @@ export interface GroupConfiguration {
     containerTypeName: string;
     groupLevelConfigurations: string[];
     contentExists?: boolean;
+    changedBy?: string;
+    changedOn?: string;
 }

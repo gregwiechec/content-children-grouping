@@ -11,7 +11,10 @@ export default {
 } as ComponentMeta<typeof EditConfiguration>;
 
 const Template: ComponentStory<typeof EditConfiguration> = (args) => (
-  <EditConfiguration {...args} availableNameGenerators={["name", "created date", "long generator name test test test test"]} onSave={action("onSave")} onCancel={action("onCancel")} />
+  <EditConfiguration
+    {...args}
+    onSaveSuccess={action("onSave")}
+  />
 );
 
 export const DefaultEditConfigurationDialog = Template.bind({});
