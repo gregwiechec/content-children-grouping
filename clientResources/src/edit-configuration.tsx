@@ -113,7 +113,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const isEditing = !!editContentLink;
 
   return (
-    <GridContainer className="configuration-item">
+    <GridContainer className="edit-configuration">
       <Grid>
         <GridCell large={12} medium={8} small={4}>
           <h2>{isEditing ? "Edit configuration" : "Add configuration"}</h2>
@@ -129,9 +129,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
         {fromCode && (
           <GridCell large={12} medium={8} small={4}>
-            <Attention alignment="center" type="warning">
-              Configuration registered from code cannot be edited
-            </Attention>
+            <div style={{ fontStyle: "italic" }}>Configuration registered from code cannot be edited</div>
           </GridCell>
         )}
 
@@ -156,7 +154,8 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         {isEditing && (
           <GridCell large={12} medium={8} small={4}>
             <label>
-              Editing content link{" "}
+              {fromCode && <>Content link&nbsp;</>}
+              {!fromCode && <>Editing content link&nbsp;</>}
               <span style={{ fontWeight: "bold" }}>
                 <ContentLink value={editContentLink} />
               </span>
@@ -264,3 +263,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
     </GridContainer>
   );
 };
+/*
+TODO: set max width*/
+
+/*TODO: when defining configuration then add name generator*/

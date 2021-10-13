@@ -11,7 +11,7 @@ export const PluginInfo = () => {
   const options = Object.keys(serverSettings.options);
 
   return (
-    <GridContainer className="configuration-item">
+    <GridContainer>
       <Grid>
         <GridCell large={12} medium={8} small={4}>
           <h2>Plugin information</h2>
@@ -39,3 +39,5 @@ export const PluginInfo = () => {
     </GridContainer>
   );
 };
+/*
+TODO: check if virtual containers enabled*/

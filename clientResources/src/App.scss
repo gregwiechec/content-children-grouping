@@ -1,8 +1,17 @@
-.configuration-item {
-  .content-link.oui-text-input[type=number] {
-    text-align: left;
+.edit-configuration {
+  max-width: 500px;
+
+  &.axiom-grid-container {
+    margin-left: 0;
   }
 
+  .content-link.oui-text-input[type=number] {
+    text-align: left;
+    max-width: 100px;
+  }
+}
+
+.configuration-item {
   .configuration-generator-select {
     max-width: 250px;
   }
