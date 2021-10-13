@@ -40,6 +40,18 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         [HttpGet]
         public ActionResult LoadConfigurations()
         {
+            return new RestResult
+            {
+                Data = new
+                {
+                    items = LoadItems()
+                },
+                SafeResponse = true
+            };
+        }
+
+        private IEnumerable<ConfigurationViewModel> LoadItems()
+        {
             var configurationViewModels = new List<ConfigurationViewModel>();
             foreach (var contentChildrenGroupsLoader in _childrenGroupsLoaders)
             {
@@ -60,14 +72,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 }
             }
 
-            return new RestResult
-            {
-                Data = new
-                {
-                    items = configurationViewModels
-                },
-                SafeResponse = true
-            };
+            return configurationViewModels;
         }
 
         [HttpGet]
@@ -83,7 +88,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             var configuration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == contentLink);
             if (configuration == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Configuration not found for [{contentLink}]");
+                return GetError($"Configuration not found for [{contentLink}]");
             }
 
             var isDbConfig = _dbContentChildrenGroupsLoader.GetConfigurations()
@@ -135,7 +140,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             }
             catch (Exception e)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Cannot parse type: " + e.Message);
+                return GetError("Cannot parse type: " + e.Message);
             }
 
             ContainerConfiguration ConvertViewModelToModel()
@@ -182,11 +187,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             }
 
             _dbContentChildrenGroupsLoader.ClearCache();
-            return new RestResult
-            {
-                Data = "ok",
-                SafeResponse = true
-            };
+            return Get(contentLink);
         }
 
         [HttpPost]
@@ -207,13 +208,32 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             var configuration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == contentLink);
             if (configuration == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Configuration for {contentLink} not found");
+                return GetError($"Configuration for {contentLink} not found");
             }
 
             containerConfigurations.Remove(configuration);
             _configSettingsDbRepository.Save(containerConfigurations);
             _dbContentChildrenGroupsLoader.ClearCache();
-            return LoadConfigurations();
+            return new RestResult
+            {
+                Data = LoadItems(),
+                SafeResponse = true
+            };
+        }
+
+        private ActionResult GetError(string message)
+        {
+            //return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Configuration for {contentLink} not found");
+            //return new RestStatusCodeResult(HttpStatusCode.BadRequest, message);
+            return new RestResult
+            {
+                Data = new
+                {
+                    Error = message,
+                    Status = HttpStatusCode.BadRequest
+                },
+                SafeResponse = true
+            };
         }
 
         public class ClearContainersViewModel

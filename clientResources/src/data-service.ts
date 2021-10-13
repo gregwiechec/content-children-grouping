@@ -36,7 +36,17 @@ export const dataService: DataService = {
   },
 
   save: (configuration: any) => {
-    return axios.post("Save", configuration);
+    return new Promise((resolve, reject) => {
+      axios.post("Save", configuration).then(result => {
+        if (result.data.status === 400 && result.data.error) {
+          reject(result.data.error);
+          return;
+        }
+        resolve(result);
+      }).catch(error => {
+        reject(error.message || error.toString());
+      });
+    });
   },
 
   delete: (configuration: GroupConfiguration) => {

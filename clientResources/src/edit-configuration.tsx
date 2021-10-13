@@ -108,7 +108,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         history.push("/");
       })
       .catch((error) => {
-        setValidationMessage(error.message);
+        setValidationMessage(error);
       });
   };
 
