@@ -41,6 +41,11 @@ namespace ContentChildrenGrouping.VirtualContainers
 
         protected override IEnumerable<IContent> GetContent(ContentQueryParameters parameters)
         {
+            if (!_options.Enabled)
+            {
+                return base.GetContent(parameters);
+            }
+
             if (!ContentReference.IsNullOrEmpty(parameters.ReferenceId))
             {
                 var selector = _languageSelectorFactory.AutoDetect(true);
