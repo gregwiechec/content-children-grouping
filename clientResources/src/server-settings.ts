@@ -6,6 +6,7 @@ export type ContentChildrenGroupingOptions = {
     readonly databaseConfigurationsEnabled: boolean;
     readonly customIconsEnabled: boolean;
     readonly searchCommandEnabled: boolean;
+    readonly virtualContainersEnabled: boolean;
 }
 
 export type ServerSettings = {

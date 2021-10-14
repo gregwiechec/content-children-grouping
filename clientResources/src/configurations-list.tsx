@@ -18,7 +18,7 @@ interface ConfigurationsListProps {
 export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
   const {
     defaultContainerType,
-    options: { databaseConfigurationsEnabled }
+    options: { databaseConfigurationsEnabled, virtualContainersEnabled }
   } = useServerSettingsContext();
 
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
@@ -41,7 +41,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           <Table.TR>
             <Table.TH width={100}>Content Link</Table.TH>
             <Table.TH width={90}>From code</Table.TH>
-            <Table.TH width={90}>Is virtual</Table.TH>
+            {virtualContainersEnabled && <Table.TH width={90}>Is virtual</Table.TH>}
             <Table.TH width={90}>Router</Table.TH>
             <Table.TH>Container type</Table.TH>
             <Table.TH width={200}>Generator</Table.TH>
@@ -55,7 +55,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 <ContentLink value={x.contentLink} contentExists={x.contentExists} />
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
-              <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>
+              {virtualContainersEnabled && <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>}
               <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>
               <Table.TD>
                 {x.containerTypeName}
@@ -67,7 +67,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               </Table.TD>
               <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
               <Table.TD className="menu-cell">
-{/*
+                {/*
                 <OverlayWrapper
                   behavior="click"
                   horizontalAttachment="left"
@@ -96,11 +96,20 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                   <ButtonIcon title="" iconName="ellipsis" style="plain" />
                 </OverlayWrapper>
 */}
-
-{/*//TODO: context menu is not working*/}
-                <Link leftIcon="projects" onClick={() => onEdit(x)}>Edit</Link>&nbsp;
-                <Link leftIcon="settings" onClick={() => onManage(x)}>Manage</Link>&nbsp;
-                {!x.fromCode && databaseConfigurationsEnabled && <Link onClick={() => setItemToDelete(x)} leftIcon="ban">Delete</Link>}
+                {/*//TODO: context menu is not working*/}
+                <Link leftIcon="projects" onClick={() => onEdit(x)}>
+                  Edit
+                </Link>
+                &nbsp;
+                <Link leftIcon="settings" onClick={() => onManage(x)}>
+                  Manage
+                </Link>
+                &nbsp;
+                {!x.fromCode && databaseConfigurationsEnabled && (
+                  <Link onClick={() => setItemToDelete(x)} leftIcon="ban">
+                    Delete
+                  </Link>
+                )}
               </Table.TD>
             </Table.TR>
           ))}

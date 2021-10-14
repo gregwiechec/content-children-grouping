@@ -28,7 +28,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const dataService = useDataServiceContext();
   const {
     availableNameGenerators = [],
-    options: { databaseConfigurationsEnabled = true }
+    options: { databaseConfigurationsEnabled = true, virtualContainersEnabled = true }
   } = useServerSettingsContext();
 
   const [isReadonly, setIsReadonly] = useState(!databaseConfigurationsEnabled);
@@ -137,7 +137,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
         {fromCode && (
           <GridCell large={12} medium={8} small={4}>
-            <div style={{ fontStyle: "italic" }}>Configuration registered from code cannot be edited</div>
+            <div className="text-description">Configuration registered from code cannot be edited</div>
           </GridCell>
         )}
 
@@ -175,8 +175,9 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             label="Is virtual container"
             checked={isVirtualContainer}
             onChange={(e) => setIsVirtualContainer(e.target.checked)}
-            isDisabled={isReadonly}
+            isDisabled={isReadonly || !virtualContainersEnabled}
           />
+          {!virtualContainersEnabled && <div className="text-description">Virtual containers are not enabled</div>}
         </GridCell>
 
         {!isVirtualContainer && (
