@@ -18,7 +18,7 @@ DefaultList.args = {
       fromCode: false,
       routingEnabled: false,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name", "CreatedDate"],
+      groupLevelConfigurations: [{ name: "Name" }, { name: "CreatedDate" }],
       isVirtualContainer: true
     },
     {
@@ -26,7 +26,7 @@ DefaultList.args = {
       fromCode: false,
       routingEnabled: true,
       containerTypeName: "",
-      groupLevelConfigurations: ["Name"],
+      groupLevelConfigurations: [{ name: "Name" }],
       isVirtualContainer: false
     }
   ]
