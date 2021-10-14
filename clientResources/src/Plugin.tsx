@@ -9,7 +9,7 @@ import { Message } from "./Message";
 import { ManageConfiguration } from "./manage-configuration";
 
 interface PluginProps {
-  dataService: DataService | null;
+  dataService?: DataService | null;
 }
 
 export default function Plugin({ dataService }: PluginProps) {
