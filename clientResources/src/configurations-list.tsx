@@ -36,7 +36,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
   };
   return (
     <>
-      <Table density="loose" className="configuration-table">
+      <Table density="loose" className="configuration-table plugin-grid">
         <Table.THead>
           <Table.TR>
             <Table.TH width={100}>Content Link</Table.TH>

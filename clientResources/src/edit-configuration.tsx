@@ -121,7 +121,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const isEditing = !!editContentLink;
 
   return (
-    <GridContainer className="edit-configuration">
+    <GridContainer className="edit-configuration plugin-grid">
       <Grid>
         <GridCell large={12} medium={8} small={4}>
           <h2>{isEditing ? "Edit configuration" : "Add configuration"}</h2>
