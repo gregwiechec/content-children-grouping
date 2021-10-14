@@ -12,12 +12,15 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
     [ServiceConfiguration(typeof(GroupNameSerializer))]
     public class GroupNameSerializer
     {
-        private IObjectSerializerFactory _serializerFactory { get; set; }
-        private ILogger _log = LogManager.GetLogger(typeof(GroupNameSerializer));
+        private readonly IObjectSerializerFactory _serializerFactory;
+        private static ILogger _log = LogManager.GetLogger(typeof(GroupNameSerializer));
+        private readonly IEnumerable<IDbAvailableGroupNameGenerator> _dbAvailableGroupNameGenerators;
 
-        public GroupNameSerializer(IObjectSerializerFactory serializerFactory)
+        public GroupNameSerializer(IObjectSerializerFactory serializerFactory,
+            IEnumerable<IDbAvailableGroupNameGenerator> dbAvailableGroupNameGenerators)
         {
             _serializerFactory = serializerFactory;
+            _dbAvailableGroupNameGenerators = dbAvailableGroupNameGenerators;
         }
 
         public string Serialize(IEnumerable<IGroupNameGenerator> generators)
@@ -45,13 +48,11 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 return Enumerable.Empty<IGroupNameGenerator>();
             }
 
-            var dbAvailableGroupNameGenerators = ServiceLocator.Current
-                .GetInstance<IEnumerable<IDbAvailableGroupNameGenerator>>().ToList();
 
             var groupNameGenerators = new List<IGroupNameGenerator>();
             foreach (var deserializedItem in deserializedItems)
             {
-                var generator = dbAvailableGroupNameGenerators.FirstOrDefault(x => x.Key == deserializedItem.Name);
+                var generator = _dbAvailableGroupNameGenerators.FirstOrDefault(x => x.Key == deserializedItem.Name);
                 if (generator != null)
                 {
                     var groupNameGenerator = generator.CreateGenerator(deserializedItem.Settings);

@@ -31,21 +31,6 @@ namespace ContentChildrenGrouping.Containers
             _defaultName = defaultName;
         }
 
-        public ByNameGroupNameGenerator(Dictionary<string, string> settings)
-        {
-            if (settings.TryGetValue("startIndex", out var value))
-            {
-                int.TryParse(value, out _startIndex);
-            }
-
-            if (settings.TryGetValue("countLetters", out var value2))
-            {
-                int.TryParse(value2, out _countLetters);
-            }
-
-            settings.TryGetValue("defaultName", out _defaultName);
-        }
-
         public string GetName(IContent content)
         {
             var nameLength = content.Name.Length;
@@ -69,7 +54,22 @@ namespace ContentChildrenGrouping.Containers
 
         public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
         {
-            return new ByNameGroupNameGenerator(settings);
+            var startIndex = 0;
+            if (settings.TryGetValue("startIndex", out var value))
+            {
+                int.TryParse(value, out startIndex);
+            }
+
+            var countLetters = 1;
+            if (settings.TryGetValue("countLetters", out var value2))
+            {
+                int.TryParse(value2, out countLetters);
+            }
+
+            settings.TryGetValue("defaultName", out var defaultName);
+
+            var result = new ByNameGroupNameGenerator(startIndex, countLetters, defaultName);
+            return result;
         }
     }
 
@@ -86,12 +86,6 @@ namespace ContentChildrenGrouping.Containers
         {
             _dateFormat = dateFormat;
             _defaultValue = defaultValue;
-        }
-
-        public ByCreateDateGroupNameGenerator(Dictionary<string, string> settings)
-        {
-            settings.TryGetValue("dateFormat", out _dateFormat);
-            settings.TryGetValue("defaultValue", out _defaultValue);
         }
 
         public string GetName(IContent content)
@@ -112,7 +106,11 @@ namespace ContentChildrenGrouping.Containers
 
         public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
         {
-            return new ByCreateDateGroupNameGenerator(settings);
+            settings.TryGetValue("dateFormat", out var dateFormat);
+            settings.TryGetValue("defaultValue", out var defaultValue);
+
+            var result = new ByCreateDateGroupNameGenerator(dateFormat, defaultValue);
+            return result;
         }
     }
 
