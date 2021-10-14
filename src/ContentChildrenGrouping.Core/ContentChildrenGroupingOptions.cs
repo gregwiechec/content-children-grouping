@@ -2,6 +2,9 @@
 
 namespace ContentChildrenGrouping.Core
 {
+    /// <summary>
+    /// Configuration for content containers
+    /// </summary>
     [Options]
     public class ContentChildrenGroupingOptions
     {
