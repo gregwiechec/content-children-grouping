@@ -28,7 +28,7 @@ export const ContentLink = ({ value, contentExists }: ContentLinkProps) => {
   }
 
   return (
-    <Link href={contentUrl.replace("{contentLink}", value)}>
+    <Link href={contentUrl.replace("{contentLink}", value)} newWindow>
       {value}
     </Link>
   );
