@@ -1,42 +1,44 @@
 import { DataService } from "../data-service";
-import { GroupConfiguration } from "../models/Groupconfiguration";
+import { GroupConfiguration } from "../models/group-configuration";
+
+const items: GroupConfiguration[] = [
+  {
+    contentLink: "1",
+    fromCode: false,
+    routingEnabled: true,
+    containerTypeName: "Alloy.CustomContainer",
+    groupLevelConfigurations: [{ name: "Name" }, { name: "Create Date" }],
+    isVirtualContainer: true
+  },
+  {
+    contentLink: "2",
+    fromCode: true,
+    routingEnabled: false,
+    containerTypeName: "",
+    groupLevelConfigurations: [{ name: "Name" }, { name: "Create Date" }],
+    isVirtualContainer: true
+  },
+  {
+    contentLink: "3",
+    fromCode: true,
+    routingEnabled: false,
+    containerTypeName: "",
+    groupLevelConfigurations: [{ name: "Name" }, { name: "Create Date" }],
+    isVirtualContainer: false
+  },
+  {
+    contentLink: "4",
+    fromCode: false,
+    routingEnabled: true,
+    containerTypeName: "",
+    groupLevelConfigurations: [{ name: "Name" }],
+    isVirtualContainer: false
+  }
+];
 
 let result = {
-  items: [
-    {
-      contentLink: "1",
-      fromCode: false,
-      routingEnabled: true,
-      containerTypeName: "Alloy.CustomContainer",
-      groupLevelConfigurations: ["Name", "Created Date"],
-      isVirtualContainer: true
-    },
-    {
-      contentLink: "2",
-      fromCode: true,
-      routingEnabled: false,
-      isVirtualContainer: true,
-      containerTypeName: "",
-      groupLevelConfigurations: ["Name", "Created Date"]
-    },
-    {
-      contentLink: "3",
-      fromCode: true,
-      routingEnabled: false,
-      containerTypeName: "",
-      groupLevelConfigurations: ["Name", "Created Date"],
-      isVirtualContainer: false
-    },
-    {
-      contentLink: "4",
-      fromCode: false,
-      routingEnabled: true,
-      containerTypeName: "",
-      groupLevelConfigurations: ["Name"],
-      isVirtualContainer: false
-    }
-  ],
-  availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
+  items: items,
+  availableNameGenerators: ["Name", "Create Date", "Very long name generator"],
   structureUpdateEnabled: false
 };
 

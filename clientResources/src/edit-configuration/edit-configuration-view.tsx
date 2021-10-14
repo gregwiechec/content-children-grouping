@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { useHistory, useParams } from "react-router-dom";
-import { GroupConfiguration } from "./models/Groupconfiguration";
+import { GeneratorConfiguration, GroupConfiguration } from "../models/group-configuration";
 import {
   Attention,
   BlockList,
@@ -15,15 +15,16 @@ import {
   Label,
   Select
 } from "optimizely-oui";
-import { useServerSettingsContext } from "./server-settings";
-import { useDataServiceContext } from "./data-service";
-import { ContentLink } from "./ContentLink";
+import { useServerSettingsContext } from "../server-settings";
+import { useDataServiceContext } from "../data-service";
+import { ContentLink } from "../content-link";
+import { GeneratorsList } from "./generators-list";
 
 interface EditConfigurationProps {
   onSaveSuccess: (message: string) => void;
 }
 
-export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => {
+export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps) => {
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
   const {
@@ -43,7 +44,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [isVirtualContainer, setIsVirtualContainer] = useState(false);
   const [changedBy, setChangedBy] = useState<string | undefined>("");
   const [changedOn, setChangedOn] = useState<string | undefined>("");
-  const [generators, setGenerators] = useState<string[]>([]);
+  const [generators, setGenerators] = useState<GeneratorConfiguration[]>([]);
 
   const [validationMessage, setValidationMessage] = useState("");
 
@@ -65,12 +66,18 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setChangedOn(result.changedOn);
       });
     } else {
-      setGenerators([availableNameGenerators[0]]);
+      setGenerators([{ name: availableNameGenerators[0] }]);
     }
-  }, [editContentLink, dataService]);
+  }, [editContentLink, dataService, databaseConfigurationsEnabled, availableNameGenerators]);
 
   const onAddGenerator = () => {
-    const updatedList = [...generators, availableNameGenerators[0]];
+    const updatedList = [...generators, { name: availableNameGenerators[0] }];
+    setGenerators(updatedList);
+  };
+
+  const onGeneratorSettingsChanged = (index: number, settings: Record<string, string>) => {
+    let updatedList = [...generators];
+    updatedList[index].settings = settings;
     setGenerators(updatedList);
   };
 
@@ -82,7 +89,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
   const onGeneratorValueChange = (index: number, value: string) => {
     let updatedList = [...generators];
-    updatedList[index] = value;
+    updatedList[index] = { name: value };
     setGenerators(updatedList);
   };
 
@@ -91,11 +98,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
       return false;
     }
 
-    if (!generators || generators.length === 0) {
-      return false;
-    }
-
-    return true;
+    return (generators || []).length !== 0;
   };
 
   const onSave = () => {
@@ -144,6 +147,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         {!isEditing && (
           <GridCell large={12} medium={8} small={4}>
             <Input
+                id="edit-configuration-content-link"
               displayError={false}
               type="number"
               isOptional={false}
@@ -193,6 +197,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             <GridCell large={12} medium={8} small={4}>
               <Input
                 type="text"
+                id="edit-configuration-type"
                 label="Container type name"
                 note="Type format: [Full type name, Assembly Name]"
                 value={containerTypeName}
@@ -204,50 +209,16 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         )}
         <GridCell large={12} medium={8} small={4}>
           <Label>Name generators *</Label>
-          <BlockList hasBorder={false} className="configuration-item">
-            {generators.map((x, index) => (
-              <BlockList.Item key={x + "_" + index}>
-                {!isReadonly && (
-                  <>
-                    <Select
-                      className="configuration-generator-select"
-                      isOptional={false}
-                      onChange={(value) => onGeneratorValueChange(index, value.target.value)}
-                    >
-                      {/*TODO: allow to configure namegenerator*/}
-                      {availableNameGenerators.map((generator) => (
-                        <option key={generator} value={generator} selected={generator === x}>
-                          {generator}
-                        </option>
-                      ))}
-                    </Select>
-                    <ButtonIcon
-                      className="remove-button"
-                      iconName="close"
-                      isDisabled={index === 0}
-                      onClick={() => onRemoveGenerator(index)}
-                      size="small"
-                      style="outline"
-                      title="Close Dialog"
-                    />
-                  </>
-                )}
-
-                {isReadonly && <span key={x}>{x}</span>}
-              </BlockList.Item>
-            ))}
-          </BlockList>
-          {!isReadonly && (
-            <Button
-              style="outline"
-              size="narrow"
-              leftIcon="add"
-              onClick={onAddGenerator}
-              isDisabled={databaseConfigurationsEnabled && (availableNameGenerators?.length || 0) === 0}
-            >
-              Add generator
-            </Button>
-          )}
+          <GeneratorsList
+            generators={generators}
+            isReadonly={isReadonly}
+            onGeneratorValueChange={onGeneratorValueChange}
+            onRemoveGenerator={onRemoveGenerator}
+            onAddGenerator={onAddGenerator}
+            onSettingsChanged={onGeneratorSettingsChanged}
+            availableNameGenerators={availableNameGenerators}
+            databaseConfigurationsEnabled={databaseConfigurationsEnabled}
+          />
         </GridCell>
 
         {isEditing && !fromCode && (

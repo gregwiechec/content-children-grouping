@@ -5,7 +5,7 @@ import Plugin from "./Plugin";
 import "./App.scss";
 import ServerSettingsContext, { ServerSettings } from "./server-settings";
 import { DataService } from "./data-service";
-import { GroupConfiguration } from "./models/Groupconfiguration";
+import { GroupConfiguration } from "./models/group-configuration";
 
 interface ComponentProps extends ServerSettings {
   dataService: DataService;
@@ -29,7 +29,7 @@ const Template: ComponentStory<typeof Component> = (args) => <Component {...args
 const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled = true, virtualContainersEnabled = true) => {
   return {
     dataService: dataService,
-    availableNameGenerators: ["Name", "Created Date", "Very long name generator"],
+    availableNameGenerators: ["Name", "Create Date", "Very long name generator"],
     defaultContainerType: "",
     contentUrl: "http://google.com/{contentLink}",
     options: {

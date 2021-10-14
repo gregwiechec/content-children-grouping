@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { useHistory, useParams } from "react-router-dom";
-import { GroupConfiguration } from "./models/Groupconfiguration";
+import { GroupConfiguration } from "./models/group-configuration";
 import { Attention, Button, Grid, GridCell, GridContainer } from "optimizely-oui";
 import { useDataServiceContext } from "./data-service";
 import {useServerSettingsContext} from "./server-settings";

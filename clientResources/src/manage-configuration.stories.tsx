@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ManageConfiguration } from "./manage-configuration";
 import "./App.scss";
 import { fakeService } from "./fake-data/fake-service";
-import {GroupConfiguration} from "./models/Groupconfiguration";
+import {GroupConfiguration} from "./models/group-configuration";
 
 export default {
   title: "Manage dialog",

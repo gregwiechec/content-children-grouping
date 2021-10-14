@@ -15,14 +15,14 @@ using EPiServer.Shell.Services.Rest;
 namespace ContentChildrenGrouping.Containers.RegisterFromDb
 {
     /// <summary>
-    /// Controller reposnsible for managing all Admin Mode plugin REST actions
+    /// Controller responsible for managing all Admin Mode plugin REST actions
     /// </summary>
     public class ConfigSettingsController : Controller
     {
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
-        private readonly IEnumerable<IGroupNameGenerator> _groupNameGenerators;
+        private readonly IEnumerable<IDbAvailableGroupNameGenerator> _groupNameGenerators;
         private readonly ContentStructureCleaner _contentStructureCleaner;
         private readonly IContentLoader _contentLoader;
         private readonly IPrincipalAccessor _principalAccessor;
@@ -30,7 +30,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         public ConfigSettingsController(IConfigSettingsDbRepository configSettingsDbRepository,
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
-            IEnumerable<IGroupNameGenerator> groupNameGenerators,
+            IEnumerable<IDbAvailableGroupNameGenerator> groupNameGenerators,
             ContentStructureCleaner contentStructureCleaner,
             IContentLoader contentLoader,
             IPrincipalAccessor principalAccessor)
@@ -85,7 +85,11 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     .ToString(),
                 containerTypeName = containerConfiguration.ContainerType.TypeToString(),
                 routingEnabled = containerConfiguration.RoutingEnabled,
-                groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g => g.Key),
+                groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g =>new GeneratorSettingsViewModel
+                {
+                    name = g.Key,
+                    settings = g.Settings
+                }),
                 isVirtualContainer = containerConfiguration.IsVirtualContainer,
                 fromCode = fromCode,
                 contentExists = contentExists,
@@ -101,7 +105,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "ContentLink cannot be empty");
             }
-
 
             var containerConfigurations = _childrenGroupsLoaders.GetAllConfigurations();
             var configuration = containerConfigurations.FirstOrDefault(x => x.ContainerContentLink == contentLink);
@@ -167,7 +170,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
                     IsVirtualContainer = config.isVirtualContainer,
                     GroupLevelConfigurations = config.groupLevelConfigurations
-                        .Select(g => _groupNameGenerators.Single(n => n.Key == g)),
+                        .Select(g => _groupNameGenerators.Single(n => n.Key == g.name).CreateGenerator(g.settings)),
                     ChangedBy = _principalAccessor?.Principal?.Identity?.Name,
                     ChangedOn = DateTime.Now
                 };
@@ -265,7 +268,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             public bool routingEnabled { get; set; }
             public bool fromCode { get; set; }
             public bool isVirtualContainer { get; set; }
-            public IEnumerable<string> groupLevelConfigurations { get; set; }
+            public IEnumerable<GeneratorSettingsViewModel> groupLevelConfigurations { get; set; }
             public bool contentExists { get; set; }
             public string changedBy { get; set; }
             public string changedOn { get; set; }
@@ -275,5 +278,11 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         {
             public bool IsNew { get; set; }
         }
+    }
+
+    public class GeneratorSettingsViewModel
+    {
+        public string name { get; set; }
+        public Dictionary<string, string> settings { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useContext } from "react";
-import { GroupConfiguration } from "./models/Groupconfiguration";
+import { GroupConfiguration } from "./models/group-configuration";
 
 export interface DataService {
   load: () => Promise<any>;
@@ -75,3 +75,5 @@ export const useDataServiceContext = (): DataService => {
   }
   return dataServiceContext;
 };
+
+/* TODO: add tests */

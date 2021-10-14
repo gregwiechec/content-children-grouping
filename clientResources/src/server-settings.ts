@@ -26,7 +26,8 @@ const defaultSettings: ServerSettings = {
         databaseConfigurationsEnabled: false,
         routerEnabled: false,
         searchCommandEnabled: false,
-        structureUpdateEnabled: false
+        structureUpdateEnabled: false,
+        virtualContainersEnabled: false
     }
 };
 

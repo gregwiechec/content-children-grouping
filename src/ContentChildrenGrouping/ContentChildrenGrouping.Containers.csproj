@@ -186,6 +186,7 @@
     <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
     <Compile Include="RegisterFromDb\DbContentChildrenGroupsLoader.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="RegisterFromDb\GroupNameSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

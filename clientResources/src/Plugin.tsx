@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import App from "./App";
 import { PluginInfo } from "./PluginInfo";
-import { EditConfiguration } from "./edit-configuration";
+import { EditConfigurationView } from "./edit-configuration/edit-configuration-view";
 import DataServiceContext, { DataService, dataService as defaultDataService } from "./data-service";
 import { Message } from "./Message";
 import { ManageConfiguration } from "./manage-configuration";
@@ -19,22 +19,27 @@ export default function Plugin({ dataService }: PluginProps) {
 
   const [message, setMessage] = useState("");
 
-  let msgTimeoutHandler: number | null = null;
+  const [msgTimeoutHandler, setMsgTimeoutHandler] = useState<number | null>(null);
+
+
   useEffect(() => {
     setMessage(message);
-    if (msgTimeoutHandler) {
-      clearTimeout(msgTimeoutHandler);
+    if (message) {
+      if (msgTimeoutHandler) {
+        clearTimeout(msgTimeoutHandler);
+      }
+      const handler = setTimeout(() => setMessage(""), 5000);
+      // @ts-ignore
+      setMsgTimeoutHandler(handler);
     }
-    // @ts-ignore
-    msgTimeoutHandler = setTimeout(() => setMessage(""), 5000);
 
     return () => {
       if (msgTimeoutHandler) {
         clearTimeout(msgTimeoutHandler);
-        msgTimeoutHandler = null;
+        setMsgTimeoutHandler(null);
       }
     };
-  }, [message]);
+  }, [message, msgTimeoutHandler]);
 
   const onMessageSet = (msg: string) => {
     setMessage(msg);
@@ -50,13 +55,13 @@ export default function Plugin({ dataService }: PluginProps) {
             <Route path="/info" render={(props: any) => <PluginInfo {...props} />} />
             <Route
               path="/edit/:editContentLink"
-              render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onMessageSet} />}
+              render={(props: any) => <EditConfigurationView {...props} onSaveSuccess={onMessageSet} />}
             />
             <Route
               path="/manage/:contentLink"
               render={(props: any) => <ManageConfiguration {...props} />}
             />
-            <Route path="/add" render={(props: any) => <EditConfiguration {...props} onSaveSuccess={onMessageSet} />} />
+            <Route path="/add" render={(props: any) => <EditConfigurationView {...props} onSaveSuccess={onMessageSet} />} />
           </Switch>
         </Router>
       </DataServiceContext.Provider>

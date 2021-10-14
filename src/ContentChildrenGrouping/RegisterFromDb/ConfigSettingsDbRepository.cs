@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using ContentChildrenGrouping.Containers.RegisterFromDb;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Extensions;
 using EPiServer.Data.Dynamic;
@@ -26,11 +27,13 @@ namespace ContentChildrenGrouping.RegisterFromDb
 
         private readonly DynamicDataStoreFactory _dataStoreFactory;
         private readonly IReadOnlyList<IGroupNameGenerator> _groupNameGenerators;
+        private readonly GroupNameSerializer _nameGeneratorSerializer;
 
         public ConfigSettingsDbRepository(DynamicDataStoreFactory dataStoreFactory,
-            IEnumerable<IGroupNameGenerator> groupNameGenerators)
+            IEnumerable<IGroupNameGenerator> groupNameGenerators, GroupNameSerializer nameGeneratorSerializer)
         {
             _dataStoreFactory = dataStoreFactory;
+            _nameGeneratorSerializer = nameGeneratorSerializer;
             _groupNameGenerators = groupNameGenerators.ToList();
         }
 
@@ -46,8 +49,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     ContainerContentLink = x.ContainerContentLink,
                     ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
                     RoutingEnabled = x.RoutingEnabled,
-                    GroupLevelConfigurations = (x.GroupLevelConfigurations ?? "").Split(',')
-                        .Select(str => _groupNameGenerators.FirstOrDefault(g => g.Key == str)).Where(g => g != null),
+                    GroupLevelConfigurations = _nameGeneratorSerializer.Deserialize(x.GroupLevelConfigurations),
                     ChangedBy = x.ChangedBy,
                     ChangedOn = date
                 };
@@ -72,7 +74,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
 
                 ddsConfig.ContainerType = userConfig.ContainerType.TypeToString();
                 ddsConfig.GroupLevelConfigurations =
-                    string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key));
+                    _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations);
                 ddsConfig.RoutingEnabled = userConfig.RoutingEnabled;
                 store.Save(ddsConfig);
                 containerConfigurations.Remove(userConfig);
@@ -85,8 +87,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     ContainerContentLink = userConfig.ContainerContentLink,
                     ContainerType = userConfig.ContainerType.TypeToString() ?? "",
                     RoutingEnabled = userConfig.RoutingEnabled,
-                    GroupLevelConfigurations =
-                        string.Join(",", userConfig.GroupLevelConfigurations.Select(x => x.Key)),
+                    GroupLevelConfigurations = _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations),
                     ChangedBy = userConfig.ChangedBy,
                     ChangedOn = userConfig.ChangedOn?.ToString(DateFormat)
                 };

@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using ContentChildrenGrouping.Core;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Containers
 {
     /// <summary>
     /// When generator class implements this interface, then generator is available as DB plugin
     /// </summary>
-    public interface IDbAvailableGroupNameGenerator
+    public interface IDbAvailableGroupNameGenerator: IGroupNameGenerator
     {
+        IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings);
     }
 
     [ServiceConfiguration(typeof(IGroupNameGenerator))]
+    [ServiceConfiguration(typeof(IDbAvailableGroupNameGenerator))]
     public class ByNameGroupNameGenerator : IGroupNameGenerator, IDbAvailableGroupNameGenerator
     {
         public string Key => "Name";
@@ -28,6 +31,21 @@ namespace ContentChildrenGrouping
             _defaultName = defaultName;
         }
 
+        public ByNameGroupNameGenerator(Dictionary<string, string> settings)
+        {
+            if (settings.TryGetValue("startIndex", out var value))
+            {
+                int.TryParse(value, out _startIndex);
+            }
+
+            if (settings.TryGetValue("countLetters", out var value2))
+            {
+                int.TryParse(value2, out _countLetters);
+            }
+
+            settings.TryGetValue("defaultName", out _defaultName);
+        }
+
         public string GetName(IContent content)
         {
             var nameLength = content.Name.Length;
@@ -41,9 +59,22 @@ namespace ContentChildrenGrouping
             result = result.Trim();
             return result;
         }
+
+        public Dictionary<string, string> Settings => new Dictionary<string, string>
+        {
+            { "startIndex", _startIndex.ToString() },
+            { "countLetters", _countLetters.ToString() },
+            { "defaultName", _defaultName }
+        };
+
+        public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
+        {
+            return new ByNameGroupNameGenerator(settings);
+        }
     }
 
     [ServiceConfiguration(typeof(IGroupNameGenerator))]
+    [ServiceConfiguration(typeof(IDbAvailableGroupNameGenerator))]
     public class ByCreateDateGroupNameGenerator : IGroupNameGenerator, IDbAvailableGroupNameGenerator
     {
         public string Key => "Create date";
@@ -57,6 +88,12 @@ namespace ContentChildrenGrouping
             _defaultValue = defaultValue;
         }
 
+        public ByCreateDateGroupNameGenerator(Dictionary<string, string> settings)
+        {
+            settings.TryGetValue("dateFormat", out _dateFormat);
+            settings.TryGetValue("defaultValue", out _defaultValue);
+        }
+
         public string GetName(IContent content)
         {
             if (content is IChangeTrackable page)
@@ -65,6 +102,17 @@ namespace ContentChildrenGrouping
             }
 
             return _defaultValue;
+        }
+
+        public Dictionary<string, string> Settings => new Dictionary<string, string>
+        {
+            { "dateFormat", _defaultValue },
+            { "defaultValue", _defaultValue }
+        };
+
+        public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
+        {
+            return new ByCreateDateGroupNameGenerator(settings);
         }
     }
 
@@ -89,5 +137,7 @@ namespace ContentChildrenGrouping
         {
             return _expression(content);
         }
+
+        public Dictionary<string, string> Settings => new Dictionary<string, string>();
     }
 }

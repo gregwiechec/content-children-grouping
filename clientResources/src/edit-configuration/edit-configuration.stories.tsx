@@ -1,17 +1,17 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { EditConfiguration } from "./edit-configuration";
-import "./App.scss";
+import { EditConfigurationView } from "./edit-configuration-view";
+import "../App.scss";
 import { action } from "@storybook/addon-actions";
 
 export default {
   title: "Edit Dialog",
-  component: EditConfiguration
-} as ComponentMeta<typeof EditConfiguration>;
+  component: EditConfigurationView
+} as ComponentMeta<typeof EditConfigurationView>;
 
-const Template: ComponentStory<typeof EditConfiguration> = (args) => (
-  <EditConfiguration
+const Template: ComponentStory<typeof EditConfigurationView> = (args) => (
+  <EditConfigurationView
     {...args}
     onSaveSuccess={action("onSave")}
   />

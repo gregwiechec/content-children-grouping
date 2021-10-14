@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { BlockList, ButtonIcon, Link, OverlayWrapper, Popover, Table } from "optimizely-oui";
 // @ts-ignore
 import Icon from "react-oui-icons";
-import { GroupConfiguration } from "./models/Groupconfiguration";
+import { GroupConfiguration } from "./models/group-configuration";
 import "optimizely-oui/dist/styles.css";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useServerSettingsContext } from "./server-settings";
-import { ContentLink } from "./ContentLink";
+import { ContentLink } from "./content-link";
 
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
@@ -39,13 +39,13 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
       <Table density="loose" className="configuration-table plugin-grid">
         <Table.THead>
           <Table.TR>
-            <Table.TH width={100}>Content Link</Table.TH>
-            <Table.TH width={90}>From code</Table.TH>
-            {virtualContainersEnabled && <Table.TH width={90}>Is virtual</Table.TH>}
-            <Table.TH width={90}>Router</Table.TH>
+            <Table.TH width="100">Content Link</Table.TH>
+            <Table.TH width="90">From code</Table.TH>
+            {virtualContainersEnabled && <Table.TH width="90">Is virtual</Table.TH>}
+            <Table.TH width="90">Router</Table.TH>
             <Table.TH>Container type</Table.TH>
-            <Table.TH width={200}>Generator</Table.TH>
-            <Table.TH width={200}>&nbsp;</Table.TH>
+            <Table.TH width="200">Generator</Table.TH>
+            <Table.TH width="200">&nbsp;</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
@@ -65,7 +65,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                   </span>
                 )}
               </Table.TD>
-              <Table.TD>{(x.groupLevelConfigurations || []).join(" => ")}</Table.TD>
+              <Table.TD>{(x.groupLevelConfigurations || []).map(x => x.name).join(" => ")}</Table.TD>
               <Table.TD className="menu-cell">
                 {/*
                 <OverlayWrapper

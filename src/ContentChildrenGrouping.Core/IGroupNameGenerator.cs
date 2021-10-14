@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using System.Collections.Generic;
+using EPiServer.Core;
 
 namespace ContentChildrenGrouping.Core
 {
@@ -11,6 +12,11 @@ namespace ContentChildrenGrouping.Core
         /// unique generator name
         /// </summary>
         string Key { get; }
+
+        /// <summary>
+        /// Readonly generator settings
+        /// </summary>
+        Dictionary<string, string> Settings { get; }
 
         string GetName(IContent content);
     }
