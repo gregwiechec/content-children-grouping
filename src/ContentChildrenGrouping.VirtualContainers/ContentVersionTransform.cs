@@ -52,11 +52,10 @@ namespace ContentChildrenGrouping.VirtualContainers
             }
 
             var result = new List<ContentReference>();
-            foreach (var generator in configuration.GroupLevelConfigurations)
+            var generators = configuration.GroupLevelConfigurations.ToList();
+            for (var index = 0; index < generators.Count; index++)
             {
-                var name = generator.GetName(source);
-                result.Add(ExtendedGetChildrenQuery.GetVirtualContentLink(source.ParentLink, name.Replace("_", "-")));
-
+                result.Add(VirtualNamesParser.GetVirtualContentLink(source.ParentLink, source, generators, index));
             }
 
             target.Properties["VirtualContainerParents"] = string.Join(",", result.Select(x => x.ToString()));

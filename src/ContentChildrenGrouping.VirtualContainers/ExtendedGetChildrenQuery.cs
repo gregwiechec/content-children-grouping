@@ -49,8 +49,6 @@ namespace ContentChildrenGrouping.VirtualContainers
             if (!ContentReference.IsNullOrEmpty(parameters.ReferenceId))
             {
                 var selector = _languageSelectorFactory.AutoDetect(true);
-                
-                //TODO: vc allow multiple levels of virtual containers
 
                 // get children of virtual container
                 if (parameters.ReferenceId.IsVirtualContainer())
@@ -58,7 +56,21 @@ namespace ContentChildrenGrouping.VirtualContainers
                     return GetVirtualContainerChildren(parameters, selector);
                 }
 
-                if (GetVirtualContainers(parameters, selector, out var result))
+                // virtual containers works only for PageData
+                var parent = _contentRepository.Get<IContent>(parameters.ReferenceId);
+                if (!(parent is PageData))
+                {
+                    return base.GetContent(parameters);
+                }
+
+                var virtualContainer = GetContainerConfiguration(parameters.ReferenceId);
+                if (virtualContainer == null)
+                {
+                    return base.GetContent(parameters);
+                }
+
+                var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
+                if (GetVirtualContainers(parameters, selector, children, new List<string>(), virtualContainer, out var result))
                 {
                     return result;
                 }
@@ -74,48 +86,62 @@ namespace ContentChildrenGrouping.VirtualContainers
         /// </summary>
         /// <param name="parameters"></param>
         /// <param name="selector"></param>
+        /// <param name="children"></param>
+        /// <param name="generatedNames"></param>
+        /// <param name="containerConfiguration"></param>
         /// <param name="virtualContainers"></param>
         /// <returns></returns>
         private bool GetVirtualContainers(ContentQueryParameters parameters, LanguageSelector selector,
+            List<IContent> children,
+            List<string> generatedNames, ContainerConfiguration containerConfiguration,
             out IEnumerable<IContent> virtualContainers)
         {
-            var parent = _contentRepository.Get<IContent>(parameters.ReferenceId);
-            if (!(parent is PageData))
+            var groupNameGenerators = containerConfiguration.GroupLevelConfigurations.ToList();
+
+            // filter children that match all above filters
+            var filteredChildren = new List<IContent>();
+            if (generatedNames.Any())
             {
-                virtualContainers = null;
-                return false;
+                foreach (var content in children)
+                {
+                    var allMatch = true;
+                    for (var generatorIndex = 0; generatorIndex < generatedNames.Count; generatorIndex++)
+                    {
+                        var groupNameGenerator = groupNameGenerators[generatorIndex];
+                        if (groupNameGenerator.GetName(content).ToLowerInvariant() != generatedNames[generatorIndex])
+                        {
+                            allMatch = false;
+                            break;
+                        }
+                    }
+                    if (allMatch)
+                    {
+                        filteredChildren.Add(content);
+                    }
+                }
             }
-
-            var virtualContainer = GetContainerConfiguration(parameters.ReferenceId);
-            if (virtualContainer == null)
+            else
             {
-                virtualContainers = null;
-                return false;
+                filteredChildren = children;
             }
+            
+            var generatorLevel = generatedNames.Count;
 
-            var children = GetChildren(parameters, parameters.ReferenceId, selector).ToList();
-
-            var groupNameGenerator = virtualContainer.GroupLevelConfigurations.First();
-            var virtualContainerNames = children.Select(x => groupNameGenerator.GetName(x))
-                .Select(x => x.Replace("_", "-")) // ContentReference provider name cannot contains "_", because it's a separator
-                .Select(x => x.ToLowerInvariant())
-                .ToList()
-                .Distinct()
-                .OrderBy(x => x);
-
-            virtualContainers = virtualContainerNames.Select(x =>
+            var result = new List<IContent>();
+            foreach (var filteredChild in filteredChildren)
             {
-                var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
-                virtualContainerPage.Name = x.ToUpperInvariant();
-                virtualContainerPage.ContentLink = GetVirtualContentLink(parameters.ReferenceId, x);
-                return virtualContainerPage;
-            }).ToList();
+                var contentName = groupNameGenerators[generatorLevel].GetName(filteredChild).ToUpperInvariant();
+                if (result.Any(x => x.Name == contentName))
+                {
+                    continue;
+                }
+                var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(new ContentReference(parameters.ReferenceId.ID));
+                virtualContainerPage.Name = contentName;
+                virtualContainerPage.ContentLink = VirtualNamesParser.GetVirtualContentLink(parameters.ReferenceId, filteredChild, groupNameGenerators, generatorLevel);
+                result.Add(virtualContainerPage);
+            }
+            virtualContainers = result.OrderBy(x=>x.Name).ToList();
             return true;
-        }
-
-        public static ContentReference GetVirtualContentLink(ContentReference parentContentLink, string generatedName)
-        {
-            return new ContentReference(parentContentLink.ID, 0, VirtualContainerExtensions.ProviderPrefix + "-" + generatedName.ToLowerInvariant());
         }
 
         /// <summary>
@@ -133,24 +159,45 @@ namespace ContentChildrenGrouping.VirtualContainers
                 throw new Exception("Configuration not found for " + parameters.ReferenceId);
             }
 
-            string ParseFilter(ContentReference virtualContainerReference)
-            {
-                if (string.IsNullOrWhiteSpace(virtualContainerReference.ProviderName))
-                {
-                    return string.Empty;
-                }
-
-                var pageFilter = virtualContainerReference.ProviderName.Substring((VirtualContainerExtensions.ProviderPrefix + "-").Length);
-                return pageFilter;
-            }
-
-            var groupNameGenerator = configuration.GroupLevelConfigurations.First();
-
             var contentReference = new ContentReference(parameters.ReferenceId.ID);
             var filteredChildren = GetChildren(parameters, contentReference, languageSelector).ToList();
-            var filterText = ParseFilter(parameters.ReferenceId).ToLowerInvariant();
-            var result = filteredChildren.Where(x => groupNameGenerator.GetName(x).ToLowerInvariant() == filterText).ToList();
-            return result;
+            var generatedNames = VirtualNamesParser.ParseGeneratorValues(parameters.ReferenceId)
+                .Select(x => x.ToLowerInvariant()).ToList();
+
+            var groupNameGenerators = configuration.GroupLevelConfigurations.ToList();
+            
+            if (generatedNames.Count == groupNameGenerators.Count)
+            {
+                // should return children of virtual container
+                var result = new List<IContent>();
+                foreach (var filteredChild in filteredChildren)
+                {
+                    var allMatch = true;
+                    for (var generatorIndex = 0; generatorIndex < generatedNames.Count; generatorIndex++)
+                    {
+                        var groupNameGenerator = groupNameGenerators[generatorIndex];
+                        if (groupNameGenerator.GetName(filteredChild).ToLowerInvariant() != generatedNames[generatorIndex])
+                        {
+                            allMatch = false;
+                            break;
+                        }
+                    }
+                    if (allMatch)
+                    {
+                        result.Add(filteredChild); 
+                    }
+                }
+                return result;
+            }
+            else
+            {
+                // we should return virtual containers on specific level
+                if (GetVirtualContainers(parameters, languageSelector, filteredChildren, generatedNames, configuration, out var result))
+                {
+                    return result;
+                }
+                throw new Exception("Cannot get virtual containers for " + parameters.ReferenceId);
+            }
         }
 
         /// <summary>

@@ -172,9 +172,9 @@
     <Compile Include="ExtendedGetChildrenQuery.cs" />
     <Compile Include="ExtendedMissingContentLanguageInformationResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VirtualContainerExtensions.cs" />
     <Compile Include="VirtualContainerPage.cs" />
     <Compile Include="VirtualContainersInitialization.cs" />
+    <Compile Include="VirtualNamesParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
