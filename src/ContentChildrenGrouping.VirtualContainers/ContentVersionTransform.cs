@@ -3,31 +3,22 @@ using System.Linq;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
 using EPiServer;
-using EPiServer.Cms.Shell.UI.Rest.Internal;
 using EPiServer.Cms.Shell.UI.Rest.Models;
 using EPiServer.Cms.Shell.UI.Rest.Models.Transforms;
-using EPiServer.Cms.Shell.UI.Rest.Models.Transforms.Internal;
 using EPiServer.Core;
-using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
-using EPiServer.Web;
 
 namespace ContentChildrenGrouping.VirtualContainers
 {
     [ServiceConfiguration(typeof(IModelTransform))]
-    public class ExtendedContentVersionFilter: ContentVersionFilter
+    public class VirtualContainersTransform: TransformBase<StructureStoreContentDataModel>
     {
         private readonly VirtualContainersOptions _options;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         private readonly IContentLoader _contentLoader;
 
-        public ExtendedContentVersionFilter(
-            MissingContentLanguageInformationResolver contentLanguageInformationResolver,
-            IContentRepository contentRepository, LanguageResolver languageResolver,
-            ServiceAccessor<SiteDefinition> currentSiteDefinition, VirtualContainersOptions options,
-            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders, IContentLoader contentLoader) : base(
-            contentLanguageInformationResolver,
-            contentRepository, languageResolver, currentSiteDefinition)
+        public VirtualContainersTransform(VirtualContainersOptions options,
+            IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders, IContentLoader contentLoader)
         {
             _options = options;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
@@ -42,17 +33,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                 return;
             }
 
-            AssignVirtualContainerParents(source, target);
-
-            //if (source.IsVirtualContainer() && target.MissingLanguageBranch != null)
-            //{
-            //    target.MissingLanguageBranch.Reason = LanguageSelectionSource.None;
-            //}
-        }
-
-        private void AssignVirtualContainerParents(IContent content, StructureStoreContentDataModel target)
-        {
-            if (content.IsVirtualContainer())
+            if (source.IsVirtualContainer())
             {
                 return;
             }
@@ -62,7 +43,7 @@ namespace ContentChildrenGrouping.VirtualContainers
             {
                 return;
             }
-            var ancestors = _contentLoader.GetAncestors(content.ContentLink).ToList().Select(x => x.ContentLink.ToReferenceWithoutVersion()).ToList();
+            var ancestors = _contentLoader.GetAncestors(source.ContentLink).ToList().Select(x => x.ContentLink.ToReferenceWithoutVersion()).ToList();
 
             var configuration = configurations.FirstOrDefault(x => ancestors.Contains(x.ContainerContentLink.ToReferenceWithoutVersion()));
             if (configuration == null)
@@ -73,8 +54,8 @@ namespace ContentChildrenGrouping.VirtualContainers
             var result = new List<ContentReference>();
             foreach (var generator in configuration.GroupLevelConfigurations)
             {
-                var name = generator.GetName(content);
-                result.Add(ExtendedGetChildrenQuery.GetVirtualContentLink(content.ParentLink, name.Replace("_", "-")));
+                var name = generator.GetName(source);
+                result.Add(ExtendedGetChildrenQuery.GetVirtualContentLink(source.ParentLink, name.Replace("_", "-")));
 
             }
 
