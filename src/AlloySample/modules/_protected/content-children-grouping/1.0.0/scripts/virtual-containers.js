@@ -62,30 +62,22 @@ define([
 
         // update selected path and add virtual containers
         var originalGetTreePath = ContentTree.prototype._getTargetPath;
-        ContentTree.prototype._getTargetPath = function (args) {
-            if (!this.selectedNode) {
-                //TODO: VC When refreshing page with selected article, the path is not selected. Maybe path should be stored in contentItem
-                // new field array VirtualParents
-                // When using search, the content is also not selected
-                return originalGetTreePath.apply(this, arguments);
-            }
-            var parent = this.selectedNode.getParent();
-            if (!parent || !parent.item || !parent.item.contentLink) {
-                return originalGetTreePath.apply(this, arguments);
-            }
-
-            // not a virtual container
-            if (parent.item.contentLink.indexOf(virtaulContainersProvider) === -1) {
+        ContentTree.prototype._getTargetPath = function (targetContent) {
+            if (!targetContent.capabilities.isInVirtualContainer || !targetContent.properties.virtualContainerParents) {
                 return originalGetTreePath.apply(this, arguments);
             }
 
             var result = originalGetTreePath.apply(this, arguments);
             var deferred = new Deferred();
             result.then(function (targetPath) {
-                //TODO: VC allow more than one virtual container
-                targetPath.splice(targetPath.length - 1, 0, parent.item.contentLink);
+                var virtualContainers = targetContent.properties.virtualContainerParents.split(",");
+                //targetPath.splice(targetPath.length - 1, 0, virtualContainers);
+
+                // inser virtual container array to current target paths array
+                targetPath.splice.apply(targetPath, [targetPath.length - 1, 0].concat(virtualContainers));
+
                 deferred.resolve(targetPath);
-            });
+            }.bind(this));
             return deferred.promise;
         };
         ContentTree.prototype._getTargetPath.nom = "_getTargetPath";

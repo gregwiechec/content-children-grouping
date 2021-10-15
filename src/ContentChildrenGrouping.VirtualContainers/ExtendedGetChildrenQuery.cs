@@ -107,12 +107,15 @@ namespace ContentChildrenGrouping.VirtualContainers
             {
                 var virtualContainerPage = _contentRepository.GetDefault<VirtualContainerPage>(parameters.ReferenceId);
                 virtualContainerPage.Name = x.ToUpperInvariant();
-                virtualContainerPage.ContentLink =
-                    new ContentReference(parameters.ReferenceId.ID, 0,
-                        VirtualContainerExtensions.ProviderPrefix + "-" + x);
+                virtualContainerPage.ContentLink = GetVirtualContentLink(parameters.ReferenceId, x);
                 return virtualContainerPage;
             }).ToList();
             return true;
+        }
+
+        public static ContentReference GetVirtualContentLink(ContentReference parentContentLink, string generatedName)
+        {
+            return new ContentReference(parentContentLink.ID, 0, VirtualContainerExtensions.ProviderPrefix + "-" + generatedName.ToLowerInvariant());
         }
 
         /// <summary>
