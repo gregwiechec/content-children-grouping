@@ -1,16 +1,18 @@
 define([
+    "epi-cms/ApplicationSettings",
 	"epi-cms/component/PageNavigationTree",
 	"epi-cms/widget/ContentTree"
 ], function (
+    ApplicationSettings,
     PageNavigationTree,
 	ContentTree
 ) {
-    return function (configurationContainerLinks) {
+    return function () {
 
         // override default page tree icon
         var originalGetIconClass = PageNavigationTree.prototype.getIconClass;
         PageNavigationTree.prototype.getIconClass = function (item, opened) {
-            if (configurationContainerLinks.indexOf(item.contentLink) !== -1) {
+            if (ApplicationSettings.allConfigurationContainerLinks.indexOf(item.contentLink) !== -1) {
                 return "epi-iconObjectSharedBlockContextual";
             }
             return originalGetIconClass.apply(this, arguments);
@@ -21,7 +23,7 @@ define([
         var originalGetTooltip = ContentTree.prototype.getTooltip;
         ContentTree.prototype.getTooltip = function (item, opened) {
             var result = originalGetTooltip.apply(this, arguments);
-            if (configurationContainerLinks.indexOf(item.contentLink) !== -1) {
+            if (ApplicationSettings.allConfigurationContainerLinks.indexOf(item.contentLink) !== -1) {
                 return result +
                     "\r\nThis content is configured as container. Structe under this content will be modified automatically.";
             }
