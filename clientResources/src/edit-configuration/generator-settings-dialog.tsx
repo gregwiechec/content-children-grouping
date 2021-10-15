@@ -24,8 +24,10 @@ export const GeneratorSettingsDialog = ({ generator, onClose, onSave }: Generato
   return (
     <DialogNew
       title="Generator settings"
+      className="generator-settings-dialog"
       hasCloseButton={true}
       hasOverlay={true}
+      onClose={onClose}
       footerButtonList={[
         <Button style="plain" key={0} onClick={onClose}>
           Cancel
@@ -71,3 +73,7 @@ const getDefaultGeneratorSettings = (generator: GeneratorConfiguration | null): 
   });
   return result;
 };
+
+//TODO: support numbers for inputs
+//TODO: change size of inputs
+//TODO: support default values when crating generators

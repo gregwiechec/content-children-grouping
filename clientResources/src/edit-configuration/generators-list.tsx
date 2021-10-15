@@ -74,7 +74,7 @@ export const GeneratorsList = ({
                   onClick={() => onRemoveGenerator(index)}
                   size="small"
                   style="outline"
-                  title="Close Dialog"
+                  title="Remove generator"
                 />
               </>
             )}
@@ -104,3 +104,4 @@ export const GeneratorsList = ({
     </>
   );
 };
+//TODO: show generator settings on list
