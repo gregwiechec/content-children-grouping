@@ -14,6 +14,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
 
         public bool RoutingEnabled { get; set; }
 
+        public bool IsVirtualContainer { get; set; }
+
         public string ContainerType { get; set; }
 
         public string GroupLevelConfigurations { get; set; }

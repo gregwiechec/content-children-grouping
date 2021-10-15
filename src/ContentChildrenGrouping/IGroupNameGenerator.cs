@@ -54,6 +54,10 @@ namespace ContentChildrenGrouping.Containers
 
         public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
         {
+            if (settings == null)
+            {
+                return new ByNameGroupNameGenerator();
+            }
             var startIndex = 0;
             if (settings.TryGetValue("startIndex", out var value))
             {
@@ -106,6 +110,10 @@ namespace ContentChildrenGrouping.Containers
 
         public IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings)
         {
+            if (settings == null)
+            {
+                return new ByCreateDateGroupNameGenerator();
+            }
             settings.TryGetValue("dateFormat", out var dateFormat);
             settings.TryGetValue("defaultValue", out var defaultValue);
 

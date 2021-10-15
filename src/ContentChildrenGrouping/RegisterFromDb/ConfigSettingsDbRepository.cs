@@ -49,6 +49,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     ContainerContentLink = x.ContainerContentLink,
                     ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
                     RoutingEnabled = x.RoutingEnabled,
+                    IsVirtualContainer = x.IsVirtualContainer,
                     GroupLevelConfigurations = _nameGeneratorSerializer.Deserialize(x.GroupLevelConfigurations),
                     ChangedBy = x.ChangedBy,
                     ChangedOn = date
@@ -76,6 +77,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 ddsConfig.GroupLevelConfigurations =
                     _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations);
                 ddsConfig.RoutingEnabled = userConfig.RoutingEnabled;
+                ddsConfig.IsVirtualContainer = userConfig.IsVirtualContainer;
                 store.Save(ddsConfig);
                 containerConfigurations.Remove(userConfig);
             }
@@ -87,6 +89,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     ContainerContentLink = userConfig.ContainerContentLink,
                     ContainerType = userConfig.ContainerType.TypeToString() ?? "",
                     RoutingEnabled = userConfig.RoutingEnabled,
+                    IsVirtualContainer = userConfig.IsVirtualContainer,
                     GroupLevelConfigurations = _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations),
                     ChangedBy = userConfig.ChangedBy,
                     ChangedOn = userConfig.ChangedOn?.ToString(DateFormat)
