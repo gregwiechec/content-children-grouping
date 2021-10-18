@@ -12,6 +12,8 @@ interface PluginProps {
   dataService?: DataService | null;
 }
 
+let msgTimeoutHandler: any;
+
 export default function Plugin({ dataService }: PluginProps) {
   if (!dataService) {
     dataService = defaultDataService;
@@ -19,24 +21,19 @@ export default function Plugin({ dataService }: PluginProps) {
 
   const [message, setMessage] = useState("");
 
-  const [msgTimeoutHandler, setMsgTimeoutHandler] = useState<number | null>(null);
-
-
   useEffect(() => {
     setMessage(message);
     if (message) {
       if (msgTimeoutHandler) {
         clearTimeout(msgTimeoutHandler);
       }
-      const handler = setTimeout(() => setMessage(""), 5000);
-      // @ts-ignore
-      setMsgTimeoutHandler(handler);
+        msgTimeoutHandler = setTimeout(() => setMessage(""), 5000);
     }
 
     return () => {
       if (msgTimeoutHandler) {
         clearTimeout(msgTimeoutHandler);
-        setMsgTimeoutHandler(null);
+          msgTimeoutHandler = null;
       }
     };
   }, [message, msgTimeoutHandler]);
