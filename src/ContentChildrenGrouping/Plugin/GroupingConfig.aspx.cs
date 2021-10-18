@@ -48,26 +48,19 @@ namespace ContentChildrenGrouping.Plugin
             return resolvedPath;
         }
 
-        private string ControllerUrl
-        {
-            get
-            {
-                _moduleResolver.Service.TryResolvePath(typeof(GroupingConfig).Assembly, "ConfigSettings/",
-                    out var resolvedPath);
-                return resolvedPath;
-            }
-        }
-
         protected string Configuration
         {
             get
             {
                 var contentUrl = Paths.ToResource("CMS", "Home#context=epi.cms.contentdata:///{contentLink}");
 
+                _moduleResolver.Service.TryResolvePath(typeof(GroupingConfig).Assembly, "ConfigSettings/",
+                    out var controllerUrl);
+
                 var groupingOptions = _childrenGroupingOptions.Service;
                 var config = new
                 {
-                    baseUrl = ControllerUrl,
+                    baseUrl = controllerUrl,
                     availableNameGenerators = _groupNameGenerators.Service.Where(x => x is IDbAvailableGroupNameGenerator).Select(x => x.Key),
                     options = new
                     {
