@@ -7,6 +7,13 @@
             <div>
                 <asp:Label runat="server" AssociatedControlID="ArticlesContainer" Translate="<%$ Resources: EPiServer, admin.siteinformationedit.startpage%>" />
                 <EPiServer:InputPageReference Style="display: inline;" ID="ArticlesContainer" AutoPostBack="false" runat="server"/>
+            </div>            
+            <div>
+                <asp:Label runat="server" AssociatedControlID="ArticleType" Text="Article type" />
+                <asp:RadioButtonList id="ArticleType" runat="server">
+                    <asp:ListItem Selected="True">Animal</asp:ListItem>
+                    <asp:ListItem>Recipe</asp:ListItem>
+                </asp:RadioButtonList>
             </div>
             <div>
                 <asp:Label AssociatedControlID="NumberOfArticles" runat="server" >Number of articles</asp:Label>
