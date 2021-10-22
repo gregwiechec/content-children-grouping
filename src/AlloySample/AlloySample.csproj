@@ -346,6 +346,8 @@
       <DependentUpon>ArticlesGenerator.aspx</DependentUpon>
     </Compile>
     <Compile Include="Plugins\ListOfAnimals.cs" />
+    <Compile Include="Plugins\ListOfRecipes.cs" />
+    <Compile Include="Plugins\LoremIpsumGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

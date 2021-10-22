@@ -2,8 +2,7 @@
 {
     public static class ListOfAnimals
     {
-        public static string[] Animals = new[]
-        {
+        public static string[] Animals = {
             "Aardvark",
             "Abyssinian",
             "Adelie Penguin",
@@ -517,7 +516,29 @@
             "Woolly Mammoth",
             "Woolly Monkey",
             "Wrasse",
-            "Wyoming Toad"
+            "Wyoming Toad",
+            "X-Ray Tetra",
+            "Xerus",
+            "Xoloitzcuintli",
+            "Yak",
+            "Yakutian Laika",
+            "Yellow Sac Spider",
+            "Yellow-Eyed Penguin",
+            "Yellowfin Tuna",
+            "Yeti Crab",
+            "Yoranian",
+            "Yorkie Bichon",
+            "Yorkie Poo",
+            "Yorkshire Terrier",
+            "Zebra",
+            "Zebra Finch",
+            "Zebra Mussels",
+            "Zebra Pleco",
+            "Zebra Shark",
+            "Zebu",
+            "Zonkey",
+            "Zorse",
+            "Zuchon"
         };
     }
 }

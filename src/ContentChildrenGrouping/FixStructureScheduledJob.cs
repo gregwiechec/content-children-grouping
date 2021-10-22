@@ -28,21 +28,28 @@ namespace ContentChildrenGrouping
         private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         private readonly IContentStructureModifier _contentStructureModifier;
+        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
         private bool _isStopped;
 
-        public FixStructureScheduledJob() : this(ServiceLocator.Current.GetInstance<IContentRepository>(),
+        public FixStructureScheduledJob() : this(
+            ServiceLocator.Current.GetInstance<IContentRepository>(),
             ServiceLocator.Current.GetAllInstances<IContentChildrenGroupsLoader>(),
-            ServiceLocator.Current.GetInstance<IContentStructureModifier>())
+            ServiceLocator.Current.GetInstance<IContentStructureModifier>(),
+            ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
+        )
         {
         }
 
-        public FixStructureScheduledJob(IContentRepository contentRepository,
+        public FixStructureScheduledJob(
+            IContentRepository contentRepository,
             IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
-            IContentStructureModifier contentStructureModifier)
+            IContentStructureModifier contentStructureModifier,
+            ContentChildrenGroupingOptions childrenGroupingOptions)
         {
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
             _contentStructureModifier = contentStructureModifier;
+            _childrenGroupingOptions = childrenGroupingOptions;
             IsStoppable = true;
         }
 
@@ -58,6 +65,14 @@ namespace ContentChildrenGrouping
 
             var totalUpdated = 0;
             var totalParsed = 0;
+
+            if (_childrenGroupingOptions.StructureUpdateEnabled)
+            {
+                var text = "Job will not run when `StructureUpdateEnabled` option is enabled";
+                OnStatusChanged(text);
+                return text;
+            }
+
 
             void Notify(ContainerConfiguration configuration)
             {

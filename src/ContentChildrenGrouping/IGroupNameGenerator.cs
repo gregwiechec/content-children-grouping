@@ -42,6 +42,12 @@ namespace ContentChildrenGrouping.Containers
 
             var result = content.Name.Substring(_startIndex, _countLetters);
             result = result.Trim();
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return _defaultName;
+            }
+
             return result;
         }
 

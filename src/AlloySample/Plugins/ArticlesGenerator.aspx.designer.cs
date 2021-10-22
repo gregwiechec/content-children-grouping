@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AlloySample.Plugins {
-    
-    
-    public partial class ArticlesGenerator {
-        
+namespace AlloySample.Plugins
+{
+
+
+    public partial class ArticlesGenerator
+    {
+
         /// <summary>
         /// ArticlesContainer control.
         /// </summary>
@@ -20,7 +22,16 @@ namespace AlloySample.Plugins {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::EPiServer.Web.WebControls.InputPageReference ArticlesContainer;
-        
+
+        /// <summary>
+        /// ArticleType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList ArticleType;
+
         /// <summary>
         /// NumberOfArticles control.
         /// </summary>
@@ -29,7 +40,7 @@ namespace AlloySample.Plugins {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox NumberOfArticles;
-        
+
         /// <summary>
         /// MaxNumberOfArticlesValidator control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace AlloySample.Plugins {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RangeValidator MaxNumberOfArticlesValidator;
-        
+
         /// <summary>
         /// GenerateButton control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace AlloySample.Plugins {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::EPiServer.UI.WebControls.ToolButton GenerateButton;
-        
+
         /// <summary>
         /// lblResult control.
         /// </summary>

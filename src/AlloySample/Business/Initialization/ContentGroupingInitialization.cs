@@ -14,8 +14,8 @@ namespace AlloySample.Business.Initialization
     {
         public void Initialize(InitializationEngine context)
         {
-           context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterByLetter(113);
-           context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterVirtualContainerByLetter(/*220*/476, 2);
+           //context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterByLetter(113);
+           //context.Locate.Advanced.GetInstance<IContentChildrenGroupsRegistration>().RegisterVirtualContainerByLetter(/*220*/476, 2);
         }
 
         public void Uninitialize(InitializationEngine context)
