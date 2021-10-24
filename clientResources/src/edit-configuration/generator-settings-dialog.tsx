@@ -21,6 +21,15 @@ export const GeneratorSettingsDialog = ({ generator, onClose, onSave }: Generato
     setCurrentValue(updated);
   };
 
+  const isValid = () => {
+    // default name cannot contains "_"
+    if (currentValue?.defaultName && currentValue?.defaultName?.indexOf("_") !== -1) {
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <DialogNew
       title="Generator settings"
@@ -32,7 +41,7 @@ export const GeneratorSettingsDialog = ({ generator, onClose, onSave }: Generato
         <Button style="plain" key={0} onClick={onClose}>
           Cancel
         </Button>,
-        <Button style="highlight" key={1} onClick={() => onSave(currentValue)}>
+        <Button style="highlight" key={1} onClick={() => onSave(currentValue)} isDisabled={!isValid()}>
           Save
         </Button>
       ]}
@@ -40,7 +49,14 @@ export const GeneratorSettingsDialog = ({ generator, onClose, onSave }: Generato
       <Fieldset>
         {Object.keys(currentValue || {}).map((x) => {
           return (
-            <Input key={x} id={x} label={x} value={currentValue[x]} type="text" onChange={(v) => updateValue(x, v.target.value)} />
+            <Input
+              key={x}
+              id={x}
+              label={x}
+              value={currentValue[x]}
+              type="text"
+              onChange={(v) => updateValue(x, v.target.value)}
+            />
           );
         })}
       </Fieldset>
