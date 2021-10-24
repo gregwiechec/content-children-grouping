@@ -42,6 +42,10 @@ tr:hover {
   .add-button {
     margin-left: 8px;
   }
+
+  &.background--white {
+    background-color: inherit !important;
+  }
 }
 
 .oui-button.add-configuration-button {
