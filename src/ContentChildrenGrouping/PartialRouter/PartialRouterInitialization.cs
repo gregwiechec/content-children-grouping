@@ -1,11 +1,12 @@
 ﻿using System.Web.Routing;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.PartialRouter;
 using EPiServer;
 using EPiServer.Framework;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
-namespace ContentChildrenGrouping.PartialRouter
+namespace ContentChildrenGrouping.Containers.PartialRouter
 {
     /// <summary>
     /// Register CustomPartialRouter

@@ -7,53 +7,13 @@ using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
-using EPiServer.Framework;
-using EPiServer.Framework.Initialization;
-using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Containers
 {
-    [InitializableModule]
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class ChangeEventInitialization : IInitializableModule
-    {
-        private ILogger _log = LogManager.GetLogger(typeof(ChangeEventInitialization));
-
-        public void Initialize(InitializationEngine context)
-        {
-            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
-                .StructureUpdateEnabled;
-            if (!structureUpdateEnabled)
-            {
-                return;
-            }
-
-            var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
-            contentEvents.SavingContent += ContentEvents_SavingContent;
-            _log.Information($"Structure SavingContent registered");
-        }
-
-        public void Uninitialize(InitializationEngine context)
-        {
-            var structureUpdateEnabled = ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
-                .StructureUpdateEnabled;
-            if (!structureUpdateEnabled)
-            {
-                return;
-            }
-
-            var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
-            contentEvents.SavingContent -= ContentEvents_SavingContent;
-            _log.Information($"Structure SavingContent unregistered");
-        }
-
-        private void ContentEvents_SavingContent(object sender, EPiServer.ContentEventArgs e)
-        {
-            ServiceLocator.Current.GetInstance<IContentStructureModifier>().UpdateContentParent(e.Content);
-        }
-    }
-
+    /// <summary>
+    /// Service for updating content structure and creating container pages
+    /// </summary>
     public interface IContentStructureModifier
     {
         void UpdateContentParent(IContent content);
@@ -62,20 +22,22 @@ namespace ContentChildrenGrouping
             ContentReference parentParentContentLink, IContent content);
     }
 
-    /// <summary>
-    /// Update content parent page to match the structure tree
-    /// </summary>
+    /// <inheritdoc />
     [ServiceConfiguration(typeof(IContentStructureModifier))]
     public class ContentStructureModifier : IContentStructureModifier
     {
+        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
         private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         private readonly IContentProviderManager _providerManager;
 
-        public ContentStructureModifier(IContentRepository contentRepository,
+        public ContentStructureModifier(
+            ContentChildrenGroupingOptions childrenGroupingOptions,
+            IContentRepository contentRepository,
             IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
             IContentProviderManager providerManager)
         {
+            _childrenGroupingOptions = childrenGroupingOptions;
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
             _providerManager = providerManager;
@@ -175,13 +137,12 @@ namespace ContentChildrenGrouping
         /// </summary>
         private void UpdateExternalUrl(IContent content, ContainerConfiguration containerConfiguration)
         {
-            if (containerConfiguration == null)
+            if (!_childrenGroupingOptions.RouterEnabled)
             {
                 return;
             }
 
-            var pageData = content as PageData;
-            if (pageData == null)
+            if (!(content is PageData pageData))
             {
                 return;
             }

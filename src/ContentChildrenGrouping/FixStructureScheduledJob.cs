@@ -12,8 +12,11 @@ using EPiServer.Scheduler;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping
+namespace ContentChildrenGrouping.Containers
 {
+    /// <summary>
+    /// Scheduled job used to update content structure
+    /// </summary>
     [ScheduledPlugIn(DefaultEnabled = false,
         DisplayName = "Fix content groups hierarchy",
         Description = "Job will move content to containers based on configuration",
