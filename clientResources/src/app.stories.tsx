@@ -30,7 +30,7 @@ const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled
   return {
     dataService: dataService,
     availableNameGenerators: ["Name", "Create Date", "Very long name generator"],
-    defaultContainerType: "",
+    defaultContainerType: "Alloy.ContainerPage, Alloy",
     contentUrl: "http://google.com/{contentLink}",
     options: {
       customIconsEnabled: false,

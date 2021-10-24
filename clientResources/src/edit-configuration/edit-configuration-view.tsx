@@ -28,6 +28,7 @@ export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps)
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
   const {
+    defaultContainerType,
     availableNameGenerators = [],
     options: { databaseConfigurationsEnabled = true, virtualContainersEnabled = true }
   } = useServerSettingsContext();
@@ -183,30 +184,26 @@ export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps)
           />
           {!virtualContainersEnabled && <div className="text-description">Virtual containers are not enabled</div>}
         </GridCell>
-
-        {!isVirtualContainer && (
-          <>
-            <GridCell>
+          <GridCell>
               <Checkbox
-                label="Router enabled"
-                checked={isRoutingEnabled}
-                onChange={(e) => setIsRoutingEnabled(e.target.checked)}
-                isDisabled={isReadonly}
+                  label="Router enabled"
+                  checked={isRoutingEnabled}
+                  onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+                  isDisabled={isReadonly || isVirtualContainer}
               />
-            </GridCell>
-            <GridCell large={12} medium={8} small={4}>
+          </GridCell>
+          <GridCell large={12} medium={8} small={4}>
               <Input
-                type="text"
-                id="edit-configuration-type"
-                label="Container type name"
-                note="Type format: [Full type name, Assembly Name]"
-                value={containerTypeName}
-                onChange={(e) => setContainerTypeName(e.target.value)}
-                isDisabled={isReadonly}
+                  type="text"
+                  id="edit-configuration-type"
+                  label="Container type name"
+                  note="Type format: [Full type name, Assembly Name]"
+                  placeholder={defaultContainerType ? "Default: " + defaultContainerType : ""}
+                  value={containerTypeName}
+                  onChange={(e) => setContainerTypeName(e.target.value)}
+                  isDisabled={isReadonly || isVirtualContainer}
               />
-            </GridCell>
-          </>
-        )}
+          </GridCell>
         <GridCell large={12} medium={8} small={4}>
           <Label>Name generators *</Label>
           <GeneratorsList
