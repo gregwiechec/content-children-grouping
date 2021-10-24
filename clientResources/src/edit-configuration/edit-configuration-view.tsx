@@ -246,4 +246,3 @@ export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps)
     </GridContainer>
   );
 };
-//TODO: when virtual container is true, then make router and container type readonly
