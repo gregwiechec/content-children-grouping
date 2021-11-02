@@ -19,13 +19,13 @@ namespace ContentChildrenGrouping.Core
         /// When true, then during content saving, the structure is updated.
         /// Default true
         /// </summary>
-        public bool StructureUpdateEnabled { get; set; } = false;
+        public bool StructureUpdateEnabled { get; set; } = true;
 
         /// <summary>
         /// When true, then containers can be configured using admin plugin.
         /// Default false
         /// </summary>
-        public bool DatabaseConfigurationsEnabled { get; set; } = false;
+        public bool DatabaseConfigurationsEnabled { get; set; } = true;
 
         /// <summary>
         /// When true, then container icon is replaced with custom icon.
@@ -40,3 +40,4 @@ namespace ContentChildrenGrouping.Core
         public bool SearchCommandEnabled { get; set; } = true;
     }
 }
+//TODO: check if editor is creating container manually
