@@ -1,35 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using ContentChildrenGrouping.Containers;
 using ContentChildrenGrouping.Core;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping.RegisterFromCode
+namespace ContentChildrenGrouping.Containers.RegisterFromCode
 {
     public interface IContentChildrenGroupsRegistration
     {
         void Register(ContainerConfiguration configuration);
-
-        void RegisterByLetter(ContentReference containerId, Type containerType = null); //TODO: add format
-
-        void RegisterByCreateDate(ContentReference containerId, Type containerType = null); //TODO: add format
-
-        void RegisterVirtualContainerByLetter(ContentReference containerId, int countLetters = 1);
     }
 
     public static class ContentChildrenGroupsRegistrationExtensions
     {
         public static void RegisterByLetter(this IContentChildrenGroupsRegistration childrenGroupsRegistration,
-            int containerId, Type containerType = null)
+            int containerId, Type containerType = null, int countLetters = 1)
         {
-            childrenGroupsRegistration.RegisterByLetter(new ContentReference(containerId), containerType);
+            childrenGroupsRegistration.Register(new ContainerConfiguration
+            {
+                ContainerContentLink = new ContentReference(containerId),
+                ContainerType = containerType,
+                GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, countLetters)}
+            });
+        }
+
+        public static void RegisterByCreateDate(this IContentChildrenGroupsRegistration childrenGroupsRegistration,
+            int containerId, string dateFormat = ByCreateDateGroupNameGenerator.DefaultFormat,
+            Type containerType = null)
+        {
+            childrenGroupsRegistration.Register(new ContainerConfiguration
+            {
+                ContainerContentLink = new ContentReference(containerId),
+                ContainerType = containerType,
+                GroupLevelConfigurations = new[] {new ByCreateDateGroupNameGenerator(dateFormat)}
+            });
         }
 
         public static void RegisterVirtualContainerByLetter(
             this IContentChildrenGroupsRegistration childrenGroupsRegistration, int containerId, int countLetters = 1)
         {
-            childrenGroupsRegistration.RegisterVirtualContainerByLetter(new ContentReference(containerId), countLetters);
+            childrenGroupsRegistration.Register(new ContainerConfiguration
+            {
+                ContainerContentLink = new ContentReference(containerId),
+                IsVirtualContainer = true,
+                GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, countLetters)}
+            });
         }
     }
 
@@ -42,35 +57,5 @@ namespace ContentChildrenGrouping.RegisterFromCode
         {
             Configurations.Add(configuration);
         }
-
-        public void RegisterByLetter(ContentReference containerId, Type containerType = null)
-        {
-            Register(new ContainerConfiguration
-            {
-                ContainerContentLink = containerId,
-                ContainerType = containerType,
-                GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, 1, "_no_category")}
-            });
-        }
-
-        public void RegisterByCreateDate(ContentReference containerId, Type containerType = null)
-        {
-            Register(new ContainerConfiguration
-            {
-                ContainerContentLink = containerId,
-                ContainerType = containerType,
-                GroupLevelConfigurations = new[] {new ByCreateDateGroupNameGenerator("yy-mm-dd", "no_date")}
-            });
-        }
-
-        public void RegisterVirtualContainerByLetter(ContentReference containerId, int countLetters)
-        {
-            Register(new ContainerConfiguration
-            {
-                ContainerContentLink = containerId,
-                IsVirtualContainer = true,
-                GroupLevelConfigurations = new[] { new ByNameGroupNameGenerator(0, countLetters, "_no_category") }
-            });
-        }
-   }
+    }
 }

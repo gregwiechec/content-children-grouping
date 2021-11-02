@@ -30,11 +30,13 @@ namespace ContentChildrenGrouping.Containers
     {
         public string Key => "Name";
 
+        public const string DefaultName = "!default";
+
         private readonly int _startIndex;
         private readonly int _countLetters;
         private readonly string _defaultName;
 
-        public ByNameGroupNameGenerator(int startIndex = 0, int countLetters = 1, string defaultName = "_default")
+        public ByNameGroupNameGenerator(int startIndex = 0, int countLetters = 1, string defaultName = DefaultName)
         {
             _startIndex = startIndex;
             _countLetters = countLetters;
@@ -99,10 +101,13 @@ namespace ContentChildrenGrouping.Containers
     {
         public string Key => "Create date";
 
+        public const string DefaultFormat = "yy-MMM";
+        public const string DefaultName = "!default";
+
         private readonly string _dateFormat;
         private readonly string _defaultValue;
 
-        public ByCreateDateGroupNameGenerator(string dateFormat = "yy-MMM", string defaultValue = "_default")
+        public ByCreateDateGroupNameGenerator(string dateFormat = DefaultFormat, string defaultValue = DefaultName)
         {
             _dateFormat = dateFormat;
             _defaultValue = defaultValue;
