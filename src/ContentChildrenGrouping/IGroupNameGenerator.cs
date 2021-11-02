@@ -9,7 +9,7 @@ namespace ContentChildrenGrouping.Containers
     /// <summary>
     /// When generator class implements this interface, then generator is available as DB plugin
     /// </summary>
-    public interface IDbAvailableGroupNameGenerator: IGroupNameGenerator //TODO: remove this interface
+    public interface IDbAvailableGroupNameGenerator
     {
         /// <summary>
         /// unique generator name
