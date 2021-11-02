@@ -246,3 +246,4 @@ export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps)
     </GridContainer>
   );
 };
+//TODO: add resources

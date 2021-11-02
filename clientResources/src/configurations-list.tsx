@@ -39,13 +39,13 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
       <Table density="loose" className="configuration-table plugin-grid">
         <Table.THead>
           <Table.TR>
-            <Table.TH width="100">Content Link</Table.TH>
-            <Table.TH width="90">From code</Table.TH>
-            {virtualContainersEnabled && <Table.TH width="90">Is virtual</Table.TH>}
-            <Table.TH width="90">Router</Table.TH>
+            <Table.TH width="120px">Content Link</Table.TH>
+            <Table.TH width="80px">From code</Table.TH>
+            {virtualContainersEnabled && <Table.TH width="80px">Is virtual</Table.TH>}
+            <Table.TH width="80px">Router</Table.TH>
             <Table.TH>Container type</Table.TH>
-            <Table.TH width="200">Generator</Table.TH>
-            <Table.TH width="200">&nbsp;</Table.TH>
+            <Table.TH width="200px">Generator</Table.TH>
+            <Table.TH width="200px">&nbsp;</Table.TH>
           </Table.TR>
         </Table.THead>
         <Table.TBody>
