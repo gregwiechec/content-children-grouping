@@ -11,9 +11,9 @@ namespace ContentChildrenGrouping.RegisterFromCode
     {
         void Register(ContainerConfiguration configuration);
 
-        void RegisterByLetter(ContentReference containerId, Type containerType = null);
+        void RegisterByLetter(ContentReference containerId, Type containerType = null); //TODO: add format
 
-        void RegisterByCreateDate(ContentReference containerId, Type containerType = null);
+        void RegisterByCreateDate(ContentReference containerId, Type containerType = null); //TODO: add format
 
         void RegisterVirtualContainerByLetter(ContentReference containerId, int countLetters = 1);
     }

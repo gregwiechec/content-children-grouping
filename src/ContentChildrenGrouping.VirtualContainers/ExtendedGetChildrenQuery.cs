@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Web;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
 using EPiServer;
@@ -48,6 +50,10 @@ namespace ContentChildrenGrouping.VirtualContainers
 
             if (!ContentReference.IsNullOrEmpty(parameters.ReferenceId))
             {
+                var queryTime = DateTime.Now;
+
+                Thread.Sleep(1);
+
                 var selector = _languageSelectorFactory.AutoDetect(true);
 
                 // get children of virtual container
@@ -66,6 +72,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                 var virtualContainer = GetContainerConfiguration(parameters.ReferenceId);
                 if (virtualContainer == null)
                 {
+                    HttpContext.Current.Items["querytime"] = (DateTime.Now - queryTime).Milliseconds;
                     return base.GetContent(parameters);
                 }
 

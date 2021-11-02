@@ -9,8 +9,18 @@ namespace ContentChildrenGrouping.Containers
     /// <summary>
     /// When generator class implements this interface, then generator is available as DB plugin
     /// </summary>
-    public interface IDbAvailableGroupNameGenerator: IGroupNameGenerator
+    public interface IDbAvailableGroupNameGenerator: IGroupNameGenerator //TODO: remove this interface
     {
+        /// <summary>
+        /// unique generator name
+        /// </summary>
+        string Key { get; }
+
+        /// <summary>
+        /// Readonly generator settings
+        /// </summary>
+        Dictionary<string, string> Settings { get; }
+
         IGroupNameGenerator CreateGenerator(Dictionary<string, string> settings);
     }
 
@@ -131,8 +141,6 @@ namespace ContentChildrenGrouping.Containers
     [ServiceConfiguration(typeof(IGroupNameGenerator))]
     internal class ByExpressionGroupNameGenerator : IGroupNameGenerator
     {
-        public string Key => "Expression";
-        
         private readonly Func<IContent, string> _expression;
 
         public ByExpressionGroupNameGenerator()
@@ -149,7 +157,5 @@ namespace ContentChildrenGrouping.Containers
         {
             return _expression(content);
         }
-
-        public Dictionary<string, string> Settings => new Dictionary<string, string>();
     }
 }

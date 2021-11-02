@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 
 namespace ContentChildrenGrouping.Core
 {
@@ -9,15 +8,10 @@ namespace ContentChildrenGrouping.Core
     public interface IGroupNameGenerator
     {
         /// <summary>
-        /// unique generator name
+        /// Generates name for the container
         /// </summary>
-        string Key { get; }
-
-        /// <summary>
-        /// Readonly generator settings
-        /// </summary>
-        Dictionary<string, string> Settings { get; }
-
+        /// <param name="content"></param>
+        /// <returns>Container name</returns>
         string GetName(IContent content);
     }
 }

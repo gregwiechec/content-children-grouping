@@ -61,7 +61,7 @@ namespace ContentChildrenGrouping.Plugin
                 var config = new
                 {
                     baseUrl = controllerUrl,
-                    availableNameGenerators = _groupNameGenerators.Service.Where(x => x is IDbAvailableGroupNameGenerator).Select(x => x.Key),
+                    availableNameGenerators = _groupNameGenerators.Service.OfType<IDbAvailableGroupNameGenerator>().Select(x => x.Key),
                     options = new
                     {
                         groupingOptions.StructureUpdateEnabled,

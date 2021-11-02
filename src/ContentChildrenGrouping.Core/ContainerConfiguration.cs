@@ -40,7 +40,7 @@ namespace ContentChildrenGrouping.Core
         /// <summary>
         /// login of user who edited edited/configuration
         /// </summary>
-        public string ChangedBy { get; set; }
+        public string ChangedBy { get; set; } //TODO: remove
 
         /// <summary>
         /// Date when configuration was changed lastTime

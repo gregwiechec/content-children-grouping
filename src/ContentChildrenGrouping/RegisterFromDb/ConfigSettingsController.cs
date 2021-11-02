@@ -85,10 +85,15 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     .ToString(),
                 containerTypeName = containerConfiguration.ContainerType.TypeToString(),
                 routingEnabled = containerConfiguration.RoutingEnabled,
-                groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g =>new GeneratorSettingsViewModel
+                groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g =>
                 {
-                    name = g.Key,
-                    settings = g.Settings
+                    var dbGenerator = g as IDbAvailableGroupNameGenerator;
+                    var generatorSettingsViewModel = new GeneratorSettingsViewModel
+                    {
+                        name = dbGenerator == null ? g.GetType().Name : dbGenerator.Key,
+                        settings = dbGenerator == null ? new Dictionary<string, string>() : dbGenerator.Settings
+                    };
+                    return generatorSettingsViewModel;
                 }),
                 isVirtualContainer = containerConfiguration.IsVirtualContainer,
                 fromCode = fromCode,
