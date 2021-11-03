@@ -39,3 +39,4 @@ export const PluginInfo = () => {
     </GridContainer>
   );
 };
+//TODO: highlight values different fom default
