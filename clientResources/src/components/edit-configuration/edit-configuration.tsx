@@ -8,7 +8,7 @@ import { useDataServiceContext } from "../../data-service";
 import { ContentLink } from "../../content-link";
 import { GeneratorsList } from "./generators-list";
 
-interface EditConfigurationProps {
+export interface EditConfigurationProps {
   onSaveSuccess: (message: string) => void;
 }
 
@@ -18,7 +18,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const {
     defaultContainerType,
     availableNameGenerators = [],
-    options: { databaseConfigurationsEnabled = true, virtualContainersEnabled = true }
+    options: { databaseConfigurationsEnabled = true, virtualContainersEnabled = true, routerEnabled = false }
   } = useServerSettingsContext();
 
   const [isReadonly, setIsReadonly] = useState(!databaseConfigurationsEnabled);
@@ -170,23 +170,26 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             </label>
           </GridCell>
         )}
-        <GridCell large={12} medium={8} small={4}>
-          <Checkbox
-            label="Is virtual container"
-            checked={isVirtualContainer}
-            onChange={(e) => setIsVirtualContainer(e.target.checked)}
-            isDisabled={isReadonly || !virtualContainersEnabled}
-          />
-          {!virtualContainersEnabled && <div className="text-description">Virtual containers are not enabled</div>}
-        </GridCell>
-        <GridCell>
-          <Checkbox
-            label="Router enabled"
-            checked={isRoutingEnabled}
-            onChange={(e) => setIsRoutingEnabled(e.target.checked)}
-            isDisabled={isReadonly || isVirtualContainer}
-          />
-        </GridCell>
+        {virtualContainersEnabled && (
+          <GridCell large={12} medium={8} small={4}>
+            <Checkbox
+              label="Is virtual container"
+              checked={isVirtualContainer}
+              onChange={(e) => setIsVirtualContainer(e.target.checked)}
+              isDisabled={isReadonly || !virtualContainersEnabled}
+            />
+          </GridCell>
+        )}
+        {routerEnabled && (
+          <GridCell>
+            <Checkbox
+              label="Router enabled"
+              checked={isRoutingEnabled}
+              onChange={(e) => setIsRoutingEnabled(e.target.checked)}
+              isDisabled={isReadonly || isVirtualContainer || !routerEnabled}
+            />
+          </GridCell>
+        )}
         <GridCell large={12} medium={8} small={4}>
           <Input
             type="text"
