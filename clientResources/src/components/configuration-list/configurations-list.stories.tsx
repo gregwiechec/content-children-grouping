@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ConfigurationsList } from "./configurations-list";
-import "./App.scss";
+import "./../../App.scss";
 
 export default {
   title: "List",

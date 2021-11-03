@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Attention, Button, Code, Grid, GridCell, GridContainer } from "optimizely-oui";
 import "./App.scss";
-import { ConfigurationsList } from "./configurations-list";
+import { ConfigurationsList } from "./components/configuration-list/configurations-list";
 import { GroupConfiguration } from "./models/group-configuration";
 import { useServerSettingsContext } from "./server-settings";
 import { useDataServiceContext } from "./data-service";

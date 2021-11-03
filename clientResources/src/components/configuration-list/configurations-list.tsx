@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { BlockList, ButtonIcon, Link, OverlayWrapper, Popover, Table } from "optimizely-oui";
 // @ts-ignore
 import Icon from "react-oui-icons";
-import { GroupConfiguration } from "./models/group-configuration";
+import { GroupConfiguration } from "../../models/group-configuration";
 import "optimizely-oui/dist/styles.css";
-import { ConfirmDialog } from "./confirm-dialog";
-import { useServerSettingsContext } from "./server-settings";
-import { ContentLink } from "./content-link";
+import { ConfirmDialog } from "../../confirm-dialog";
+import { useServerSettingsContext } from "../../server-settings";
+import { ContentLink } from "../../content-link";
 
 interface ConfigurationsListProps {
   items: GroupConfiguration[];
