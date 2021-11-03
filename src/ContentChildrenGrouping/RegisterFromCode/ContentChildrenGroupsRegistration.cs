@@ -55,6 +55,10 @@ namespace ContentChildrenGrouping.Containers.RegisterFromCode
 
         public void Register(ContainerConfiguration configuration)
         {
+            if (ContentReference.IsNullOrEmpty(configuration.ContainerContentLink))
+            {
+                throw new ArgumentException("Configuration contentLink cannot be empty");
+            }
             Configurations.Add(configuration);
         }
     }
