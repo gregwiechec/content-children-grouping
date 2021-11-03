@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ContentChildrenGrouping.ContainerModel;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
@@ -7,6 +8,7 @@ using ContentChildrenGrouping.Extensions;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.Containers
@@ -128,8 +130,21 @@ namespace ContentChildrenGrouping.Containers
 
             if (content.ParentLink.ToReferenceWithoutVersion() != parentLink.ToReferenceWithoutVersion())
             {
-                content.ParentLink = parentLink.ToReferenceWithoutVersion(); //TODO: not working for existing pages
+                if (IsNewContent(content))
+                {
+                    content.ParentLink = parentLink.ToReferenceWithoutVersion(); //TODO: not working for existing pages
+                }
+                else
+                {
+                    _contentRepository.Move(content.ContentLink, parentLink.ToReferenceWithoutVersion(),
+                        AccessLevel.NoAccess, AccessLevel.NoAccess);
+                }
             }
+        }
+
+        private static bool IsNewContent(IContent content)
+        {
+            return content.ContentLink == null || content.ContentLink == ContentReference.EmptyReference;
         }
 
         /// <summary>
@@ -159,8 +174,7 @@ namespace ContentChildrenGrouping.Containers
             var url = pageData.URLSegment;
             if (string.IsNullOrWhiteSpace(url))
             {
-                var isNewContent = pageData.ContentLink == null ||
-                                   pageData.ContentLink == ContentReference.EmptyReference;
+                var isNewContent = IsNewContent(pageData);
                 var provider = GetProvider(isNewContent ? pageData.ParentLink : pageData.ContentLink,
                     isNewContent);
                 url = provider.GetUniqueUrlSegment(pageData, pageData.ParentLink);
