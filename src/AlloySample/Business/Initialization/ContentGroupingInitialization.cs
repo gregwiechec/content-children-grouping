@@ -46,7 +46,7 @@ namespace AlloySample.Business.Initialization
         {
             context.Services.AddTransient(serviceLocator => new ContentChildrenGroupingOptions
             {
-                RouterEnabled = false,
+                RouterEnabled = true,
                 DatabaseConfigurationsEnabled = true,
                 StructureUpdateEnabled = true,
                 SearchCommandEnabled = true,

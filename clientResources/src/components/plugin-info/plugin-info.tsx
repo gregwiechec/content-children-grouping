@@ -1,7 +1,7 @@
 import React from "react";
 // @ts-ignore
 import { useHistory } from "react-router-dom";
-import { useServerSettingsContext } from "./server-settings";
+import { useServerSettingsContext } from "../../server-settings";
 import {Button, Grid, GridCell, GridContainer, Table} from "optimizely-oui";
 
 export const PluginInfo = () => {
@@ -9,6 +9,11 @@ export const PluginInfo = () => {
   const history = useHistory();
 
   const options = Object.keys(serverSettings.options);
+  const defaultOptions = serverSettings.defaultOptions || {};
+
+  const isChanged = (name: string) => {
+    return (serverSettings.options as any)[name] !== (defaultOptions as any)[name];
+  };
 
   return (
     <GridContainer className="plugin-grid">
@@ -26,7 +31,7 @@ export const PluginInfo = () => {
               {options.map((x) => (
                 <Table.TR key={x}>
                   <Table.TD>{x}</Table.TD>
-                  <Table.TD>{(serverSettings.options as any)[x]?.toString()}</Table.TD>
+                  <Table.TD className={isChanged(x) ? "has-changes": ""}>{(serverSettings.options as any)[x]?.toString()}</Table.TD>
                 </Table.TR>
               ))}
             </Table.TBody>

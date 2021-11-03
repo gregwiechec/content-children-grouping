@@ -17,23 +17,23 @@ namespace ContentChildrenGrouping.Containers
     /// <summary>
     /// Scheduled job used to update content structure
     /// </summary>
-    [ScheduledPlugIn(DefaultEnabled = false,
+    [ScheduledPlugIn(DefaultEnabled = true,
         DisplayName = "Fix content groups hierarchy",
         Description = "Job will move content to containers based on configuration",
-        GUID = "D2963BAF-778D-4E3A-8C29-516BEF812260",
+        GUID = "3531556E-6F6A-4E4E-A5EE-B4A636A6B612",
         IntervalLength = 12,
         IntervalType = ScheduledIntervalType.Hours,
         Restartable = true)]
     [ServiceConfiguration]
-    public class FixStructureScheduledJob : ScheduledJobBase
+    public class FixStructureScheduledJob2 : ScheduledJobBase
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(FixStructureScheduledJob));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(FixStructureScheduledJob2));
         private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         private readonly IContentStructureModifier _contentStructureModifier;
         private bool _isStopped;
 
-        public FixStructureScheduledJob() : this(
+        public FixStructureScheduledJob2() : this(
             ServiceLocator.Current.GetInstance<IContentRepository>(),
             ServiceLocator.Current.GetAllInstances<IContentChildrenGroupsLoader>(),
             ServiceLocator.Current.GetInstance<IContentStructureModifier>()
@@ -41,7 +41,7 @@ namespace ContentChildrenGrouping.Containers
         {
         }
 
-        public FixStructureScheduledJob(
+        public FixStructureScheduledJob2(
             IContentRepository contentRepository,
             IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
             IContentStructureModifier contentStructureModifier)

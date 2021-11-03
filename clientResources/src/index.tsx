@@ -12,6 +12,7 @@ axios.defaults.baseURL = configuration.baseUrl;
 
 const settings: ServerSettings = {
     options: configuration.options,
+    defaultOptions: configuration.defaultOptions,
     availableNameGenerators: configuration.availableNameGenerators,
     contentUrl: configuration.contentUrl,
     defaultContainerType: configuration.defaultContainerType

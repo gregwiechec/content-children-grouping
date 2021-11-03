@@ -57,6 +57,9 @@ namespace ContentChildrenGrouping.Plugin
                 _moduleResolver.Service.TryResolvePath(typeof(GroupingConfig).Assembly, "ConfigSettings/",
                     out var controllerUrl);
 
+                var defaultGroupingOptions = new ContentChildrenGroupingOptions();
+                var defaultVirtualOptions = new VirtualContainersOptions();
+
                 var groupingOptions = _childrenGroupingOptions.Service;
                 var config = new
                 {
@@ -70,6 +73,15 @@ namespace ContentChildrenGrouping.Plugin
                         groupingOptions.DatabaseConfigurationsEnabled,
                         groupingOptions.RouterEnabled,
                         VirtualContainersEnabled = _virtualContainerOptions.Service.Enabled
+                    },
+                    defaultOptions = new
+                    {
+                        defaultGroupingOptions.StructureUpdateEnabled,
+                        defaultGroupingOptions.CustomIconsEnabled,
+                        defaultGroupingOptions.SearchCommandEnabled,
+                        defaultGroupingOptions.DatabaseConfigurationsEnabled,
+                        defaultGroupingOptions.RouterEnabled,
+                        VirtualContainersEnabled = defaultVirtualOptions.Enabled
                     },
                     contentUrl,
                     defaultContainerType = typeof(GroupingContainerPage).TypeToString()

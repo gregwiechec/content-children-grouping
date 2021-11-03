@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BlockList, Button, ButtonIcon, Select } from "optimizely-oui";
-import { GeneratorConfiguration } from "../models/group-configuration";
+import { GeneratorConfiguration } from "../../models/group-configuration";
 import { GeneratorSettingsDialog } from "./generator-settings-dialog";
 
 interface GeneratorsListProps {

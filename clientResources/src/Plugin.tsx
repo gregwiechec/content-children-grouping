@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import App from "./App";
-import { PluginInfo } from "./PluginInfo";
+import PluginInfo from "./components/plugin-info";
 import EditConfigurationView from "./components/edit-configuration";
 import DataServiceContext, { DataService, dataService as defaultDataService } from "./data-service";
 import { Message } from "./Message";

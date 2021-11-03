@@ -14,14 +14,22 @@ export type ServerSettings = {
     readonly contentUrl: string;
     readonly defaultContainerType: string;
     readonly options: ContentChildrenGroupingOptions
+    readonly defaultOptions: ContentChildrenGroupingOptions
 }
-
 
 const defaultSettings: ServerSettings = {
     availableNameGenerators: [],
     defaultContainerType: "",
     contentUrl: "",
     options: {
+        customIconsEnabled: false,
+        databaseConfigurationsEnabled: false,
+        routerEnabled: false,
+        searchCommandEnabled: false,
+        structureUpdateEnabled: false,
+        virtualContainersEnabled: false
+    },
+    defaultOptions: {
         customIconsEnabled: false,
         databaseConfigurationsEnabled: false,
         routerEnabled: false,
