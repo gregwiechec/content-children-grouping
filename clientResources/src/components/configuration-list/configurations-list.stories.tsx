@@ -2,17 +2,35 @@ import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ConfigurationsList } from "./configurations-list";
 import "./../../App.scss";
+import ServerSettingsContext from "../../server-settings";
+import { getServerSettings } from "../../fake-data/fake-server-settings";
 
 export default {
-  title: "List",
+  title: "Configuration list",
   component: ConfigurationsList
 } as ComponentMeta<typeof ConfigurationsList>;
 
-const Template: ComponentStory<typeof ConfigurationsList> = (args) => <ConfigurationsList {...args} />;
+const Template: ComponentStory<typeof ConfigurationsList> = (args: any) => {
+  var overridden: any = {};
+  if (args.router === false) {
+    overridden.routerEnabled = false;
+  }
+  if (args.virtualContainersEnabled === false) {
+    overridden.virtualContainersEnabled = false;
+  }
+  const serverSettings = getServerSettings(overridden);
 
-export const DefaultList = Template.bind({});
-DefaultList.args = {
-  items: [
+  return (
+    <div style={{ width: 1000 }}>
+      <ServerSettingsContext.Provider value={serverSettings}>
+        <ConfigurationsList {...args} />
+      </ServerSettingsContext.Provider>
+    </div>
+  );
+};
+
+const getItems = () => {
+  return [
     {
       contentLink: "123",
       fromCode: false,
@@ -25,32 +43,26 @@ DefaultList.args = {
       contentLink: "124",
       fromCode: false,
       routingEnabled: true,
-      containerTypeName: "",
+      containerTypeName: "AlloySample.Models.Pages.ContainerPage, AlloySample",
       groupLevelConfigurations: [{ name: "Name" }],
       isVirtualContainer: false
     }
   ]
 };
 
-export const AdminMode = (args: any) => (
-  <div style={{ width: 1000 }}>
-    <ConfigurationsList {...args} />
-  </div>
-);
+export const DefaultList = Template.bind({});
+DefaultList.args = {
+  items: getItems()
+};
 
-AdminMode.args = {
-  items: [
-    {
-      contentLink: "123",
-      routingEnabled: false,
-      containerTypeName: "AlloySample.Models.Pages.ContainerPage, AlloySample, Version=1.0.0.0, Culture=neutral",
-      groupLevelConfigurations: ["Name", "CreatedDate"]
-    },
-    {
-      contentLink: "124",
-      routingEnabled: true,
-      containerTypeName: "",
-      groupLevelConfigurations: ["Name", "Test1", "Test2", "Test3", "Test4"]
-    }
-  ]
+export const WithNoRouter = Template.bind({});
+WithNoRouter.args = {
+  items: getItems(),
+  router: false
+};
+
+export const WithNoVirtualcontainers = Template.bind({});
+WithNoVirtualcontainers.args = {
+  items: getItems(),
+  virtualContainersEnabled: false
 };

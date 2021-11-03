@@ -18,7 +18,7 @@ interface ConfigurationsListProps {
 export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
   const {
     defaultContainerType,
-    options: { databaseConfigurationsEnabled, virtualContainersEnabled }
+    options: { databaseConfigurationsEnabled, virtualContainersEnabled, routerEnabled }
   } = useServerSettingsContext();
 
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
@@ -42,7 +42,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
             <Table.TH width="120px">Content Link</Table.TH>
             <Table.TH width="80px">From code</Table.TH>
             {virtualContainersEnabled && <Table.TH width="80px">Is virtual</Table.TH>}
-            <Table.TH width="80px">Router</Table.TH>
+            {routerEnabled && <Table.TH width="80px">Router</Table.TH>}
             <Table.TH>Container type</Table.TH>
             <Table.TH width="200px">Generator</Table.TH>
             <Table.TH width="200px">&nbsp;</Table.TH>
@@ -56,7 +56,7 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
               {virtualContainersEnabled && <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>}
-              <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>
+              {routerEnabled && <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>}
               <Table.TD>
                 {x.containerTypeName}
                 {!x.containerTypeName && (
