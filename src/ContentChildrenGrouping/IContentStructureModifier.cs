@@ -128,7 +128,7 @@ namespace ContentChildrenGrouping.Containers
 
             if (content.ParentLink.ToReferenceWithoutVersion() != parentLink.ToReferenceWithoutVersion())
             {
-                content.ParentLink = parentLink.ToReferenceWithoutVersion();
+                content.ParentLink = parentLink.ToReferenceWithoutVersion(); //TODO: not working for existing pages
             }
         }
 
