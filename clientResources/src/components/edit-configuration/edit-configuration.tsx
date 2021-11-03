@@ -250,3 +250,4 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   );
 };
 //TODO: add resources
+//TODO: when structure update is not enabled then router should not be available
