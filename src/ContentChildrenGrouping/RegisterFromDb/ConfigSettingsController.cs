@@ -79,6 +79,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         {
             var contentExists = _contentLoader.TryGet<IContent>(containerConfiguration.ContainerContentLink, out var _);
 
+            var dbConfiguration = containerConfiguration as DbContainerConfiguration;
             return new ConfigurationViewModel
             {
                 contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
@@ -98,8 +99,8 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 isVirtualContainer = containerConfiguration.IsVirtualContainer,
                 fromCode = fromCode,
                 contentExists = contentExists,
-                changedBy = containerConfiguration.ChangedBy,
-                changedOn = containerConfiguration.ChangedOn?.ToString("yyyy-MM-dd HH:mm")
+                changedBy = dbConfiguration?.ChangedBy ?? "",
+                changedOn = dbConfiguration?.ChangedOn?.ToString("yyyy-MM-dd HH:mm") ?? ""
             };
         }
 
@@ -166,9 +167,9 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 return GetError("Cannot parse type: " + e.Message);
             }
 
-            ContainerConfiguration ConvertViewModelToModel()
+            DbContainerConfiguration ConvertViewModelToModel()
             {
-                return new ContainerConfiguration
+                return new DbContainerConfiguration
                 {
                     ContainerContentLink = contentLink,
                     ContainerType = containerType,

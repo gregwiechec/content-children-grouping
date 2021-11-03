@@ -12,9 +12,9 @@ namespace ContentChildrenGrouping.RegisterFromDb
 {
     public interface IConfigSettingsDbRepository
     {
-        IEnumerable<ContainerConfiguration> LoadAll();
+        IEnumerable<DbContainerConfiguration> LoadAll();
 
-        void Save(IEnumerable<ContainerConfiguration> configurations);
+        void Save(IEnumerable<DbContainerConfiguration> configurations);
     }
 
     /// <summary>
@@ -37,14 +37,14 @@ namespace ContentChildrenGrouping.RegisterFromDb
             _groupNameGenerators = groupNameGenerators.ToList();
         }
 
-        public IEnumerable<ContainerConfiguration> LoadAll()
+        public IEnumerable<DbContainerConfiguration> LoadAll()
         {
             var result = GetStore().Items<ConfigurationSettingsDds>().ToList();
             return result.Select(x =>
             {
                 DateTime.TryParseExact(x.ChangedOn, DateFormat, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var date);
-                return new ContainerConfiguration
+                return new DbContainerConfiguration
                 {
                     ContainerContentLink = x.ContainerContentLink,
                     ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
@@ -57,7 +57,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
             });
         }
 
-        public void Save(IEnumerable<ContainerConfiguration> configurations)
+        public void Save(IEnumerable<DbContainerConfiguration> configurations)
         {
             var store = GetStore();
 

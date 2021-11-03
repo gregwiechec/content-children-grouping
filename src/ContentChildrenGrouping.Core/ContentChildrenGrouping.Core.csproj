@@ -163,6 +163,7 @@
   <ItemGroup>
     <Compile Include="ContainerConfiguration.cs" />
     <Compile Include="ContentChildrenGroupingOptions.cs" />
+    <Compile Include="RegisterFromDb\DbContanerConfiguration.cs" />
     <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
     <Compile Include="IContentChildrenGroupsLoader.cs" />
     <Compile Include="IGroupNameGenerator.cs" />
@@ -172,5 +173,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

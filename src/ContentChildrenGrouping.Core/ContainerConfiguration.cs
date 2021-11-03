@@ -36,15 +36,5 @@ namespace ContentChildrenGrouping.Core
         /// Configurations for groups
         /// </summary>
         public IEnumerable<IGroupNameGenerator> GroupLevelConfigurations { get; set; }
-
-        /// <summary>
-        /// login of user who edited edited/configuration
-        /// </summary>
-        public string ChangedBy { get; set; } //TODO: remove
-
-        /// <summary>
-        /// Date when configuration was changed lastTime
-        /// </summary>
-        public DateTime? ChangedOn { get; set; }
     }
 }
