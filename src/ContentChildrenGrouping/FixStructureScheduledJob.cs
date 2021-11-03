@@ -31,14 +31,12 @@ namespace ContentChildrenGrouping.Containers
         private readonly IContentRepository _contentRepository;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _contentChildrenGroupsLoaders;
         private readonly IContentStructureModifier _contentStructureModifier;
-        private readonly ContentChildrenGroupingOptions _childrenGroupingOptions;
         private bool _isStopped;
 
         public FixStructureScheduledJob() : this(
             ServiceLocator.Current.GetInstance<IContentRepository>(),
             ServiceLocator.Current.GetAllInstances<IContentChildrenGroupsLoader>(),
-            ServiceLocator.Current.GetInstance<IContentStructureModifier>(),
-            ServiceLocator.Current.GetInstance<ContentChildrenGroupingOptions>()
+            ServiceLocator.Current.GetInstance<IContentStructureModifier>()
         )
         {
         }
@@ -46,13 +44,11 @@ namespace ContentChildrenGrouping.Containers
         public FixStructureScheduledJob(
             IContentRepository contentRepository,
             IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
-            IContentStructureModifier contentStructureModifier,
-            ContentChildrenGroupingOptions childrenGroupingOptions)
+            IContentStructureModifier contentStructureModifier)
         {
             _contentRepository = contentRepository;
             _contentChildrenGroupsLoaders = contentChildrenGroupsLoaders;
             _contentStructureModifier = contentStructureModifier;
-            _childrenGroupingOptions = childrenGroupingOptions;
             IsStoppable = true;
         }
 
@@ -68,14 +64,6 @@ namespace ContentChildrenGrouping.Containers
 
             var totalUpdated = 0;
             var totalParsed = 0;
-
-            if (_childrenGroupingOptions.StructureUpdateEnabled)
-            {
-                var text = "Job will not run when `StructureUpdateEnabled` option is enabled";
-                OnStatusChanged(text);
-                return text;
-            }
-
 
             void Notify(ContainerConfiguration configuration)
             {
@@ -120,7 +108,6 @@ namespace ContentChildrenGrouping.Containers
                             var currentContainerContentLink = configuration.ContainerContentLink;
                             foreach (var parentName in correctParentNames)
                             {
-                                //TODO: groups create a hashmap for [config,groupConfig,name] = parentLink
                                 var parent = _contentRepository.GetChildren<IContent>(currentContainerContentLink)
                                     .FirstOrDefault(x => x.Name.CompareStrings(parentName));
                                 if (parent == null)
@@ -132,8 +119,10 @@ namespace ContentChildrenGrouping.Containers
                                 {
                                     currentContainerContentLink = parent.ContentLink;
                                 }
+                                //TODO: job should update external URL
                             }
 
+                            totalUpdated++;
                             _contentRepository.Move(content.ContentLink, currentContainerContentLink,
                                 AccessLevel.NoAccess, AccessLevel.NoAccess);
                         }

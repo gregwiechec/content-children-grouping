@@ -16,7 +16,7 @@ namespace ContentChildrenGrouping.Containers
     /// </summary>
     public interface IContentStructureModifier
     {
-        void UpdateContentParent(IContent content);
+        void UpdateContentParent(IContent content); //TODO: add new method UpdateContentParent(IContent content, config) used in scheduled job
 
         ContentReference CreateParent(ContainerConfiguration containerConfiguration, string parentName,
             ContentReference parentParentContentLink, IContent content);
