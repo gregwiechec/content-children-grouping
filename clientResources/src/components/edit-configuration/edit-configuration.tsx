@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 // @ts-ignore
 import { useHistory, useParams } from "react-router-dom";
-import { GeneratorConfiguration, GroupConfiguration } from "../models/group-configuration";
+import { GeneratorConfiguration, GroupConfiguration } from "../../models/group-configuration";
 import { Attention, Button, Checkbox, Grid, GridCell, GridContainer, Input, Label, Spinner } from "optimizely-oui";
-import { useServerSettingsContext } from "../server-settings";
-import { useDataServiceContext } from "../data-service";
-import { ContentLink } from "../content-link";
+import { useServerSettingsContext } from "../../server-settings";
+import { useDataServiceContext } from "../../data-service";
+import { ContentLink } from "../../content-link";
 import { GeneratorsList } from "./generators-list";
 
 interface EditConfigurationProps {
   onSaveSuccess: (message: string) => void;
 }
 
-export const EditConfigurationView = ({ onSaveSuccess }: EditConfigurationProps) => {
+export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => {
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
   const {
