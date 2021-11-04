@@ -1,7 +1,9 @@
 ﻿using AlloySample.Models.Pages;
 using ContentChildrenGrouping.Containers;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.PhysicalContainers;
 using ContentChildrenGrouping.RegisterFromCode;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;

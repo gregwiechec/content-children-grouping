@@ -1,4 +1,5 @@
 ﻿using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.PhysicalContainers;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;

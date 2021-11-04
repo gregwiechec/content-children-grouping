@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
-using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.EditMode;
+using ContentChildrenGrouping.PhysicalContainers;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using EPiServer.Shell.Modules;
 
-namespace ContentChildrenGrouping.EditMode
+namespace ContentChildrenGrouping.Core.EditMode
 {
     public class ContentChildrenGroupingModuleViewModelModule : ShellModule
     {

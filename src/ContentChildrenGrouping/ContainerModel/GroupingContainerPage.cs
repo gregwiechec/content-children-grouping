@@ -1,7 +1,7 @@
 using EPiServer.Core;
 using EPiServer.DataAnnotations;
 
-namespace ContentChildrenGrouping.ContainerModel
+namespace ContentChildrenGrouping.PhysicalContainers.ContainerModel
 {
     /// <summary>
     /// Default content type used to logically group pages in the page tree

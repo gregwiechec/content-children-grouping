@@ -3,6 +3,7 @@ using System.Linq;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
+using ContentChildrenGrouping.PhysicalContainers;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Security;

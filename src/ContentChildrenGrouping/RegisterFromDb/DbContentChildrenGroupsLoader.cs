@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.PhysicalContainers;
 using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromDb

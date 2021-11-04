@@ -1,6 +1,6 @@
 ﻿using System;
-using ContentChildrenGrouping.ContainerModel;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.PhysicalContainers.ContainerModel;
 
 namespace ContentChildrenGrouping.Extensions
 {

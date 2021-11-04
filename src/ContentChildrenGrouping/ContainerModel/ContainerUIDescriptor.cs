@@ -1,6 +1,6 @@
 ﻿using EPiServer.Shell;
 
-namespace ContentChildrenGrouping.ContainerModel
+namespace ContentChildrenGrouping.PhysicalContainers.ContainerModel
 {
     /// <summary>
     /// Describes how the UI should appear for <see cref="GroupingContainerPage"/> content.

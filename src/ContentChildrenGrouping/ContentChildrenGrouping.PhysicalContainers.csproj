@@ -167,8 +167,6 @@
     <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
     <Compile Include="PartialRouter\CustomPartialRouter.cs" />
     <Compile Include="ContainerModel\GroupingContainerPage.cs" />
-    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
-    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FixStructureScheduledJob.cs" />
     <Compile Include="IContentStructureModifier.cs" />

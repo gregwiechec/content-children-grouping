@@ -1,6 +1,6 @@
 ﻿using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping.Core
+namespace ContentChildrenGrouping.PhysicalContainers
 {
     /// <summary>
     /// Configuration for content containers
