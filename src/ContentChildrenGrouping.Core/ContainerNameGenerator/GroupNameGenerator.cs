@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ContentChildrenGrouping.Core;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping.Containers
+namespace ContentChildrenGrouping.Core.ContainerNameGenerator
 {
     /// <summary>
     /// When generator class implements this interface, then generator is available as DB plugin

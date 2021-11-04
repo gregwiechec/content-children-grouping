@@ -170,14 +170,11 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FixStructureScheduledJob.cs" />
     <Compile Include="IContentStructureModifier.cs" />
-    <Compile Include="IGroupNameGenerator.cs" />
     <Compile Include="PartialRouter\PartialRouterInitialization.cs" />
     <Compile Include="Plugin\GroupingConfig.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterFromCode\ContentChildrenGroupsRegistration.cs" />
-    <Compile Include="RegisterFromCode\FromCodeContentChildrenGroupsLoader.cs" />
     <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
     <Compile Include="RegisterFromDb\ContentStructureCleaner.cs" />
     <Compile Include="RegisterFromDb\ConfigSettingsController.cs" />

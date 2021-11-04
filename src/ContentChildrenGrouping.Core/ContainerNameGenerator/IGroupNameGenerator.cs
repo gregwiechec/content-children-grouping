@@ -1,6 +1,6 @@
 ﻿using EPiServer.Core;
 
-namespace ContentChildrenGrouping.Core
+namespace ContentChildrenGrouping.Core.ContainerNameGenerator
 {
     /// <summary>
     /// Generating name for structure

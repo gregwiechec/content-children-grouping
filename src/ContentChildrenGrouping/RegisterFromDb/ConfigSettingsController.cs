@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
 using ContentChildrenGrouping.RegisterFromDb;

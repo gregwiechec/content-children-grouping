@@ -162,14 +162,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerConfiguration.cs" />
+    <Compile Include="ContainerNameGenerator\GroupNameGenerator.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
     <Compile Include="Options\ContentChildrenGroupingOptions.cs" />
     <Compile Include="Options\VirtualContainersOptions.cs" />
+    <Compile Include="RegisterFromCode\ContentChildrenGroupsRegistration.cs" />
+    <Compile Include="RegisterFromCode\FromCodeContentChildrenGroupsLoader.cs" />
     <Compile Include="RegisterFromDb\DbContanerConfiguration.cs" />
     <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
     <Compile Include="IContentChildrenGroupsLoader.cs" />
-    <Compile Include="IGroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\IGroupNameGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

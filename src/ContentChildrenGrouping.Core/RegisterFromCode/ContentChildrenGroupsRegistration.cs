@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 
-namespace ContentChildrenGrouping.Containers.RegisterFromCode
+namespace ContentChildrenGrouping.Core.RegisterFromCode
 {
     public interface IContentChildrenGroupsRegistration
     {

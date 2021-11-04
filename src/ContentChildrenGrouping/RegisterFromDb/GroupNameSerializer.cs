@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.Core;
+using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using EPiServer.Framework.Serialization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;

@@ -2,7 +2,6 @@
 using ContentChildrenGrouping.Containers;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.PhysicalContainers;
-using ContentChildrenGrouping.RegisterFromCode;
 using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Core;
 using EPiServer.Framework;
