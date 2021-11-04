@@ -124,7 +124,7 @@ namespace ContentChildrenGrouping.Core.ContainerNameGenerator
 
         public Dictionary<string, string> Settings => new Dictionary<string, string>
         {
-            { "dateFormat", _defaultValue },
+            { "dateFormat", _dateFormat },
             { "defaultValue", _defaultValue }
         };
 
