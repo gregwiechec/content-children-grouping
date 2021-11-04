@@ -11,6 +11,6 @@ namespace ContentChildrenGrouping.VirtualContainers
         /// <summary>
         /// When true then Virtual containers are enabled
         /// </summary>
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; } = true;
     }
 }
