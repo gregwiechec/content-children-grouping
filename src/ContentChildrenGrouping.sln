@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlloySample", "AlloySample\AlloySample.csproj", "{C1FE7FA5-C9FF-473A-AD9C-C08347D63631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentChildrenGrouping.Containers", "ContentChildrenGrouping\ContentChildrenGrouping.Containers.csproj", "{9395953D-305D-4078-BFE3-D6EE2B264EB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentChildrenGrouping.PhysicalContainers", "ContentChildrenGrouping\ContentChildrenGrouping.PhysicalContainers.csproj", "{9395953D-305D-4078-BFE3-D6EE2B264EB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentChildrenGrouping.VirtualContainers", "ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj", "{2866667B-7D2A-49CF-9352-CEB3E4D121C9}"
 EndProject
