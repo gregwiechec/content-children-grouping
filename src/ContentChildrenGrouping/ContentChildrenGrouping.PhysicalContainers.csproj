@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeEventInitialization.cs" />
-    <Compile Include="ContainerModel\ContainerPageController.cs" />
     <Compile Include="ContainerModel\ContainerUIDescriptor.cs" />
     <Compile Include="Extensions\ContainerConfigurationExtensions.cs" />
     <Compile Include="PartialRouter\CustomPartialRouter.cs" />
