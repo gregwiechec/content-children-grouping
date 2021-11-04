@@ -9,6 +9,11 @@ namespace ContentChildrenGrouping.Core
     public class ContentChildrenGroupingOptions
     {
         /// <summary>
+        /// When true then physical containers are enabled
+        /// </summary>
+        public bool Enabled { get; set; } = false;
+
+        /// <summary>
         /// When true, then routing is globally enabled.
         /// Default true
         /// For complex scenarios, because of the performance it's better to implement custom PartialRouter.
