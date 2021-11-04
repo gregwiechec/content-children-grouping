@@ -92,5 +92,3 @@ const getDefaultGeneratorSettings = (generator: GeneratorConfiguration | null): 
 
 //TODO: support numbers for inputs
 //TODO: change size of inputs
-//TODO: support default values when crating generators
-//TODO: do not allow to set _ as default name

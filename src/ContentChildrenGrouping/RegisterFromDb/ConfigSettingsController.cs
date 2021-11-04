@@ -177,7 +177,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
                     IsVirtualContainer = config.isVirtualContainer,
                     GroupLevelConfigurations = config.groupLevelConfigurations
-                        .Select(g => _groupNameGenerators.Single(n => n.Key == g.name).CreateGenerator(g.settings)),
+                        .Select(g => _groupNameGenerators.Single(n => n.Key.CompareStrings(g.name)).CreateGenerator(g.settings)),
                     ChangedBy = _principalAccessor?.Principal?.Identity?.Name,
                     ChangedOn = DateTime.Now
                 };

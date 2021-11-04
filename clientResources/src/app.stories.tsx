@@ -38,7 +38,8 @@ const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled
       routerEnabled: false,
       searchCommandEnabled: false,
       structureUpdateEnabled: false,
-      virtualContainersEnabled: virtualContainersEnabled
+      virtualContainersEnabled: virtualContainersEnabled,
+      physicalContainersEnabled: true
     }
   };
 };
