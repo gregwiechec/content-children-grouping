@@ -63,12 +63,36 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         setLoading(false);
       });
     } else {
-      setGenerators([{ name: availableNameGenerators[0] }]);
+      setGenerators([getGenerator(availableNameGenerators[0])]);
     }
   }, [editContentLink, dataService, databaseConfigurationsEnabled, availableNameGenerators]);
 
+  const getGenerator = (generatorType: string): GeneratorConfiguration => {
+    generatorType = generatorType.toLocaleLowerCase();
+
+    let settings = undefined;
+    switch (generatorType.toLocaleLowerCase()) {
+      case "name":
+        settings = {
+          startIndex: "0",
+          countLetters: "1",
+          defaultName: "!default"
+        };
+        break;
+      case "create date": {
+        settings = {
+          dateFormat: "yyyy",
+          defaultValue: "!default"
+        };
+        break;
+      }
+    }
+
+    return { name: generatorType, settings };
+  };
+
   const onAddGenerator = () => {
-    const updatedList = [...generators, { name: availableNameGenerators[0] }];
+    const updatedList = [...generators, getGenerator(availableNameGenerators[0])];
     setGenerators(updatedList);
   };
 
@@ -86,7 +110,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
   const onGeneratorValueChange = (index: number, value: string) => {
     let updatedList = [...generators];
-    updatedList[index] = { name: value };
+    updatedList[index] = getGenerator(value);
     setGenerators(updatedList);
   };
 

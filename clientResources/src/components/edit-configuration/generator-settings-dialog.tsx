@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, DialogNew, Fieldset, Input } from "optimizely-oui";
-import { GeneratorConfiguration } from "../models/group-configuration";
+import { GeneratorConfiguration } from "../../models/group-configuration";
 
 interface GeneratorSettingDialogProps {
   generator: GeneratorConfiguration | null;
