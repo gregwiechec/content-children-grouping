@@ -70,6 +70,7 @@ namespace ContentChildrenGrouping.Plugin
                     availableNameGenerators = _groupNameGenerators.Service.OfType<IDbAvailableGroupNameGenerator>().Select(x => x.Key),
                     options = new
                     {
+                        PhysicalContainersEnabled = groupingOptions.Enabled,
                         groupingOptions.StructureUpdateEnabled,
                         groupingOptions.CustomIconsEnabled,
                         groupingOptions.SearchCommandEnabled,
@@ -79,6 +80,8 @@ namespace ContentChildrenGrouping.Plugin
                     },
                     defaultOptions = new
                     {
+                        PhysicalContainersEnabled = defaultGroupingOptions.Enabled,
+                        defaultGroupingOptions.Enabled,
                         defaultGroupingOptions.StructureUpdateEnabled,
                         defaultGroupingOptions.CustomIconsEnabled,
                         defaultGroupingOptions.SearchCommandEnabled,

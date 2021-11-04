@@ -8,7 +8,7 @@ import { ConfirmDialog } from "../../confirm-dialog";
 import { useServerSettingsContext } from "../../server-settings";
 import { ContentLink } from "../../content-link";
 
-interface ConfigurationsListProps {
+export interface ConfigurationsListProps {
   items: GroupConfiguration[];
   onEdit: (item: GroupConfiguration) => void;
   onManage: (item: GroupConfiguration) => void;
@@ -18,7 +18,7 @@ interface ConfigurationsListProps {
 export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
   const {
     defaultContainerType,
-    options: { databaseConfigurationsEnabled, virtualContainersEnabled, routerEnabled }
+    options: { databaseConfigurationsEnabled, virtualContainersEnabled, routerEnabled, physicalContainersEnabled }
   } = useServerSettingsContext();
 
   const [itemToDelete, setItemToDelete] = useState<GroupConfiguration | null>(null);
@@ -34,6 +34,12 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
     onDelete(itemToDelete);
     setItemToDelete(null);
   };
+
+  let showVirtualContainersCheckbox = virtualContainersEnabled;
+  if (virtualContainersEnabled && !physicalContainersEnabled) {
+    showVirtualContainersCheckbox = false;
+  }
+
   return (
     <>
       <Table density="loose" className="configuration-table plugin-grid">
@@ -41,9 +47,9 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
           <Table.TR>
             <Table.TH width="120px">Content Link</Table.TH>
             <Table.TH width="80px">From code</Table.TH>
-            {virtualContainersEnabled && <Table.TH width="80px">Is virtual</Table.TH>}
-            {routerEnabled && <Table.TH width="80px">Router</Table.TH>}
-            <Table.TH>Container type</Table.TH>
+            {showVirtualContainersCheckbox && <Table.TH width="80px">Is virtual</Table.TH>}
+            {routerEnabled && physicalContainersEnabled && <Table.TH width="80px">Router</Table.TH>}
+            {physicalContainersEnabled && <Table.TH>Container type</Table.TH>}
             <Table.TH width="200px">Generator</Table.TH>
             <Table.TH width="200px">&nbsp;</Table.TH>
           </Table.TR>
@@ -55,17 +61,21 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 <ContentLink value={x.contentLink} contentExists={x.contentExists} />
               </Table.TD>
               <Table.TD>{x.fromCode && <Icon name="check" />}</Table.TD>
-              {virtualContainersEnabled && <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>}
-              {routerEnabled && <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>}
-              <Table.TD>
-                {x.containerTypeName}
-                {!x.containerTypeName && (
-                  <span style={{ fontStyle: "italic" }} title={defaultContainerType}>
-                    [default]
-                  </span>
-                )}
-              </Table.TD>
-              <Table.TD>{(x.groupLevelConfigurations || []).map(x => x.name).join(" => ")}</Table.TD>
+              {showVirtualContainersCheckbox && <Table.TD>{x.isVirtualContainer && <Icon name="check" />}</Table.TD>}
+              {routerEnabled && physicalContainersEnabled && (
+                <Table.TD>{x.routingEnabled && <Icon name="check" />}</Table.TD>
+              )}
+              {physicalContainersEnabled && (
+                <Table.TD>
+                  {x.containerTypeName}
+                  {!x.containerTypeName && (
+                    <span style={{ fontStyle: "italic" }} title={defaultContainerType}>
+                      [default]
+                    </span>
+                  )}
+                </Table.TD>
+              )}
+              <Table.TD>{(x.groupLevelConfigurations || []).map((x) => x.name).join(" => ")}</Table.TD>
               <Table.TD className="menu-cell">
                 {/*
                 <OverlayWrapper
@@ -100,10 +110,14 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                 <Link leftIcon="projects" onClick={() => onEdit(x)}>
                   Edit
                 </Link>
-                &nbsp;
-                <Link leftIcon="settings" onClick={() => onManage(x)}>
-                  Manage
-                </Link>
+                {physicalContainersEnabled && (
+                  <>
+                    &nbsp;
+                    <Link leftIcon="settings" onClick={() => onManage(x)}>
+                      Manage
+                    </Link>
+                  </>
+                )}
                 &nbsp;
                 {!x.fromCode && databaseConfigurationsEnabled && (
                   <Link onClick={() => setItemToDelete(x)} leftIcon="ban">
