@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 
 export type ContentChildrenGroupingOptions = {
+    readonly physicalContainersEnabled: boolean;
     readonly routerEnabled: boolean;
     readonly structureUpdateEnabled: boolean;
     readonly databaseConfigurationsEnabled: boolean;
@@ -22,6 +23,7 @@ const defaultSettings: ServerSettings = {
     defaultContainerType: "",
     contentUrl: "",
     options: {
+        physicalContainersEnabled: false,
         customIconsEnabled: false,
         databaseConfigurationsEnabled: false,
         routerEnabled: false,
@@ -30,6 +32,7 @@ const defaultSettings: ServerSettings = {
         virtualContainersEnabled: false
     },
     defaultOptions: {
+        physicalContainersEnabled: false,
         customIconsEnabled: false,
         databaseConfigurationsEnabled: false,
         routerEnabled: false,

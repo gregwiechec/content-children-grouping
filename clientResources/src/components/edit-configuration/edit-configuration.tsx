@@ -18,7 +18,12 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const {
     defaultContainerType,
     availableNameGenerators = [],
-    options: { databaseConfigurationsEnabled = true, virtualContainersEnabled = true, routerEnabled = false }
+    options: {
+      databaseConfigurationsEnabled = true,
+      virtualContainersEnabled = true,
+      routerEnabled = false,
+      physicalContainersEnabled = false
+    }
   } = useServerSettingsContext();
 
   const [isReadonly, setIsReadonly] = useState(!databaseConfigurationsEnabled);
@@ -119,6 +124,11 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
     return <Spinner />;
   }
 
+  let showVirtualContainersCheckbox = virtualContainersEnabled;
+  if (virtualContainersEnabled && !physicalContainersEnabled) {
+    showVirtualContainersCheckbox = false;
+  }
+
   return (
     <GridContainer className="edit-configuration plugin-grid">
       <Grid>
@@ -170,7 +180,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             </label>
           </GridCell>
         )}
-        {virtualContainersEnabled && (
+        {showVirtualContainersCheckbox && (
           <GridCell large={12} medium={8} small={4}>
             <Checkbox
               label="Is virtual container"
@@ -180,7 +190,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             />
           </GridCell>
         )}
-        {routerEnabled && (
+        {physicalContainersEnabled && routerEnabled && (
           <GridCell>
             <Checkbox
               label="Router enabled"
@@ -190,18 +200,20 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
             />
           </GridCell>
         )}
-        <GridCell large={12} medium={8} small={4}>
-          <Input
-            type="text"
-            id="edit-configuration-type"
-            label="Container type name"
-            note="Type format: [Full type name, Assembly Name]"
-            placeholder={defaultContainerType ? "Default: " + defaultContainerType : ""}
-            value={containerTypeName}
-            onChange={(e) => setContainerTypeName(e.target.value)}
-            isDisabled={isReadonly || isVirtualContainer}
-          />
-        </GridCell>
+        {physicalContainersEnabled && (
+          <GridCell large={12} medium={8} small={4}>
+            <Input
+              type="text"
+              id="edit-configuration-type"
+              label="Container type name"
+              note="Type format: [Full type name, Assembly Name]"
+              placeholder={defaultContainerType ? "Default: " + defaultContainerType : ""}
+              value={containerTypeName}
+              onChange={(e) => setContainerTypeName(e.target.value)}
+              isDisabled={isReadonly || isVirtualContainer}
+            />
+          </GridCell>
+        )}
         <GridCell large={12} medium={8} small={4}>
           <Label>Name generators *</Label>
           <GeneratorsList

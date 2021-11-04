@@ -13,6 +13,7 @@ export const getServerSettings = (overriddenValues?: any): ServerSettings => {
     defaultContainerType: "Alloy.ContainerPage, Alloy",
     contentUrl: "http://google.com/{contentLink}",
     options: {
+      physicalContainersEnabled: getValueOrDefault("physicalContainersEnabled", overriddenValues, true),
       customIconsEnabled: false,
       databaseConfigurationsEnabled: true,
       routerEnabled: getValueOrDefault("routerEnabled", overriddenValues, true),
@@ -21,6 +22,7 @@ export const getServerSettings = (overriddenValues?: any): ServerSettings => {
       virtualContainersEnabled: getValueOrDefault("virtualContainersEnabled", overriddenValues, true)
     },
     defaultOptions: {
+      physicalContainersEnabled: true,
       customIconsEnabled: true,
       databaseConfigurationsEnabled: true,
       routerEnabled: true,

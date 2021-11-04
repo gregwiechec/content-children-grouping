@@ -11,6 +11,7 @@ import { getServerSettings } from "../../fake-data/fake-server-settings";
 interface EditConfigurationStorybookProps extends EditConfigurationProps {
     router: boolean;
     virtualContainersEnabled: boolean;
+    physicalContainersEnabled: boolean;
 }
 
 const EditConfigurationStorybook = (props: EditConfigurationStorybookProps) => {
@@ -20,6 +21,9 @@ const EditConfigurationStorybook = (props: EditConfigurationStorybookProps) => {
     }
     if (props.virtualContainersEnabled === false) {
         overridden.virtualContainersEnabled = false;
+    }
+    if (props.physicalContainersEnabled === false) {
+        overridden.physicalContainersEnabled = false;
     }
     const serverSettings = getServerSettings(overridden);
 
@@ -56,4 +60,9 @@ WithNoRouter.args = {
 export const WithNoVirtualContainers = Template.bind({});
 WithNoVirtualContainers.args = {
     virtualContainersEnabled: false
+}
+
+export const NoPhysicalsContainers = Template.bind({});
+NoPhysicalsContainers.args = {
+    physicalContainersEnabled: false
 }
