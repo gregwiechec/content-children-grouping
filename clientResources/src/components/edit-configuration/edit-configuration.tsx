@@ -1,8 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import { useHistory, useParams } from "react-router-dom";
 import { GeneratorConfiguration, GroupConfiguration } from "../../models/group-configuration";
-import { Attention, Button, Checkbox, Grid, GridCell, GridContainer, Input, Label, Spinner } from "optimizely-oui";
+import {
+  Attention,
+  Button,
+  ButtonIcon,
+  Checkbox,
+  Grid,
+  GridCell,
+  GridContainer,
+  Input,
+  Label,
+  Spinner
+} from "optimizely-oui";
 import { useServerSettingsContext } from "../../server-settings";
 import { useDataServiceContext } from "../../data-service";
 import { ContentLink } from "../../content-link";
@@ -40,6 +51,9 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [changedBy, setChangedBy] = useState<string | undefined>("");
   const [changedOn, setChangedOn] = useState<string | undefined>("");
   const [generators, setGenerators] = useState<GeneratorConfiguration[]>([]);
+
+  const contentLinkElementId = "content-link-" + new Date().getTime();
+  const contentLinkElRef = useRef(null);
 
   const [validationMessage, setValidationMessage] = useState("");
 
@@ -142,6 +156,30 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
       });
   };
 
+  const selectContent = () => {
+    const callback = (value: any) => {
+      if (value) {
+        // @ts-ignore
+          setContentLink(contentLinkElRef?.current?.value || "");
+      }
+    };
+    // @ts-ignore
+    let epi = window.EPi;
+    const url = epi.ResolveUrlFromUI("edit/pagebrowser.aspx");
+    epi.CreatePageBrowserDialog(
+      url,
+      contentLink,
+      true /*disableCurrentPageOption*/,
+      false /*displayWarning*/,
+      "hiddenField1" /*info*/,
+      contentLinkElementId /*value*/,
+      null /*language*/,
+      callback /*callbackMethod*/,
+      null /*callbackArguments*/,
+      true /*requireUrlForSelectedPage*/
+    );
+  };
+
   const isEditing = !!editContentLink;
 
   if (isLoading) {
@@ -152,6 +190,10 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   if (virtualContainersEnabled && !physicalContainersEnabled) {
     showVirtualContainersCheckbox = false;
   }
+
+  const RightContainer = () => {
+    return <ButtonIcon iconName="ellipsis" onClick={selectContent} size="small" style="outline" title="Close Dialog" />;
+  };
 
   return (
     <GridContainer className="edit-configuration plugin-grid">
@@ -175,11 +217,11 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         )}
 
         {!isEditing && (
-          <GridCell large={12} medium={8} small={4}>
+          <GridCell className="content-link-select" large={12} medium={8} small={4}>
             <Input
               id="edit-configuration-content-link"
               displayError={false}
-              type="number"
+              type="text"
               isOptional={false}
               label="Container Content link"
               maxLength={5}
@@ -189,7 +231,10 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
               value={contentLink}
               isRequired
               isDisabled={isReadonly}
+              RightContainer={RightContainer}
             />
+            <input type="hidden" id="hiddenField1" />
+            <input type="hidden" ref={contentLinkElRef} id={contentLinkElementId} />
           </GridCell>
         )}
 
