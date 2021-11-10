@@ -115,7 +115,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                     for (var generatorIndex = 0; generatorIndex < generatedNames.Count; generatorIndex++)
                     {
                         var groupNameGenerator = groupNameGenerators[generatorIndex];
-                        if (groupNameGenerator.GetName(content).ToLowerInvariant() != generatedNames[generatorIndex])
+                        if (groupNameGenerator.GetName(content).ToLower() != generatedNames[generatorIndex])
                         {
                             allMatch = false;
                             break;
@@ -168,8 +168,7 @@ namespace ContentChildrenGrouping.VirtualContainers
 
             var contentReference = new ContentReference(parameters.ReferenceId.ID);
             var filteredChildren = GetChildren(parameters, contentReference, languageSelector).ToList();
-            var generatedNames = VirtualNamesParser.ParseGeneratorValues(parameters.ReferenceId)
-                .Select(x => x.ToLowerInvariant()).ToList();
+            var generatedNames = VirtualNamesParser.ParseGeneratorValues(parameters.ReferenceId).Select(x => x.ToLower()).ToList();
 
             var groupNameGenerators = configuration.GroupLevelConfigurations.ToList();
             
@@ -183,7 +182,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                     for (var generatorIndex = 0; generatorIndex < generatedNames.Count; generatorIndex++)
                     {
                         var groupNameGenerator = groupNameGenerators[generatorIndex];
-                        if (groupNameGenerator.GetName(filteredChild).ToLowerInvariant() != generatedNames[generatorIndex])
+                        if (groupNameGenerator.GetName(filteredChild).ToLower() != generatedNames[generatorIndex])
                         {
                             allMatch = false;
                             break;
