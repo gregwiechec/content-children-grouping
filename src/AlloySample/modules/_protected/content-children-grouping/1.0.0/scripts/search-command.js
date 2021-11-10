@@ -27,7 +27,7 @@ define([
                 return;
             }
 
-            this.set("isAvailable", ApplicationSettings.allConfigurationContainerLinks.indexOf(contentLink) !== -1);
+            this.set("isAvailable", ApplicationSettings.configurationContainerLinks.indexOf(contentLink) !== -1);
         },
 
         _getContentLink: function () {

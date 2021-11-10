@@ -2,15 +2,13 @@
 using System.Linq;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.Extensions;
-using ContentChildrenGrouping.PhysicalContainers;
-using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Cms.Shell.Internal;
 using EPiServer.Core;
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Shell;
 using EPiServer.Shell.Modules;
 
-namespace ContentChildrenGrouping.EditMode
+namespace ContentChildrenGrouping.VirtualContainers.EditMode
 {
     public class ContentChildrenGroupingModuleViewModel : CmsModuleViewModel
     {
@@ -18,11 +16,6 @@ namespace ContentChildrenGrouping.EditMode
         /// List of all configured containers
         /// </summary>
         public IEnumerable<string> ConfigurationContainerLinks { get; set; }
-
-        /// <summary>
-        /// List of all virtual containers
-        /// </summary>
-        public IEnumerable<string> VirtualContainerLinks { get; set; }
 
         public bool CustomIconsEnabled { get; set; } = false;
 
@@ -34,14 +27,13 @@ namespace ContentChildrenGrouping.EditMode
             IClientResourceService clientResourceService,
             IEnumerable<IContentRepositoryDescriptor> contentRepositoryDescriptors,
             IEnumerable<IContentChildrenGroupsLoader> contentChildrenGroupsLoaders,
-            ContentChildrenGroupingOptions childrenGroupingOptions, VirtualContainersOptions virtualContainersOptions) :
+            VirtualContainersOptions virtualContainersOptions) :
             base(shellModule, clientResourceService, contentRepositoryDescriptors)
         {
             var loaders = contentChildrenGroupsLoaders.ToList();
-            ConfigurationContainerLinks = loaders.GetAllContainersConfigurations().Select(x => x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
-            VirtualContainerLinks = loaders.GetAllVirtualContainersConfigurations().Select(x => x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
-            CustomIconsEnabled = childrenGroupingOptions.CustomIconsEnabled;
-            SearchCommandEnabled = childrenGroupingOptions.SearchCommandEnabled;
+            ConfigurationContainerLinks = loaders.GetAllConfigurations().Select(x => x.ContainerContentLink.ToReferenceWithoutVersion().ToString());
+            CustomIconsEnabled = virtualContainersOptions.CustomIconsEnabled;
+            SearchCommandEnabled = virtualContainersOptions.SearchCommandEnabled;
             VirtualContainersEnabled = virtualContainersOptions.Enabled;
         }
     }

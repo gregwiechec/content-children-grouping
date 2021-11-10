@@ -30,16 +30,12 @@ const getDefaultProps = (dataService: DataService, databaseConfigurationsEnabled
   return {
     dataService: dataService,
     availableNameGenerators: ["Name", "Create Date", "Very long name generator"],
-    defaultContainerType: "Alloy.ContainerPage, Alloy",
     contentUrl: "http://google.com/{contentLink}",
     options: {
       customIconsEnabled: false,
       databaseConfigurationsEnabled: databaseConfigurationsEnabled,
-      routerEnabled: false,
       searchCommandEnabled: false,
-      structureUpdateEnabled: false,
-      virtualContainersEnabled: virtualContainersEnabled,
-      physicalContainersEnabled: true
+      virtualContainersEnabled: virtualContainersEnabled
     }
   };
 };
@@ -56,15 +52,11 @@ const emptyService: DataService = {
     });
   },
   save: () => new Promise((resolve) => resolve(true)),
-  clearContainers: () => new Promise((resolve) => resolve("test")),
   get: (contentLink: string) =>
     new Promise((resolve) =>
       resolve({
-        routingEnabled: false,
         contentLink: contentLink,
-        isVirtualContainer: false,
         fromCode: false,
-        containerTypeName: "",
         groupLevelConfigurations: []
       })
     ),
@@ -78,6 +70,3 @@ EmptyApp.args = getDefaultProps(emptyService);
 
 export const NoDataBaseConfiguration = Template.bind({});
 NoDataBaseConfiguration.args = getDefaultProps(fakeService, false);
-
-export const NoVirtualContainers = Template.bind({});
-NoVirtualContainers.args = getDefaultProps(fakeService, true, false);

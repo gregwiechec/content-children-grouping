@@ -261,6 +261,7 @@
     <Compile Include="Business\Channels\DisplayResolutions.cs" />
     <Compile Include="Business\Channels\MobileChannel.cs" />
     <Compile Include="Business\Channels\WebChannel.cs" />
+    <Compile Include="Business\ContentGrouping\RangeGenerator.cs" />
     <Compile Include="Business\Initialization\ContentGroupingInitialization.cs" />
     <Compile Include="Business\ContentExtensions.cs" />
     <Compile Include="Business\ContentLocator.cs" />
@@ -366,11 +367,11 @@
     <Content Include="ClientResources\Styles\Styles.css" />
     <Content Include="favicon.ico" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\admin.css" />
-    <Content Include="modules\_protected\content-children-grouping\1.0.0\moduleInitializer.js" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\scripts\moduleInitializer.js" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\scripts\search-command-initiaization.js" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\scripts\page-tree-initialization.js" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\scripts\search-command.js" />
+    <Content Include="modules\_protected\content-children-grouping\1.0.0\scripts\virtual-containers.js" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\static\css\2.chunk.css" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\static\css\main.chunk.css" />
     <Content Include="modules\_protected\content-children-grouping\1.0.0\static\js\2.chunk.js" />
@@ -428,7 +429,9 @@
     <Content Include="Static\jwplayer\video.mp4" />
     <Content Include="Views\Web.config" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\DefaultSiteContent.episerverdata" />
     <None Include="EPiServerLog.config" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\web.config" />
@@ -448,7 +451,9 @@
     <Content Include="modules\_protected\Shell\Shell.zip" />
     <Content Include="modules\_protected\CMS\web.config" />
     <Content Include="modules\_protected\CMS\CMS.zip" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Views\_viewstart.cshtml" />
     <Content Include="Views\VideoFile\Index.cshtml" />
     <Content Include="Views\StartPage\Index.cshtml" />
@@ -495,22 +500,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ContentChildrenGrouping.Core\ContentChildrenGrouping.Core.csproj">
-      <Project>{75a3bbbf-b030-4b6a-ad3e-f83e8df3e9e1}</Project>
-      <Name>ContentChildrenGrouping.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj">
       <Project>{2866667b-7d2a-49cf-9352-ceb3e4d121c9}</Project>
       <Name>ContentChildrenGrouping.VirtualContainers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ContentChildrenGrouping\ContentChildrenGrouping.PhysicalContainers.csproj">
-      <Project>{9395953d-305d-4078-bfe3-d6ee2b264eb7}</Project>
-      <Name>ContentChildrenGrouping.PhysicalContainers</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Business\ContentGrouping\" />
-  </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

@@ -10,24 +10,17 @@ const getValueOrDefault = (name: string, overriddenValues: any, defaultValue: an
 export const getServerSettings = (overriddenValues?: any): ServerSettings => {
   let result: ServerSettings = {
     availableNameGenerators: ["Name", "Create Date", "Very long name generator"],
-    defaultContainerType: "Alloy.ContainerPage, Alloy",
     contentUrl: "http://google.com/{contentLink}",
     options: {
-      physicalContainersEnabled: getValueOrDefault("physicalContainersEnabled", overriddenValues, true),
       customIconsEnabled: false,
       databaseConfigurationsEnabled: true,
-      routerEnabled: getValueOrDefault("routerEnabled", overriddenValues, true),
       searchCommandEnabled: false,
-      structureUpdateEnabled: false,
       virtualContainersEnabled: getValueOrDefault("virtualContainersEnabled", overriddenValues, true)
     },
     defaultOptions: {
-      physicalContainersEnabled: true,
       customIconsEnabled: true,
       databaseConfigurationsEnabled: true,
-      routerEnabled: true,
       searchCommandEnabled: true,
-      structureUpdateEnabled: true,
       virtualContainersEnabled: true
     }
   };

@@ -24,7 +24,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         private readonly DbContentChildrenGroupsLoader _dbContentChildrenGroupsLoader;
         private readonly IEnumerable<IContentChildrenGroupsLoader> _childrenGroupsLoaders;
         private readonly IEnumerable<IDbAvailableGroupNameGenerator> _groupNameGenerators;
-        private readonly ContentStructureCleaner _contentStructureCleaner;
         private readonly IContentLoader _contentLoader;
         private readonly IPrincipalAccessor _principalAccessor;
 
@@ -32,7 +31,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             DbContentChildrenGroupsLoader dbContentChildrenGroupsLoader,
             IEnumerable<IContentChildrenGroupsLoader> childrenGroupsLoaders,
             IEnumerable<IDbAvailableGroupNameGenerator> groupNameGenerators,
-            ContentStructureCleaner contentStructureCleaner,
             IContentLoader contentLoader,
             IPrincipalAccessor principalAccessor)
         {
@@ -40,7 +38,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             _dbContentChildrenGroupsLoader = dbContentChildrenGroupsLoader;
             _childrenGroupsLoaders = childrenGroupsLoaders;
             _groupNameGenerators = groupNameGenerators;
-            _contentStructureCleaner = contentStructureCleaner;
             _contentLoader = contentLoader;
             _principalAccessor = principalAccessor;
         }
@@ -85,8 +82,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
             {
                 contentLink = containerConfiguration.ContainerContentLink.ToReferenceWithoutVersion().ID
                     .ToString(),
-                containerTypeName = containerConfiguration.ContainerType.TypeToString(),
-                routingEnabled = containerConfiguration.RoutingEnabled,
                 groupLevelConfigurations = containerConfiguration.GroupLevelConfigurations.Select(g =>
                 {
                     var dbGenerator = g as IDbAvailableGroupNameGenerator;
@@ -97,7 +92,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                     };
                     return generatorSettingsViewModel;
                 }),
-                isVirtualContainer = containerConfiguration.IsVirtualContainer,
                 fromCode = fromCode,
                 contentExists = contentExists,
                 changedBy = dbConfiguration?.ChangedBy ?? "",
@@ -155,27 +149,11 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
                 return GetError($"Content not found for {contentLink} content link");
             }
 
-
-            Type containerType;
-            try
-            {
-                containerType = config.isVirtualContainer || string.IsNullOrWhiteSpace(config.containerTypeName)
-                    ? null
-                    : Type.GetType(config.containerTypeName, true);
-            }
-            catch (Exception e)
-            {
-                return GetError("Cannot parse type: " + e.Message);
-            }
-
             DbContainerConfiguration ConvertViewModelToModel()
             {
                 return new DbContainerConfiguration
                 {
                     ContainerContentLink = contentLink,
-                    ContainerType = containerType,
-                    RoutingEnabled = config.isVirtualContainer ? false :  config.routingEnabled,
-                    IsVirtualContainer = config.isVirtualContainer,
                     GroupLevelConfigurations = config.groupLevelConfigurations
                         .Select(g => _groupNameGenerators.Single(n => n.Key.CompareStrings(g.name)).CreateGenerator(g.settings)),
                     ChangedBy = _principalAccessor?.Principal?.Identity?.Name,
@@ -185,7 +163,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
 
             if (config.IsNew)
             {
-                var containerConfigurations = _childrenGroupsLoaders.GetAllContainersConfigurations().ToList();
+                var containerConfigurations = _childrenGroupsLoaders.GetAllConfigurations().ToList();
                 if (containerConfigurations.Any(x => x.ContainerContentLink == contentLink))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest,
@@ -215,17 +193,6 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
 
             _dbContentChildrenGroupsLoader.ClearCache();
             return Get(contentLink);
-        }
-
-        [HttpPost]
-        public ActionResult ClearContainers(ClearContainersViewModel clearContainersViewModel)
-        {
-            _contentStructureCleaner.ClearContainers(clearContainersViewModel.contentLink, out var message);
-            return new RestResult
-            {
-                Data = message,
-                SafeResponse = true
-            };
         }
 
         [HttpDelete]
@@ -271,10 +238,7 @@ namespace ContentChildrenGrouping.Containers.RegisterFromDb
         public class ConfigurationViewModel
         {
             public string contentLink { get; set; }
-            public string containerTypeName { get; set; }
-            public bool routingEnabled { get; set; }
             public bool fromCode { get; set; }
-            public bool isVirtualContainer { get; set; }
             public IEnumerable<GeneratorSettingsViewModel> groupLevelConfigurations { get; set; }
             public bool contentExists { get; set; }
             public string changedBy { get; set; }

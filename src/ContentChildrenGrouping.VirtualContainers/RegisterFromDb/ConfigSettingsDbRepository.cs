@@ -5,7 +5,6 @@ using System.Linq;
 using ContentChildrenGrouping.Containers.RegisterFromDb;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
-using ContentChildrenGrouping.Extensions;
 using EPiServer.Data.Dynamic;
 using EPiServer.ServiceLocation;
 
@@ -48,9 +47,6 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 return new DbContainerConfiguration
                 {
                     ContainerContentLink = x.ContainerContentLink,
-                    ContainerType = string.IsNullOrWhiteSpace(x.ContainerType) ? null : Type.GetType(x.ContainerType),
-                    RoutingEnabled = x.RoutingEnabled,
-                    IsVirtualContainer = x.IsVirtualContainer,
                     GroupLevelConfigurations = _nameGeneratorSerializer.Deserialize(x.GroupLevelConfigurations),
                     ChangedBy = x.ChangedBy,
                     ChangedOn = date
@@ -74,11 +70,8 @@ namespace ContentChildrenGrouping.RegisterFromDb
                     continue;
                 }
 
-                ddsConfig.ContainerType = userConfig.ContainerType.TypeToString();
                 ddsConfig.GroupLevelConfigurations =
                     _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations);
-                ddsConfig.RoutingEnabled = userConfig.RoutingEnabled;
-                ddsConfig.IsVirtualContainer = userConfig.IsVirtualContainer;
                 store.Save(ddsConfig);
                 containerConfigurations.Remove(userConfig);
             }
@@ -88,9 +81,6 @@ namespace ContentChildrenGrouping.RegisterFromDb
                 var dds = new ConfigurationSettingsDds
                 {
                     ContainerContentLink = userConfig.ContainerContentLink,
-                    ContainerType = userConfig.ContainerType.TypeToString() ?? "",
-                    RoutingEnabled = userConfig.RoutingEnabled,
-                    IsVirtualContainer = userConfig.IsVirtualContainer,
                     GroupLevelConfigurations = _nameGeneratorSerializer.Serialize(userConfig.GroupLevelConfigurations),
                     ChangedBy = userConfig.ChangedBy,
                     ChangedOn = userConfig.ChangedOn?.ToString(DateFormat)

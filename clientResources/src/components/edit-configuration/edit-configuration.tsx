@@ -6,7 +6,6 @@ import {
   Attention,
   Button,
   ButtonIcon,
-  Checkbox,
   Grid,
   GridCell,
   GridContainer,
@@ -27,13 +26,9 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const { editContentLink } = useParams();
   const dataService = useDataServiceContext();
   const {
-    defaultContainerType,
     availableNameGenerators = [],
     options: {
-      databaseConfigurationsEnabled = true,
-      virtualContainersEnabled = true,
-      routerEnabled = false,
-      physicalContainersEnabled = false
+      databaseConfigurationsEnabled = true
     }
   } = useServerSettingsContext();
 
@@ -44,10 +39,7 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
   const [isLoading, setLoading] = useState(false);
   const [contentLink, setContentLink] = useState("");
   const [fromCode, setFromCode] = useState(false);
-  const [containerTypeName, setContainerTypeName] = useState("");
-  const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const [contentExists, setIsContentExists] = useState<boolean | undefined>(false);
-  const [isVirtualContainer, setIsVirtualContainer] = useState(false);
   const [changedBy, setChangedBy] = useState<string | undefined>("");
   const [changedOn, setChangedOn] = useState<string | undefined>("");
   const [generators, setGenerators] = useState<GeneratorConfiguration[]>([]);
@@ -66,9 +58,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         }
         setContentLink(result.contentLink);
         setFromCode(result.fromCode);
-        setContainerTypeName(result.containerTypeName);
-        setIsRoutingEnabled(result.routingEnabled);
-        setIsVirtualContainer(result.isVirtualContainer);
         setGenerators(result.groupLevelConfigurations || []);
         setIsReadonly(!databaseConfigurationsEnabled || result.fromCode);
         setIsContentExists(result.contentExists);
@@ -142,9 +131,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
         isNew: !isEditing,
         contentLink: contentLink || editContentLink,
         fromCode: false,
-        containerTypeName: containerTypeName,
-        routingEnabled: isRoutingEnabled,
-        isVirtualContainer: isVirtualContainer,
         groupLevelConfigurations: generators
       })
       .then(() => {
@@ -184,11 +170,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
 
   if (isLoading) {
     return <Spinner />;
-  }
-
-  let showVirtualContainersCheckbox = virtualContainersEnabled;
-  if (virtualContainersEnabled && !physicalContainersEnabled) {
-    showVirtualContainersCheckbox = false;
   }
 
   const RightContainer = () => {
@@ -247,40 +228,6 @@ export const EditConfiguration = ({ onSaveSuccess }: EditConfigurationProps) => 
                 <ContentLink value={editContentLink} contentExists={contentExists} />
               </span>
             </label>
-          </GridCell>
-        )}
-        {showVirtualContainersCheckbox && (
-          <GridCell large={12} medium={8} small={4}>
-            <Checkbox
-              label="Is virtual container"
-              checked={isVirtualContainer}
-              onChange={(e) => setIsVirtualContainer(e.target.checked)}
-              isDisabled={isReadonly || !virtualContainersEnabled}
-            />
-          </GridCell>
-        )}
-        {physicalContainersEnabled && routerEnabled && (
-          <GridCell>
-            <Checkbox
-              label="Router enabled"
-              checked={isRoutingEnabled}
-              onChange={(e) => setIsRoutingEnabled(e.target.checked)}
-              isDisabled={isReadonly || isVirtualContainer || !routerEnabled}
-            />
-          </GridCell>
-        )}
-        {physicalContainersEnabled && (
-          <GridCell large={12} medium={8} small={4}>
-            <Input
-              type="text"
-              id="edit-configuration-type"
-              label="Container type name"
-              note="Type format: [Full type name, Assembly Name]"
-              placeholder={defaultContainerType ? "Default: " + defaultContainerType : ""}
-              value={containerTypeName}
-              onChange={(e) => setContainerTypeName(e.target.value)}
-              isDisabled={isReadonly || isVirtualContainer}
-            />
           </GridCell>
         )}
         <GridCell large={12} medium={8} small={4}>

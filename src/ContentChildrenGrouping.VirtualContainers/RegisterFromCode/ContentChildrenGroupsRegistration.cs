@@ -14,36 +14,22 @@ namespace ContentChildrenGrouping.Core.RegisterFromCode
     public static class ContentChildrenGroupsRegistrationExtensions
     {
         public static void RegisterByLetter(this IContentChildrenGroupsRegistration childrenGroupsRegistration,
-            int containerId, Type containerType = null, int countLetters = 1)
+            int containerId, int countLetters = 1)
         {
             childrenGroupsRegistration.Register(new ContainerConfiguration
             {
                 ContainerContentLink = new ContentReference(containerId),
-                ContainerType = containerType,
                 GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, countLetters)}
             });
         }
 
         public static void RegisterByCreateDate(this IContentChildrenGroupsRegistration childrenGroupsRegistration,
-            int containerId, string dateFormat = ByCreateDateGroupNameGenerator.DefaultFormat,
-            Type containerType = null)
+            int containerId, string dateFormat = ByCreateDateGroupNameGenerator.DefaultFormat)
         {
             childrenGroupsRegistration.Register(new ContainerConfiguration
             {
                 ContainerContentLink = new ContentReference(containerId),
-                ContainerType = containerType,
                 GroupLevelConfigurations = new[] {new ByCreateDateGroupNameGenerator(dateFormat)}
-            });
-        }
-
-        public static void RegisterVirtualContainerByLetter(
-            this IContentChildrenGroupsRegistration childrenGroupsRegistration, int containerId, int countLetters = 1)
-        {
-            childrenGroupsRegistration.Register(new ContainerConfiguration
-            {
-                ContainerContentLink = new ContentReference(containerId),
-                IsVirtualContainer = true,
-                GroupLevelConfigurations = new[] {new ByNameGroupNameGenerator(0, countLetters)}
             });
         }
     }

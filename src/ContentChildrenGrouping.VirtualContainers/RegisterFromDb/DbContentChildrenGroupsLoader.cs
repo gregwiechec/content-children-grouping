@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ContentChildrenGrouping.Core;
-using ContentChildrenGrouping.PhysicalContainers;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.RegisterFromDb
@@ -14,7 +14,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
     public class DbContentChildrenGroupsLoader : IContentChildrenGroupsLoader
     {
         private readonly IConfigSettingsDbRepository _configSettingsDbRepository;
-        private readonly ContentChildrenGroupingOptions _options;
+        private readonly VirtualContainersOptions _options;
         private readonly object _lock = new object();
 
         public int Rank => 100;
@@ -22,7 +22,7 @@ namespace ContentChildrenGrouping.RegisterFromDb
         private const string CacheKey = "Configurations";
 
         public DbContentChildrenGroupsLoader(IConfigSettingsDbRepository configSettingsDbRepository,
-            ContentChildrenGroupingOptions options)
+            VirtualContainersOptions options)
         {
             _configSettingsDbRepository = configSettingsDbRepository;
             _options = options;

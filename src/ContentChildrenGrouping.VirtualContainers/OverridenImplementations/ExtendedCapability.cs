@@ -77,7 +77,7 @@ namespace ContentChildrenGrouping.VirtualContainers
                 return false;
             }
 
-            var configurations = _contentChildrenGroupsLoaders.GetAllVirtualContainersConfigurations().ToList();
+            var configurations = _contentChildrenGroupsLoaders.GetAllConfigurations().ToList();
             if (!configurations.Any())
             {
                 return false;

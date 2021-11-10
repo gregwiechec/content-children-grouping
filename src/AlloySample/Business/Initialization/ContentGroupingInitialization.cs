@@ -1,9 +1,4 @@
-﻿using AlloySample.Models.Pages;
-using ContentChildrenGrouping.Containers;
-using ContentChildrenGrouping.Core;
-using ContentChildrenGrouping.PhysicalContainers;
-using ContentChildrenGrouping.VirtualContainers;
-using EPiServer.Core;
+﻿using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
@@ -27,8 +22,6 @@ namespace AlloySample.Business.Initialization
                 new ContainerConfiguration
                 {
                     ContainerContentLink = new ContentReference(123456789),
-                    RoutingEnabled = true,
-                    ContainerType = typeof(ContainerPage),
                     GroupLevelConfigurations = new IGroupNameGenerator[]
                     {
                         new ByNameGroupNameGenerator(0, 1),
@@ -45,17 +38,12 @@ namespace AlloySample.Business.Initialization
 
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            context.Services.AddTransient(serviceLocator => new ContentChildrenGroupingOptions
-            {
-                RouterEnabled = false,
-                DatabaseConfigurationsEnabled = true,
-                StructureUpdateEnabled = false,
-                SearchCommandEnabled = true,
-                CustomIconsEnabled = true
-            });
             context.Services.AddTransient(serviceLocator => new VirtualContainersOptions
             {
-                Enabled = true
+                Enabled = true,
+                SearchCommandEnabled = true,
+                CustomIconsEnabled = true,
+                DatabaseConfigurationsEnabled = true
             });
         }
     }

@@ -8,7 +8,8 @@ define([
 	ContentTree
 ) {
     return function () {
-
+        //TODO: VC remove
+        /*
         // override default page tree icon
         var originalGetIconClass = PageNavigationTree.prototype.getIconClass;
         PageNavigationTree.prototype.getIconClass = function (item, opened) {
@@ -30,6 +31,7 @@ define([
             return result;
         };
         ContentTree.prototype.getTooltip.nom = "getTooltip";
+        */
     };
 });
 

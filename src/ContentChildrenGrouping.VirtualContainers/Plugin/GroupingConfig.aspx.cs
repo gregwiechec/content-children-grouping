@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using ContentChildrenGrouping.Containers;
-using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
-using ContentChildrenGrouping.Extensions;
-using ContentChildrenGrouping.PhysicalContainers;
-using ContentChildrenGrouping.PhysicalContainers.ContainerModel;
 using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.Framework.Modules;
 using EPiServer.Framework.Serialization;
@@ -27,7 +22,6 @@ namespace ContentChildrenGrouping.Plugin
     {
         protected Injected<IModuleResourceResolver> _moduleResolver { get; set; }
         protected Injected<IObjectSerializerFactory> _serializerFactory { get; set; }
-        private readonly Injected<ContentChildrenGroupingOptions> _childrenGroupingOptions;
         private readonly Injected<VirtualContainersOptions> _virtualContainerOptions;
         private readonly Injected<IEnumerable<IGroupNameGenerator>> _groupNameGenerators;
 
@@ -60,37 +54,27 @@ namespace ContentChildrenGrouping.Plugin
                 _moduleResolver.Service.TryResolvePath(typeof(GroupingConfig).Assembly, "ConfigSettings/",
                     out var controllerUrl);
 
-                var defaultGroupingOptions = new ContentChildrenGroupingOptions();
                 var defaultVirtualOptions = new VirtualContainersOptions();
 
-                var groupingOptions = _childrenGroupingOptions.Service;
                 var config = new
                 {
                     baseUrl = controllerUrl,
                     availableNameGenerators = _groupNameGenerators.Service.OfType<IDbAvailableGroupNameGenerator>().Select(x => x.Key),
                     options = new
                     {
-                        PhysicalContainersEnabled = groupingOptions.Enabled,
-                        groupingOptions.StructureUpdateEnabled,
-                        groupingOptions.CustomIconsEnabled,
-                        groupingOptions.SearchCommandEnabled,
-                        groupingOptions.DatabaseConfigurationsEnabled,
-                        groupingOptions.RouterEnabled,
+                        _virtualContainerOptions.Service.CustomIconsEnabled,
+                        _virtualContainerOptions.Service.SearchCommandEnabled,
+                        _virtualContainerOptions.Service.DatabaseConfigurationsEnabled,
                         VirtualContainersEnabled = _virtualContainerOptions.Service.Enabled
                     },
                     defaultOptions = new
                     {
-                        PhysicalContainersEnabled = defaultGroupingOptions.Enabled,
-                        defaultGroupingOptions.Enabled,
-                        defaultGroupingOptions.StructureUpdateEnabled,
-                        defaultGroupingOptions.CustomIconsEnabled,
-                        defaultGroupingOptions.SearchCommandEnabled,
-                        defaultGroupingOptions.DatabaseConfigurationsEnabled,
-                        defaultGroupingOptions.RouterEnabled,
+                        defaultVirtualOptions.CustomIconsEnabled,
+                        defaultVirtualOptions.SearchCommandEnabled,
+                        defaultVirtualOptions.DatabaseConfigurationsEnabled,
                         VirtualContainersEnabled = defaultVirtualOptions.Enabled
                     },
-                    contentUrl,
-                    defaultContainerType = typeof(GroupingContainerPage).TypeToString()
+                    contentUrl
                 };
 
                 var objectSerializer = _serializerFactory.Service.GetSerializer(KnownContentTypes.Json);

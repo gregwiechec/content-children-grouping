@@ -215,7 +215,7 @@ namespace ContentChildrenGrouping.VirtualContainers
         {
             // get virtual containers for configured container
             var containerContentLink = new ContentReference(contentLink.ID);
-            var result = _contentChildrenGroupsLoaders.GetAllVirtualContainersConfigurations()
+            var result = _contentChildrenGroupsLoaders.GetAllConfigurations()
                 .FirstOrDefault(x => x.ContainerContentLink.ToReferenceWithoutVersion() == containerContentLink);
             return result;
         }

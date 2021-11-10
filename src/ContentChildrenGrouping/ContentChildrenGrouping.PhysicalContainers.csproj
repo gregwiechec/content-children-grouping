@@ -171,17 +171,7 @@
     <Compile Include="FixStructureScheduledJob.cs" />
     <Compile Include="IContentStructureModifier.cs" />
     <Compile Include="PartialRouter\PartialRouterInitialization.cs" />
-    <Compile Include="Plugin\GroupingConfig.aspx.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
-    <Compile Include="RegisterFromDb\ContentStructureCleaner.cs" />
-    <Compile Include="RegisterFromDb\ConfigSettingsController.cs" />
-    <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
-    <Compile Include="RegisterFromDb\DbContentChildrenGroupsLoader.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="RegisterFromDb\GroupNameSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
