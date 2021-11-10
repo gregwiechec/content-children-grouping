@@ -53,7 +53,6 @@ const App = ({ onDeleteMessage }: AppProps) => {
           <ConfigurationsList
             items={items}
             onEdit={(c) => history.push("/edit/" + c.contentLink)}
-            onManage={(c) => history.push("/manage/" + c.contentLink)}
             onDelete={onDeleteConfiguration}
           />
         </GridCell>

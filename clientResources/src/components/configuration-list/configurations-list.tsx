@@ -11,11 +11,10 @@ import { ContentLink } from "../../content-link";
 export interface ConfigurationsListProps {
   items: GroupConfiguration[];
   onEdit: (item: GroupConfiguration) => void;
-  onManage: (item: GroupConfiguration) => void;
   onDelete: (item: GroupConfiguration) => void;
 }
 
-export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: ConfigurationsListProps) => {
+export const ConfigurationsList = ({ items, onEdit, onDelete }: ConfigurationsListProps) => {
   const {
     options: { databaseConfigurationsEnabled }
   } = useServerSettingsContext();
@@ -67,9 +66,6 @@ export const ConfigurationsList = ({ items, onEdit, onManage, onDelete }: Config
                       <BlockList hasBorder={false}>
                         <BlockList.Item onClick={() => onEdit(x)}>
                           <Link leftIcon="projects">Edit</Link>
-                        </BlockList.Item>
-                        <BlockList.Item onClick={() => onManage(x)}>
-                          <Link leftIcon="settings">Manage</Link>
                         </BlockList.Item>
                         {!x.fromCode && databaseConfigurationsEnabled && (
                           <BlockList.Item onClick={() => setItemToDelete(x)}>

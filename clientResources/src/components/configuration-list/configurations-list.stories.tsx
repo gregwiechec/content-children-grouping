@@ -22,7 +22,6 @@ const ConfigurationListStorybook = (props: ConfigurationListComponentStorybookPr
       <ServerSettingsContext.Provider value={serverSettings}>
         <ConfigurationsList
           items={getItems()}
-          onManage={action("manage")}
           onDelete={action("delete")}
           onEdit={action("edit")}
         />
