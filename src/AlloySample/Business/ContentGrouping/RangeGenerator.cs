@@ -18,12 +18,12 @@ namespace AlloySample.Business.ContentGrouping
                 return "A-F";
             }
 
-            if (name >= 'h' || name <= 'n')
+            if (name >= 'h' && name <= 'n')
             {
                 return "H-N";
             }
 
-            if (name >= 'm' || name <= 's')
+            if (name >= 'm' && name <= 's')
             {
                 return "M-S";
             }
