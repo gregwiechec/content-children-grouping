@@ -17,6 +17,8 @@ function ZipCurrentModule
 	#$viewsOutputDirectory = $targetDirectory + "\Views"
 	#Robocopy.exe "Views" $viewsOutputDirectory\ /S
 	
+	Robocopy.exe ".\Plugins" $targetDirectory\"Plugins" /S
+	
 	Robocopy.exe ".\" $targetDirectory\ "module.config"
 
     #((Get-Content -Path module.config -Raw).TrimEnd() -Replace $defaultVersion, $version ) | Set-Content -Path module.config
