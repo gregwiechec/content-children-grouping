@@ -8,6 +8,7 @@ using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using ContentChildrenGrouping.Core.Extensions;
 using ContentChildrenGrouping.Extensions;
 using ContentChildrenGrouping.RegisterFromDb;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Security;

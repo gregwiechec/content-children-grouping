@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using EPiServer.Core;
 
-namespace ContentChildrenGrouping.Core
+namespace ContentChildrenGrouping.VirtualContainers
 {
     /// <summary>
     /// Configuration for container content
@@ -19,5 +18,15 @@ namespace ContentChildrenGrouping.Core
         /// Configurations for groups
         /// </summary>
         public IEnumerable<IGroupNameGenerator> GroupLevelConfigurations { get; set; }
+
+        public ContainerConfiguration()
+        {
+        }
+
+        public ContainerConfiguration(ContentReference containerContentLink, IGroupNameGenerator groupLevelConfiguration)
+        {
+            ContainerContentLink = containerContentLink;
+            GroupLevelConfigurations = new[] {groupLevelConfiguration};
+        }
     }
 }

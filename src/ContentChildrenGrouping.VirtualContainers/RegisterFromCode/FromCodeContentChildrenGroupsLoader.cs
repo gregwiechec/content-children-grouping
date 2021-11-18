@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ContentChildrenGrouping.VirtualContainers;
 using EPiServer.ServiceLocation;
 
 namespace ContentChildrenGrouping.Core.RegisterFromCode

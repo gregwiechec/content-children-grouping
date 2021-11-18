@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ContentChildrenGrouping.VirtualContainers;
 
 namespace ContentChildrenGrouping.Core
 {

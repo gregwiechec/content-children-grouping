@@ -1,4 +1,5 @@
 ﻿using System;
+using ContentChildrenGrouping.VirtualContainers;
 
 namespace ContentChildrenGrouping.Core
 {
