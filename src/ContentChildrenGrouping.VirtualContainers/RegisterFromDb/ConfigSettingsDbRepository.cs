@@ -5,6 +5,7 @@ using System.Linq;
 using ContentChildrenGrouping.Containers.RegisterFromDb;
 using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
+using ContentChildrenGrouping.VirtualContainers.ContainerNameGenerator;
 using EPiServer.Data.Dynamic;
 using EPiServer.ServiceLocation;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using ContentChildrenGrouping.VirtualContainers;
+using ContentChildrenGrouping.VirtualContainers.ContainerNameGenerator;
 using EPiServer.Framework.Modules;
 using EPiServer.Framework.Serialization;
 using EPiServer.PlugIn;

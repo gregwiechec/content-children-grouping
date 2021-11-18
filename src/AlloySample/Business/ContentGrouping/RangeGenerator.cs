@@ -1,4 +1,5 @@
 ﻿using ContentChildrenGrouping.Core.ContainerNameGenerator;
+using ContentChildrenGrouping.VirtualContainers.ContainerNameGenerator;
 using EPiServer.Core;
 
 namespace AlloySample.Business.ContentGrouping
