@@ -14,6 +14,9 @@ namespace ContentChildrenGrouping.VirtualContainers
     {
     }
 
+    /// <summary>
+    /// UI descriptor for VirtualContainerPage with custom Page type settings
+    /// </summary>
     [UIDescriptorRegistration]
     public class VirtualContainerPageUIDescriptor : UIDescriptor<VirtualContainerPage>
     {
