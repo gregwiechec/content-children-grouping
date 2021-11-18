@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ContentChildrenGrouping.Core;
-using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using ContentChildrenGrouping.VirtualContainers.ContainerNameGenerator;
 using EPiServer.Framework.Serialization;
 using EPiServer.Logging;

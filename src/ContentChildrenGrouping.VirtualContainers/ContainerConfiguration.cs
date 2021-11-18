@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using ContentChildrenGrouping.VirtualContainers.ContainerNameGenerator;
 using EPiServer.Core;
 

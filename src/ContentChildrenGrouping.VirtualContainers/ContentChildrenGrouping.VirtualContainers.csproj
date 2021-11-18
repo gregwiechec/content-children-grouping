@@ -163,7 +163,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerConfiguration.cs" />
-    <Compile Include="ContainerNameGenerator\GroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\ByCreateDateGroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\ByNameGroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\ByExpressionGroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\IDbAvailableGroupNameGenerator.cs" />
     <Compile Include="ContainerNameGenerator\IGroupNameGenerator.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
     <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
