@@ -28,8 +28,8 @@ export const ContentLink = ({ value, contentExists }: ContentLinkProps) => {
   }
 
   return (
-    <Link href={contentUrl.replace("{contentLink}", value)} newWindow>
+    <a href={contentUrl.replace("{contentLink}", value)} className="link" target="_top" rel="noopener noreferrer">
       {value}
-    </Link>
+    </a>
   );
 };
