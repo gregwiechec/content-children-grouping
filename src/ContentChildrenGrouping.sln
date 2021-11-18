@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlloySample", "AlloySample\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentChildrenGrouping.VirtualContainers", "ContentChildrenGrouping.VirtualContainers\ContentChildrenGrouping.VirtualContainers.csproj", "{2866667B-7D2A-49CF-9352-CEB3E4D121C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentChildrenGrouping.VirtualContainers.Tests", "ContentChildrenGrouping.VirtualContainers.Tests\ContentChildrenGrouping.VirtualContainers.Tests.csproj", "{962AF034-C2A7-4910-9F68-8D06A59EFE46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2866667B-7D2A-49CF-9352-CEB3E4D121C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2866667B-7D2A-49CF-9352-CEB3E4D121C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2866667B-7D2A-49CF-9352-CEB3E4D121C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962AF034-C2A7-4910-9F68-8D06A59EFE46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962AF034-C2A7-4910-9F68-8D06A59EFE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962AF034-C2A7-4910-9F68-8D06A59EFE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962AF034-C2A7-4910-9F68-8D06A59EFE46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

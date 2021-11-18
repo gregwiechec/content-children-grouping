@@ -44,6 +44,11 @@ namespace ContentChildrenGrouping.VirtualContainers
             return new ContentReference(parentContentLink.ID, 0, ProviderPrefix + "-" + namesStr);
         }
 
+        /// <summary>
+        /// Get generated names from ContentReference
+        /// </summary>
+        /// <param name="virtualContainerReference"></param>
+        /// <returns></returns>
         public static IEnumerable<string> ParseGeneratorValues(ContentReference virtualContainerReference)
         {
             if (string.IsNullOrWhiteSpace(virtualContainerReference.ProviderName))
