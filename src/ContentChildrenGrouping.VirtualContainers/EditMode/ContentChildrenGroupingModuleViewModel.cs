@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ContentChildrenGrouping.Core;
-using ContentChildrenGrouping.Core.Extensions;
+using ContentChildrenGrouping.VirtualContainers.Extensions;
 using EPiServer.Cms.Shell.Internal;
 using EPiServer.Core;
 using EPiServer.Framework.Web.Resources;
