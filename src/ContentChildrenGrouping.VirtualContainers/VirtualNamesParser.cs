@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ContentChildrenGrouping.Core;
 using ContentChildrenGrouping.Core.ContainerNameGenerator;
 using EPiServer.Core;
 
@@ -38,7 +37,7 @@ namespace ContentChildrenGrouping.VirtualContainers
             {
                 var name = generators[i].GetName(content) ?? "";
                 // ContentReference provider name cannot contains "_", because it's a separator
-                name = name.ToLowerInvariant().Replace("_", "*");
+                name = name.ToLower().Replace("_", "*");
                 names.Add(name);
             }
             var namesStr = string.Join(",", names);

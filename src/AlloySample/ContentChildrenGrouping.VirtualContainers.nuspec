@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>ContentChildrenGrouping.VirtualContainers</id>
+    <version>$version$</version>
+    <title>ContentChildrenGrouping.VirtualContainers</title>
+    <authors>https://github.com/gregwiechec</authors>
+    <owners>https://github.com/gregwiechec</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Episerver addon used to group page children</description>
+    <releaseNotes/>
+    <copyright>Copyright 2021</copyright>
+    <tags>Episerver</tags>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/gregwiechec/content-children-grouping</projectUrl>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.15.0,12.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.27.0,12.0)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\ContentChildrenGrouping.VirtualContainers.dll" target="lib\net45\" />
+    <file src="..\..\buildoutput\content-children-grouping\content-children-grouping.zip" target="content\modules\_protected\content-children-grouping\" />
+    <file src="modules\_protected\content-children-grouping\web.config" target="content\modules\_protected\content-children-grouping\" />
+    <file src="web.config.transform" target="content" />
+    <file src="readme.txt" target="" />
+  </files>
+</package>

@@ -162,28 +162,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentVersionTransform.cs" />
-    <Compile Include="CustomContentDataModelBaseTransform.cs" />
-    <Compile Include="CustomContentLanguageSettingsHandler.cs" />
-    <Compile Include="CustomContentProviderManager.cs" />
-    <Compile Include="CustomHasChildrenEvaluator.cs" />
-    <Compile Include="ExtendedCapability.cs" />
-    <Compile Include="ExtendedDefaultContentQueryHelper.cs" />
-    <Compile Include="ExtendedGetChildrenQuery.cs" />
-    <Compile Include="ExtendedMissingContentLanguageInformationResolver.cs" />
+    <Compile Include="ContainerConfiguration.cs" />
+    <Compile Include="ContainerNameGenerator\GroupNameGenerator.cs" />
+    <Compile Include="ContainerNameGenerator\IGroupNameGenerator.cs" />
+    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModel.cs" />
+    <Compile Include="EditMode\ContentChildrenGroupingModuleViewModelModule.cs" />
+    <Compile Include="Extensions\ContentChildrenGroupsLoaderExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="IContentChildrenGroupsLoader.cs" />
+    <Compile Include="OverridenImplementations\ContentVersionTransform.cs" />
+    <Compile Include="OverridenImplementations\CustomContentDataModelBaseTransform.cs" />
+    <Compile Include="OverridenImplementations\CustomContentLanguageSettingsHandler.cs" />
+    <Compile Include="OverridenImplementations\CustomContentProviderManager.cs" />
+    <Compile Include="OverridenImplementations\CustomHasChildrenEvaluator.cs" />
+    <Compile Include="OverridenImplementations\ExtendedCapability.cs" />
+    <Compile Include="OverridenImplementations\ExtendedDefaultContentQueryHelper.cs" />
+    <Compile Include="OverridenImplementations\ExtendedGetChildrenQuery.cs" />
+    <Compile Include="OverridenImplementations\ExtendedMissingContentLanguageInformationResolver.cs" />
+    <Compile Include="Plugin\GroupingConfig.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterFromCode\ContentChildrenGroupsRegistration.cs" />
+    <Compile Include="RegisterFromCode\FromCodeContentChildrenGroupsLoader.cs" />
+    <Compile Include="RegisterFromDb\ConfigSettingsController.cs" />
+    <Compile Include="RegisterFromDb\ConfigSettingsDbRepository.cs" />
+    <Compile Include="RegisterFromDb\ConfigurationSettingsDds.cs" />
+    <Compile Include="RegisterFromDb\DbContanerConfiguration.cs" />
+    <Compile Include="RegisterFromDb\DbContentChildrenGroupsLoader.cs" />
+    <Compile Include="RegisterFromDb\GroupNameSerializer.cs" />
     <Compile Include="VirtualContainerPage.cs" />
-    <Compile Include="VirtualContainersInitialization.cs" />
+    <Compile Include="OverridenImplementations\VirtualContainersInitialization.cs" />
+    <Compile Include="VirtualContainersOptions.cs" />
     <Compile Include="VirtualNamesParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ContentChildrenGrouping.Core\ContentChildrenGrouping.Core.csproj">
-      <Project>{75a3bbbf-b030-4b6a-ad3e-f83e8df3e9e1}</Project>
-      <Name>ContentChildrenGrouping.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

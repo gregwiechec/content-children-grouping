@@ -6,15 +6,11 @@ import { getServerSettings } from "../../fake-data/fake-server-settings";
 import {PluginInfo} from "./plugin-info";
 
 interface PluginInfoStorybookStorybookProps {
-    router: boolean;
     virtualContainersEnabled: boolean;
 }
 
 const PluginInfoStorybook = (props: PluginInfoStorybookStorybookProps) => {
     let overridden: any = {};
-    if (props.router === false) {
-        overridden.routerEnabled = false;
-    }
     if (props.virtualContainersEnabled === false) {
         overridden.virtualContainersEnabled = false;
     }

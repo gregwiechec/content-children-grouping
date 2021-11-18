@@ -1,9 +1,6 @@
 import { createContext, useContext } from "react";
 
 export type ContentChildrenGroupingOptions = {
-    readonly physicalContainersEnabled: boolean;
-    readonly routerEnabled: boolean;
-    readonly structureUpdateEnabled: boolean;
     readonly databaseConfigurationsEnabled: boolean;
     readonly customIconsEnabled: boolean;
     readonly searchCommandEnabled: boolean;
@@ -13,31 +10,23 @@ export type ContentChildrenGroupingOptions = {
 export type ServerSettings = {
     readonly availableNameGenerators: string[];
     readonly contentUrl: string;
-    readonly defaultContainerType: string;
     readonly options: ContentChildrenGroupingOptions
     readonly defaultOptions: ContentChildrenGroupingOptions
 }
 
 const defaultSettings: ServerSettings = {
     availableNameGenerators: [],
-    defaultContainerType: "",
     contentUrl: "",
     options: {
-        physicalContainersEnabled: false,
         customIconsEnabled: false,
         databaseConfigurationsEnabled: false,
-        routerEnabled: false,
         searchCommandEnabled: false,
-        structureUpdateEnabled: false,
         virtualContainersEnabled: false
     },
     defaultOptions: {
-        physicalContainersEnabled: false,
         customIconsEnabled: false,
         databaseConfigurationsEnabled: false,
-        routerEnabled: false,
         searchCommandEnabled: false,
-        structureUpdateEnabled: false,
         virtualContainersEnabled: false
     }
 };

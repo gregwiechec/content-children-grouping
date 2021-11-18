@@ -24,8 +24,6 @@
             this.inherited(arguments);
 
             ApplicationSettings.configurationContainerLinks = this._settings.configurationContainerLinks || [];
-            ApplicationSettings.virtualContainerLinks = this._settings.virtualContainerLinks || [];
-            ApplicationSettings.allConfigurationContainerLinks = (ApplicationSettings.configurationContainerLinks).concat(ApplicationSettings.virtualContainerLinks);
 
             if (this._settings.customIconsEnabled) {
                 pageTreeInitialization();
