@@ -14,8 +14,8 @@ using EPiServer.Web;
 
 namespace ContentChildrenGrouping.Plugin
 {
-    [GuiPlugIn(DisplayName = "Configure content groups",
-        Description = "Configure content groups",
+    [GuiPlugIn(DisplayName = "Configure virtual containers",
+        Description = "Manage virtual containers configurations",
         Area = EPiServer.PlugIn.PlugInArea.AdminMenu,
         UrlFromModuleFolder = "Plugins/GroupingConfig.aspx")]
     public partial class GroupingConfig : EPiServer.Shell.WebForms.WebFormsBase
@@ -35,7 +35,7 @@ namespace ContentChildrenGrouping.Plugin
                     .AccessDenied(new HttpContextWrapper(HttpContext.Current));
             }
 
-            SystemMessageContainer.Heading = "Configure content groups";
+            SystemMessageContainer.Heading = "Configure virtual containers";
             SystemMessageContainer.HelpFile = "home";
         }
 
